@@ -1,8 +1,10 @@
-import { Formik, Form } from "formik";
-import Input from "./common/Input";
-import AuthButton from "./common/AuthButton";
-import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import { Formik, Form } from "formik";
+import AuthButton from "./common/AuthButton";
+import Input from "./common/Input";
+import PasswordInput from "./common/PasswordInput";
+import * as Yup from "yup";
+import { useState } from "react";
 
 const schema = Yup.object({
   username: Yup.string()
@@ -15,6 +17,8 @@ const schema = Yup.object({
 });
 
 function Signup() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleSubmit = async (values, actions) => {
     console.log("Values: ", values);
 
@@ -25,6 +29,8 @@ function Signup() {
     actions.resetForm();
     actions.setSubmitting(false);
   };
+
+  const togglePassword = () => setShowPassword((state) => !state);
 
   return (
     <section className="bg-slate-900 min-h-screen flex items-center justify-center ">
@@ -45,10 +51,12 @@ function Signup() {
 
           <Input type="email" name="email" placeholder="Enter your email." />
 
-          <Input
-            type="password"
+          <PasswordInput
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder="Enter your password."
+            handleToggle={togglePassword}
+            showPassword={showPassword}
           />
 
           <AuthButton action="creating account...">Create account</AuthButton>

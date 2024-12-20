@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import { useField } from "formik";
-import { FaUser, FaEnvelope } from "react-icons/fa";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 
-function Input({ type, ...props }) {
+function PasswordInput({ type, showPassword, handleToggle, ...props }) {
   const [fields, meta] = useField(props);
   return (
-    <section className="w-full">
+    <section className="w-full" tabIndex="0">
       <div
         className={`w-full bg-gray-100 flex ${
           meta.touched && meta.error && "border-red-100"
@@ -19,9 +19,10 @@ function Input({ type, ...props }) {
         />
         <button
           type="button"
-          className="w-10 flex justify-center items-center cursor-default"
+          onClick={handleToggle}
+          className="w-10 flex justify-center items-center cursor-pointer"
         >
-          {type === "text" ? <FaUser /> : <FaEnvelope />}
+          {showPassword ? <FaEye /> : <FaEyeSlash />}
         </button>
       </div>
       {meta.touched && meta.error && (
@@ -33,4 +34,4 @@ function Input({ type, ...props }) {
   );
 }
 
-export default Input;
+export default PasswordInput;
