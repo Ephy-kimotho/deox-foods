@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import ThemeToggle from './ThemeToggle';
-import logo from '../assets/images/deox-foods-logo.png'; // Ensure this path is correct
+import { useState } from "react";
+import { NavLink, Link } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
+import logo from "../assets/images/deox-foods-logo.png"; // Ensure this path is correct
 
-const Navbar = ({ onLoginClick, onSignupClick }) => {
+const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -11,11 +11,7 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo with spacing from the left */}
         <div className="flex items-center pl-4">
-          <img
-            src={logo}
-            alt="Deox Foods Logo"
-            className="w-12 h-12"
-          />
+          <img src={logo} alt="Deox Foods Logo" className="w-12 h-12" />
         </div>
 
         {/* Desktop Links in the Center */}
@@ -24,27 +20,35 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
             to="/"
             className={({ isActive }) =>
               `text-xl font-semibold ${
-                isActive ? 'text-2xl font-bold text-brown-700' : 'text-gray-600 dark:text-gray-400 hover:text-orange-200'
+                isActive
+                  ? "text-2xl font-bold text-brown-700"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
             Home
           </NavLink>
+
           <NavLink
-            to="/about"
+            to="about"
             className={({ isActive }) =>
               `text-xl font-semibold ${
-                isActive ? 'text-2xl font-bold text-brown-700' : 'text-gray-600 dark:text-gray-400 hover:text-orange-200'
+                isActive
+                  ? "text-2xl font-bold text-brown-700"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
             About
           </NavLink>
+
           <NavLink
-            to="/contact"
+            to="contact"
             className={({ isActive }) =>
               `text-xl font-semibold ${
-                isActive ? 'text-2xl font-bold text-brown-700' : 'text-gray-600 dark:text-gray-400 hover:text-orange-200'
+                isActive
+                  ? "text-2xl font-bold text-brown-700"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
@@ -54,21 +58,23 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
 
         {/* Theme Toggle and Buttons on the Right */}
         <div className="hidden lg:flex items-center space-x-4">
-          <button
-            onClick={onLoginClick}
+          <Link
+            to="login"
             className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-md"
           >
             Login
-          </button>
-          <button
-            onClick={onSignupClick}
+          </Link>
+          <Link
+            to="signup"
             className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-md"
           >
             Sign Up
-          </button>
+          </Link>
           <div className="flex items-center space-x-2">
             <ThemeToggle className="w-4 h-4" />
-            <span className="text-gray-600 dark:text-gray-400 text-base font-semibold">Theme</span>
+            <span className="text-gray-600 dark:text-gray-400 text-base font-semibold">
+              Theme
+            </span>
           </div>
         </div>
 
@@ -91,9 +97,7 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
                 strokeLinejoin="round"
                 strokeWidth="2"
                 d={
-                  isMenuOpen
-                    ? 'M6 18L18 6M6 6l12 12'
-                    : 'M4 6h16M4 12h16m-7 6h7'
+                  isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"
                 }
               />
             </svg>
@@ -103,9 +107,7 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div
-          className="fixed top-0 right-0 h-full w-1/2 bg-gray-100 dark:bg-night-100 shadow-lg transform translate-x-0 transition-transform duration-300 flex flex-col justify-between"
-        >
+        <div className="fixed top-0 right-0 h-full w-1/2 bg-gray-100 dark:bg-night-100 shadow-lg transform translate-x-0 transition-transform duration-300 flex flex-col justify-between">
           <button
             className="absolute top-4 right-4 text-gray-600 dark:text-gray-400"
             onClick={() => setMenuOpen(false)}
@@ -131,7 +133,9 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
               to="/"
               className={({ isActive }) =>
                 `text-lg font-semibold ${
-                  isActive ? 'text-xl font-bold text-brown-700' : 'text-gray-600 dark:text-gray-400 hover:text-orange-200'
+                  isActive
+                    ? "text-xl font-bold text-brown-700"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -142,7 +146,9 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
               to="/about"
               className={({ isActive }) =>
                 `text-lg font-semibold ${
-                  isActive ? 'text-xl font-bold text-brown-700' : 'text-gray-600 dark:text-gray-400 hover:text-orange-200'
+                  isActive
+                    ? "text-xl font-bold text-brown-700"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -153,7 +159,9 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
               to="/contact"
               className={({ isActive }) =>
                 `text-lg font-semibold ${
-                  isActive ? 'text-xl font-bold text-brown-700' : 'text-gray-600 dark:text-gray-400 hover:text-orange-200'
+                  isActive
+                    ? "text-xl font-bold text-brown-700"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -165,30 +173,32 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
           <div className="flex flex-col items-center space-y-4 mb-6 px-6">
             {/* Login and Signup Buttons */}
             <div className="flex space-x-4">
-              <button
+              <Link
+                to="login"
                 onClick={() => {
-                  onLoginClick();
                   setMenuOpen(false);
                 }}
                 className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-md"
               >
                 Login
-              </button>
-              <button
+              </Link>
+              <Link
+                to="signup"
                 onClick={() => {
-                  onSignupClick();
                   setMenuOpen(false);
                 }}
                 className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-md"
               >
                 SignUp
-              </button>
+              </Link>
             </div>
 
             {/* Theme Toggle and Title */}
             <div className="flex items-center space-x-2">
               <ThemeToggle className="w-4 h-4" />
-              <span className="text-gray-600 dark:text-gray-400 text-base font-semibold">Theme</span>
+              <span className="text-gray-600 dark:text-gray-400 text-base font-semibold">
+                Theme
+              </span>
             </div>
           </div>
         </div>

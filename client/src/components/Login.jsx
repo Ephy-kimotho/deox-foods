@@ -27,7 +27,7 @@ function Login() {
   const togglePassword = () => setShowPassword((state) => !state);
 
   return (
-    <section className="min-h-screen bg-slate-900 flex justify-center items-center">
+    <section className="min-h-screen bg-night-100 flex justify-center items-center mt-10">
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={schema}
@@ -49,7 +49,7 @@ function Login() {
 
           <div className="font-bold font-openSans text-base text-night-200 flex flex-col items-center sm:flex-row gap-2">
             <p>Don&apos;t have an account ?</p>
-            <Link to="/" className="text-orange-200 hover:underline">
+            <Link to="/signup" className="text-orange-200 hover:underline">
               Create one now
             </Link>
           </div>
