@@ -1,8 +1,5 @@
-module.exports = {
-  content: [
-    'C:\Users\John\Desktop\Deox\deox-foods\index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
+export default {
+  content: ["/index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
@@ -34,6 +31,9 @@ module.exports = {
           200: "#1a4383",
         },
       },
+      width:{
+        100:"100px"
+      }
     },
   },
   plugins: [],
