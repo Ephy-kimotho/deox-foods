@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { FiSearch } from 'react-icons/fi';
+import { useState } from "react";
+import { FiSearch } from "react-icons/fi";
 
 const SearchBar = ({ onSearch }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const handleSearch = () => {
     onSearch(query);
@@ -14,7 +14,7 @@ const SearchBar = ({ onSearch }) => {
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="p-2 md:p-3 rounded-l-full font-sans outline-none w-40 md:w-64 bg-white dark:bg-gray-800"
+        className="p-2 md:p-3 rounded-l-full font-sans outline-none w-40 md:w-64 bg-white  dark:bg-gray-800 placeholder:text-night-100 dark:placeholder:text-gray-200"
         placeholder="Search..."
       />
       <button

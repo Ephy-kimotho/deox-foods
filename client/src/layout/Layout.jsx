@@ -5,12 +5,14 @@ import Footer from "../components/Footer";
 
 function Layout() {
   return (
-    <div className="flex flex-col">
+    <div>
       <Navbar />
-      <main className="min-h-screen">
-        <Outlet />
-      </main>
-      <Footer />
+      <div className="flex flex-col justify-between">
+        <main className="flex">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }

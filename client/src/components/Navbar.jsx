@@ -1,27 +1,35 @@
 import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
-import logo from "../assets/images/deox-foods-logo.png"; // Ensure this path is correct
+import logo from "../assets/images/deox-foods-logo.png";
+import { IoCart } from "react-icons/io5";
+import useCartStore from "../stores/useCartStore";
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const cart = useCartStore((state) => state.cart);
+
+  const numOfItems = cart.reduce((sum, item) => {
+    sum = sum + item.quantity;
+    return sum;
+  }, 0);
 
   return (
     <nav className="bg-gray-100 dark:bg-night-100 shadow-md py-4 font-sans fixed top-0 left-0 right-0 z-50">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="container mx-auto flex justify-between">
         {/* Logo with spacing from the left */}
         <div className="flex items-center pl-4">
           <img src={logo} alt="Deox Foods Logo" className="w-12 h-12" />
         </div>
 
         {/* Desktop Links in the Center */}
-        <div className="hidden lg:flex items-center space-x-12 mx-auto">
+        <div className="hidden lg:flex items-center space-x-12">
           <NavLink
             to="/"
             className={({ isActive }) =>
               `text-xl font-semibold ${
                 isActive
-                  ? "text-2xl font-bold text-brown-700"
+                  ? "text-2xl font-bold text-orange-300"
                   : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
@@ -34,7 +42,7 @@ const Navbar = () => {
             className={({ isActive }) =>
               `text-xl font-semibold ${
                 isActive
-                  ? "text-2xl font-bold text-brown-700"
+                  ? "text-2xl font-bold text-orange-300"
                   : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
@@ -47,13 +55,34 @@ const Navbar = () => {
             className={({ isActive }) =>
               `text-xl font-semibold ${
                 isActive
-                  ? "text-2xl font-bold text-brown-700"
+                  ? "text-2xl font-bold text-orange-300"
                   : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
             Contact Us
           </NavLink>
+          <NavLink
+            to="my-orders"
+            className={({ isActive }) =>
+              `text-xl font-semibold ${
+                isActive
+                  ? "text-2xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              }`
+            }
+          >
+            Orders
+          </NavLink>
+        </div>
+
+        <div className="relative text-gray-800 w-10 dark:text-white ml-auto mr-4 lg:m-0 flex items-center">
+          <Link to="cart">
+            <span className="absolute -top-[6px] right-2 font-bold">
+              {numOfItems}
+            </span>
+            <IoCart className="text-4xl" />
+          </Link>
         </div>
 
         {/* Theme Toggle and Buttons on the Right */}
@@ -70,6 +99,7 @@ const Navbar = () => {
           >
             Sign Up
           </Link>
+
           <div className="flex items-center space-x-2">
             <ThemeToggle className="w-4 h-4" />
             <span className="text-gray-600 dark:text-gray-400 text-base font-semibold">
@@ -134,7 +164,7 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `text-lg font-semibold ${
                   isActive
-                    ? "text-xl font-bold text-brown-700"
+                    ? "text-xl font-bold text-orange-300"
                     : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
@@ -143,11 +173,11 @@ const Navbar = () => {
               Home
             </NavLink>
             <NavLink
-              to="/about"
+              to="about"
               className={({ isActive }) =>
                 `text-lg font-semibold ${
                   isActive
-                    ? "text-xl font-bold text-brown-700"
+                    ? "text-xl font-bold text-orange-300"
                     : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
@@ -156,17 +186,30 @@ const Navbar = () => {
               About
             </NavLink>
             <NavLink
-              to="/contact"
+              to="contact"
               className={({ isActive }) =>
                 `text-lg font-semibold ${
                   isActive
-                    ? "text-xl font-bold text-brown-700"
+                    ? "text-xl font-bold text-orange-300"
                     : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
             >
               Contact Us
+            </NavLink>
+            <NavLink
+              to="my-orders"
+              className={({ isActive }) =>
+                `text-lg font-semibold ${
+                  isActive
+                    ? "text-xl font-bold text-orange-300"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                }`
+              }
+              onClick={() => setMenuOpen(false)}
+            >
+              Orders
             </NavLink>
           </div>
 

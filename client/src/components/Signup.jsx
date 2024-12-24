@@ -33,7 +33,7 @@ function Signup() {
   const togglePassword = () => setShowPassword((state) => !state);
 
   return (
-    <section className="bg-night-100 min-h-screen flex items-center justify-center mt-10 ">
+    <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 min-h-sc flex items-center justify-center mt-10 ">
       <Formik
         initialValues={{ username: "", email: "", password: "" }}
         validationSchema={schema}

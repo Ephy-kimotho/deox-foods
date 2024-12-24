@@ -1,5 +1,6 @@
 export default {
   content: ["/index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
@@ -28,12 +29,12 @@ export default {
         },
         night: {
           100: "#15181f",
-          200: "#1a4383",
+          200: "#1f232e",
         },
       },
-      width:{
-        100:"100px"
-      }
+      width: {
+        100: "100px",
+      },
     },
   },
   plugins: [],

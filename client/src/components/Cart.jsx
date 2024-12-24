@@ -15,24 +15,24 @@ function Cart() {
   const cartHasItems = cart?.length > 0;
 
   return (
-    <section className="bg-white p-4 flex flex-col mt-20 mb-5">
-      <header className="py-1 border-b-2 border-gray-500 font-openSans mb-6">
+    <section className="flex-grow py-4 bg-zinc-200 dark:bg-night-200 px-6">
+      <header className="py-2 mt-20 mb-4 font-openSans  border-b-2 border-gray-600">
         <h2 className="text-orange-300 text-3xl font-bold">My Cart</h2>
       </header>
 
-      <main className="flex-grow">
+      <div className="flex-grow">
         {cartHasItems ? (
           cart.map((item) => <CartProduct {...item} key={item.id} />)
         ) : (
           <h2 className="text-orange-300 text-xl font-bold">Cart is empty.</h2>
         )}
-      </main>
+      </div>
 
-      <footer className="mt-10" >
-        <ul className="list-none font-openSans">
+      <footer className="mt-10">
+        <ul className="list-none font-openSans dark:text-gray-200">
           <li className="flex justify-between items-center py-2 border-b-2 border-gray-600">
             <span className="font-bold">Subtotal</span>
-            <span>Ksh. ${Subtotal}</span>
+            <span>Ksh. {Subtotal}</span>
           </li>
           <li className="flex justify-between items-center py-2 border-b-2 border-gray-600">
             <span className="font-bold">Delivery fee</span>
