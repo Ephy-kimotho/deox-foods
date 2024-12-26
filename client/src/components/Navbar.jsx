@@ -18,7 +18,7 @@ const Navbar = () => {
     <nav className="bg-gray-100 dark:bg-night-100 shadow-md py-4 font-sans fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto flex justify-between">
         {/* Logo with spacing from the left */}
-        <div className="flex items-center pl-4">
+        <div className="flex items-center pl-2">
           <img src={logo} alt="Deox Foods Logo" className="w-12 h-12" />
         </div>
 
@@ -35,6 +35,32 @@ const Navbar = () => {
             }
           >
             Home
+          </NavLink>
+
+          <NavLink
+            to="restraunts"
+            className={({ isActive }) =>
+              `text-xl font-semibold ${
+                isActive
+                  ? "text-2xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              }`
+            }
+          >
+            Restaurants
+          </NavLink>
+
+          <NavLink
+            to="fruits"
+            className={({ isActive }) =>
+              `text-xl font-semibold ${
+                isActive
+                  ? "text-2xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              }`
+            }
+          >
+            Fruits
           </NavLink>
 
           <NavLink
@@ -171,6 +197,34 @@ const Navbar = () => {
               onClick={() => setMenuOpen(false)}
             >
               Home
+            </NavLink>
+
+            <NavLink
+              to="restraunts"
+              className={({ isActive }) =>
+                `text-lg font-semibold ${
+                  isActive
+                    ? "text-xl font-bold text-orange-300"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                }`
+              }
+              onClick={() => setMenuOpen(false)}
+            >
+              Restaurants
+            </NavLink>
+
+            <NavLink
+              to="fruits"
+              className={({ isActive }) =>
+                `text-lg font-semibold ${
+                  isActive
+                    ? "text-xl font-bold text-orange-300"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                }`
+              }
+              onClick={() => setMenuOpen(false)}
+            >
+              Fruits
             </NavLink>
             <NavLink
               to="about"

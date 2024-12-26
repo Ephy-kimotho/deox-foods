@@ -6,6 +6,9 @@ import Signup from "../components/Signup";
 import Layout from "../layout/Layout";
 import Cart from "../components/Cart";
 import MyOrders from "../components/MyOrders";
+import About from "../components/About";
+import Restaurants from "../components/Restaurants";
+import Fruits from "../components/Fruits";
 
 const routes = createBrowserRouter([
   {
@@ -31,6 +34,18 @@ const routes = createBrowserRouter([
       {
         path: "my-orders",
         element: <MyOrders />,
+      },
+      {
+        path: "about",
+        element: <About />,
+      },
+      {
+        path: "restraunts",
+        element: <Restaurants />,
+      },
+      {
+        path: "fruits",
+        element: <Fruits />,
       },
     ],
   },
