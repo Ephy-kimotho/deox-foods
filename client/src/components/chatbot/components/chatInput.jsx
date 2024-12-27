@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // src/components/ChatInput.jsx
 import React from "react";
 import { TextField, Box } from "@mui/material";

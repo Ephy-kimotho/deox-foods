@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 // src/components/ChatMessage.jsx
-import React from "react";
 import { Box, Typography } from "@mui/material";
 
 const ChatMessage = ({ message, isAI = true }) => {

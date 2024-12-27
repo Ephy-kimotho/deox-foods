@@ -1,5 +1,5 @@
 // src/components/ChatbotLayout.jsx
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Box } from "@mui/material";
 import ChatGPTInfo from "../chat/page";
 import ChatInput from "../components/chatInput";
@@ -48,7 +48,7 @@ const ChatbotLayout = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        minHeight: "100vh",
         backgroundColor: "#fb8c00", // Orange background for the layout
       }}
     >

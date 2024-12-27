@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Menu, MenuItem, Switch, FormControlLabel, Typography } from '@mui/material';
-import { Brightness4, Brightness7, Language, ModeNight, Star } from '@mui/icons-material';
+import { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Switch,
+  FormControlLabel,
+  Typography,
+} from "@mui/material";
+import {
+  Brightness4,
+  Brightness7,
+  Language,
+  ModeNight,
+  Star,
+} from "@mui/icons-material";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [roastMode, setRoastMode] = useState(false);
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState("en");
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -33,10 +48,22 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: darkMode ? (roastMode ? '#e64a19' : '#263238') : '#fb8c00' }}>
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: darkMode
+          ? roastMode
+            ? "#e64a19"
+            : "#263238"
+          : "#fb8c00",
+      }}
+    >
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1, color: darkMode ? 'white' : 'black' }}>
-         DeoxBot
+        <Typography
+          variant="h6"
+          sx={{ flexGrow: 1, color: darkMode ? "white" : "black" }}
+        >
+          DeoxBot
         </Typography>
         <FormControlLabel
           control={
@@ -48,7 +75,7 @@ const Navbar = () => {
             />
           }
           label="Dark Mode"
-          sx={{ color: darkMode ? 'white' : 'black' }}
+          sx={{ color: darkMode ? "white" : "black" }}
         />
         <FormControlLabel
           control={
@@ -60,19 +87,19 @@ const Navbar = () => {
             />
           }
           label="Roast Mode"
-          sx={{ color: darkMode ? 'white' : 'black' }}
+          sx={{ color: darkMode ? "white" : "black" }}
         />
         <IconButton color="inherit" onClick={handleMenuClick}>
           <Language />
         </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          open={menuOpen}
-          onClose={handleMenuClose}
-        >
-          <MenuItem onClick={() => handleLanguageChange('en')}>English</MenuItem>
-          <MenuItem onClick={() => handleLanguageChange('fr')}>French</MenuItem>
-          <MenuItem onClick={() => handleLanguageChange('es')}>Spanish</MenuItem>
+        <Menu anchorEl={anchorEl} open={menuOpen} onClose={handleMenuClose}>
+          <MenuItem onClick={() => handleLanguageChange("en")}>
+            English
+          </MenuItem>
+          <MenuItem onClick={() => handleLanguageChange("fr")}>French</MenuItem>
+          <MenuItem onClick={() => handleLanguageChange("es")}>
+            Spanish
+          </MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

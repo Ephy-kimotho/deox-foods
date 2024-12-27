@@ -36,11 +36,30 @@ const useCartStore = create((set) => ({
   ],
 
   /* Methods that work on cart */
-  addItemToCart: (item) =>
-    set((prevState) => ({ cart: [...prevState.cart, item] })),
+  addItemToCart: (item, id) => {
+    return set((prevState) => {
+      let updatedArray = prevState.cart.slice(0);
+      const foundItem = updatedArray.find((item) => item.id === id);
+
+      if (foundItem) {
+        foundItem.quantity++;
+        return { cart: updatedArray };
+      } else {
+        return { cart: [...updatedArray, item] };
+      }
+    });
+  },
   removeItemFromCart: (itemId) =>
     set((prevState) => {
-      const updatedCart = prevState.cart.filter((item) => item.id !== itemId);
+      const updatedCart = prevState.cart.reduce((acc, item) => {
+        if (item.id !== itemId) {
+          acc.push(item);
+        } else {
+          item.quantity = 1;
+        }
+        return acc;
+      }, []);
+
       return { cart: updatedCart };
     }),
   changeQuantity: (action, id) =>

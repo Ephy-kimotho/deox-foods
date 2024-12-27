@@ -10,6 +10,7 @@ import restaurant5 from "../assets/images/restaurant5.jpg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+
 const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
   useEffect(() => {

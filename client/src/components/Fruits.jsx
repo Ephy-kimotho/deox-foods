@@ -1,9 +1,8 @@
 import { fruits } from "../data";
+import useCartStore from "../stores/useCartStore";
 
 const Fruits = () => {
-  const handleAddToCart = (fruitName) => {
-    alert(`${fruitName} added to cart!`);
-  };
+  const addItemToCart = useCartStore((state) => state.addItemToCart);
 
   return (
     <div className="p-6 bg-zinc-200 dark:bg-night-200 min-h-screen flex-grow">
@@ -31,7 +30,7 @@ const Fruits = () => {
               </p>
               <button
                 className="mt-4 bg-[#FD661D] text-white px-4 py-2 rounded-md hover:bg-[#e85c1a]"
-                onClick={() => handleAddToCart(fruit.name)}
+                onClick={() => addItemToCart(fruit, fruit.id)}
               >
                 Add to Cart
               </button>

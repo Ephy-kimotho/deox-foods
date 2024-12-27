@@ -18,9 +18,9 @@ const Navbar = () => {
     <nav className="bg-gray-100 dark:bg-night-100 shadow-md py-4 font-sans fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto flex justify-between">
         {/* Logo with spacing from the left */}
-        <div className="flex items-center pl-2">
+        <Link to="/" className="flex items-center">
           <img src={logo} alt="Deox Foods Logo" className="w-12 h-12" />
-        </div>
+        </Link>
 
         {/* Desktop Links in the Center */}
         <div className="hidden lg:flex items-center space-x-12">
