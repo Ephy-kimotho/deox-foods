@@ -8,7 +8,6 @@ export default {
         montserrat: ["Montserrat", "sana-serif"],
       },
       colors: {
-        cream: "#e3d5ca",
         gray: {
           100: "#fafafa",
           200: "#faf9f7",
@@ -16,11 +15,7 @@ export default {
           400: "#f3f7fa",
           500: "#bcc2d2",
           600: "#7d7d7d",
-        },
-        red: {
-          100: "#E63946",
-          200: "#f5444a",
-          300: "#f7705a",
+          700: "#2C3E50",
         },
         orange: {
           100: "#ff9763",
