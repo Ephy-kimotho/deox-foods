@@ -11,6 +11,7 @@ import Restaurants from "../components/Restaurants";
 import Fruits from "../components/Fruits";
 import Contact from "../components/Contact";
 import ChatbotLayout from "../components/chatbot/layout/page";
+import FoodItemsPage from "../components/FoodItems";
 
 const routes = createBrowserRouter(
   [
@@ -49,6 +50,10 @@ const routes = createBrowserRouter(
         {
           path: "fruits",
           element: <Fruits />,
+        },
+        {
+          path: "food-menu/:hotelid",
+          element: <FoodItemsPage />,
         },
         {
           path: "contact",
