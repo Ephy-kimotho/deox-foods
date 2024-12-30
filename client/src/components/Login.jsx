@@ -42,7 +42,6 @@ function Login() {
     }, 500); // Adjust the timeout duration as needed (e.g., 500ms)
   };
 
-
   const togglePassword = () => setShowPassword((state) => !state);
 
   return (
@@ -77,6 +76,13 @@ function Login() {
               onBlur={handleBlur}
               error={touched.password && errors.password} // Display error message
             />
+            {/* Forgot Password Link */}
+            <Link
+              to="/forgot-password"
+              className="text-sm text-orange-200 hover:underline self-end mt-[-10px]"
+            >
+              Forgot Password?
+            </Link>
             <AuthButton disabled={isSubmitting || isSending}>
               {isSending ? (
                 <div className="flex justify-center items-center">
@@ -88,7 +94,7 @@ function Login() {
             </AuthButton>
 
             <div className="font-bold font-openSans text-base text-night-200 flex flex-col items-center sm:flex-row gap-2">
-              <p>Don&apos;t have an account ?</p>
+              <p>Don&apos;t have an account?</p>
               <Link to="/signup" className="text-orange-200 hover:underline">
                 Create one now
               </Link>
