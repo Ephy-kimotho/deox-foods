@@ -13,6 +13,7 @@ import Contact from "../components/Contact";
 import ChatbotLayout from "../components/chatbot/layout/page";
 import FoodItemsPage from "../components/FoodItems";
 import ForgotPassword from "../components/ForgotPasword";
+import ResetPassword from "../components/ResetPassword";
 
 const routes = createBrowserRouter(
   [
@@ -63,6 +64,10 @@ const routes = createBrowserRouter(
         {
           path: "forgot-password",
           element: <ForgotPassword />,
+        },
+        {
+          path: "reset-password",
+          element: <ResetPassword />,
         },
         {
           path: "chatbot",
