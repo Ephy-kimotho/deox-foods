@@ -32,6 +32,7 @@ const Home = () => {
                 Location:{" "}
                 <span className="font-medium">{restaurant.location}</span>
               </p>
+              {/* For the FRUITS PAGE, navigate to the /fruits page */}
               {restaurant.name === "FRUITS PAGE" ? (
                 <Link
                   to="/fruits"
@@ -40,9 +41,13 @@ const Home = () => {
                   Order Now
                 </Link>
               ) : (
-                <button className="mt-4 bg-orange-300 text-white px-4 py-2 rounded-md hover:bg-orange-600">
+                // For other restaurants, navigate to the filtered food menu page
+                <Link
+                  to={`/food-menu/${restaurant.name}`} // Dynamically pass restaurant ID in URL
+                  className="mt-4 bg-orange-300 text-white px-4 py-2 rounded-md hover:bg-orange-600 inline-block"
+                >
                   Order Now
-                </button>
+                </Link>
               )}
             </div>
           </div>
@@ -53,3 +58,4 @@ const Home = () => {
 };
 
 export default Home;
+

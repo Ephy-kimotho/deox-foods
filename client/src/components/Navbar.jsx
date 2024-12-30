@@ -37,7 +37,7 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
-            to="food-menu/:hotelid"
+            to="food-menu/:hotelId"
             className={({ isActive }) =>
               `text-xl font-semibold ${isActive
                 ? "text-2xl font-bold text-orange-300"

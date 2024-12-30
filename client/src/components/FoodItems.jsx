@@ -11,9 +11,9 @@ const hotels = [
 
 const meals = [
   { id: 1, name: "Pizza Margherita", hotel: "NAKSHI HOTEL", description: "Delicious pizza with fresh mozzarella", price: 12.99 },
-  { id: 2, name: "Burger", hotel: "Hotel B", description: "Juicy beef burger with fries", price: 8.99 },
-  { id: 3, name: "Pasta Alfredo", hotel: "Hotel A", description: "Creamy pasta with parmesan cheese", price: 14.99 },
-  { id: 4, name: "Sushi", hotel: "Hotel C", description: "Fresh sushi with tuna and salmon", price: 18.99 },
+  { id: 2, name: "Burger", hotel: "GOLDEN FRIES", description: "Juicy beef burger with fries", price: 8.99 },
+  { id: 3, name: "Pasta Alfredo", hotel: "1960 HOTEL", description: "Creamy pasta with parmesan cheese", price: 14.99 },
+  { id: 4, name: "Sushi", hotel: "MAGGY'S HOTEL", description: "Fresh sushi with tuna and salmon", price: 18.99 },
   // Add more meals as needed
 ];
 

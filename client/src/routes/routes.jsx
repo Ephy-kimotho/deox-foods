@@ -52,7 +52,7 @@ const routes = createBrowserRouter(
           element: <Fruits />,
         },
         {
-          path: "food-menu/:hotelid",
+          path: "food-menu/:hotelId",
           element: <FoodItemsPage />,
         },
         {
