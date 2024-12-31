@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
+import Chatbot from "./Chatbot";
+import { FaComments } from "react-icons/fa";
 import Slider from "react-slick";
 import SearchSection from "./SearchSection";
 import restaurant1 from "../assets/images/restaurant1.jpg";
@@ -10,21 +11,13 @@ import restaurant5 from "../assets/images/restaurant5.jpg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-
 const Home = () => {
-  const [restaurants, setRestaurants] = useState([]);
-  useEffect(() => {
-    axios
-      .get("/api/restaurants")
-      .then((response) => {
-        setRestaurants(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the restaurants!", error);
-      });
-  }, []);
+  const [isChatbotVisible, setIsChatbotVisible] = useState(false);
 
-  // Dummy data for testing
+  const toggleChatbot = () => {
+    setIsChatbotVisible((prev) => !prev);
+  };
+
   const dummyRestaurants = [
     { id: 1, name: "Restaurant 1", image: restaurant1 },
     { id: 2, name: "Restaurant 2", image: restaurant2 },
@@ -44,34 +37,24 @@ const Home = () => {
     responsive: [
       {
         breakpoint: 1024,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: false,
-        },
+        settings: { slidesToShow: 4, slidesToScroll: 1 },
       },
       {
         breakpoint: 600,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: false,
-        },
+        settings: { slidesToShow: 4, slidesToScroll: 1 },
       },
     ],
   };
 
   return (
-    <div className="flex-grow bg-zinc-200 dark:bg-night-200 text-gray-900 dark:text-gray-200">
+    <div className="relative flex-grow bg-zinc-200 dark:bg-night-200 text-gray-900 dark:text-gray-200">
       <SearchSection />
       <div className="container mx-auto p-4 mb-4">
         <h2 className="text-3xl font-bold text-center mb-4">
           Nearby Restaurants
         </h2>
-        <div className="p-4 bg-gray-200 rounded-lg">
-          <Slider {...settings} className="space-x-0.5 md:space-x-1">
+        <div className="p-4 bg-gray-200 dark:bg-night-100 rounded-lg">
+          <Slider {...settings}>
             {dummyRestaurants.map((restaurant) => (
               <div key={restaurant.id} className="flex justify-center">
                 <img
@@ -84,8 +67,18 @@ const Home = () => {
           </Slider>
         </div>
       </div>
+      {/* Chatbot */}
+      <Chatbot isVisible={isChatbotVisible} toggleVisibility={toggleChatbot} />
+      {/* Toggle Chatbot Button */}
+      <button
+        onClick={toggleChatbot}
+        className="fixed bottom-4 right-4 p-3 rounded-full bg-orange-400 text-white hover:bg-orange-500 focus:outline-none z-50"
+      >
+        {isChatbotVisible ? "✖" : <FaComments size={20} />}
+      </button>
     </div>
   );
 };
 
 export default Home;
+

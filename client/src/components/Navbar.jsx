@@ -27,10 +27,9 @@ const Navbar = () => {
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `text-xl font-semibold ${
-                isActive
-                  ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              `text-xl font-semibold ${isActive
+                ? "text-2xl font-bold text-orange-300"
+                : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
@@ -38,12 +37,23 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
+            to="food-menu/:hotelId"
+            className={({ isActive }) =>
+              `text-xl font-semibold ${isActive
+                ? "text-2xl font-bold text-orange-300"
+                : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              }`
+            }
+          >
+            Food Menu
+          </NavLink>
+
+          <NavLink
             to="restraunts"
             className={({ isActive }) =>
-              `text-xl font-semibold ${
-                isActive
-                  ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              `text-xl font-semibold ${isActive
+                ? "text-2xl font-bold text-orange-300"
+                : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
@@ -53,10 +63,9 @@ const Navbar = () => {
           <NavLink
             to="fruits"
             className={({ isActive }) =>
-              `text-xl font-semibold ${
-                isActive
-                  ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              `text-xl font-semibold ${isActive
+                ? "text-2xl font-bold text-orange-300"
+                : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
@@ -66,10 +75,9 @@ const Navbar = () => {
           <NavLink
             to="about"
             className={({ isActive }) =>
-              `text-xl font-semibold ${
-                isActive
-                  ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              `text-xl font-semibold ${isActive
+                ? "text-2xl font-bold text-orange-300"
+                : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
@@ -79,10 +87,9 @@ const Navbar = () => {
           <NavLink
             to="contact"
             className={({ isActive }) =>
-              `text-xl font-semibold ${
-                isActive
-                  ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              `text-xl font-semibold ${isActive
+                ? "text-2xl font-bold text-orange-300"
+                : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
@@ -91,10 +98,9 @@ const Navbar = () => {
           <NavLink
             to="my-orders"
             className={({ isActive }) =>
-              `text-xl font-semibold ${
-                isActive
-                  ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+              `text-xl font-semibold ${isActive
+                ? "text-2xl font-bold text-orange-300"
+                : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
               }`
             }
           >
@@ -188,10 +194,9 @@ const Navbar = () => {
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `text-lg font-semibold ${
-                  isActive
-                    ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                `text-lg font-semibold ${isActive
+                  ? "text-xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -200,12 +205,24 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
+              to="food-menu/:hotelid"
+              className={({ isActive }) =>
+                `text-lg font-semibold ${isActive
+                  ? "text-xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                }`
+              }
+              onClick={() => setMenuOpen(false)}
+            >
+              Food Menu
+            </NavLink>
+
+            <NavLink
               to="restraunts"
               className={({ isActive }) =>
-                `text-lg font-semibold ${
-                  isActive
-                    ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                `text-lg font-semibold ${isActive
+                  ? "text-xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -216,10 +233,9 @@ const Navbar = () => {
             <NavLink
               to="fruits"
               className={({ isActive }) =>
-                `text-lg font-semibold ${
-                  isActive
-                    ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                `text-lg font-semibold ${isActive
+                  ? "text-xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -229,10 +245,9 @@ const Navbar = () => {
             <NavLink
               to="about"
               className={({ isActive }) =>
-                `text-lg font-semibold ${
-                  isActive
-                    ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                `text-lg font-semibold ${isActive
+                  ? "text-xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -242,10 +257,9 @@ const Navbar = () => {
             <NavLink
               to="contact"
               className={({ isActive }) =>
-                `text-lg font-semibold ${
-                  isActive
-                    ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                `text-lg font-semibold ${isActive
+                  ? "text-xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -255,10 +269,9 @@ const Navbar = () => {
             <NavLink
               to="my-orders"
               className={({ isActive }) =>
-                `text-lg font-semibold ${
-                  isActive
-                    ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                `text-lg font-semibold ${isActive
+                  ? "text-xl font-bold text-orange-300"
+                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -286,11 +299,10 @@ const Navbar = () => {
                 }}
                 className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-md"
               >
-                SignUp
+                Sign Up
               </Link>
             </div>
 
-            {/* Theme Toggle and Title */}
             <div className="flex items-center space-x-2">
               <ThemeToggle className="w-4 h-4" />
               <span className="text-gray-600 dark:text-gray-400 text-base font-semibold">
@@ -305,3 +317,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

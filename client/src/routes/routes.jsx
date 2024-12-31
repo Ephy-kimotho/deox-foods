@@ -11,6 +11,9 @@ import Restaurants from "../components/Restaurants";
 import Fruits from "../components/Fruits";
 import Contact from "../components/Contact";
 import ChatbotLayout from "../components/chatbot/layout/page";
+import FoodItemsPage from "../components/FoodItems";
+import ForgotPassword from "../components/ForgotPasword";
+import ResetPassword from "../components/ResetPassword";
 
 const routes = createBrowserRouter(
   [
@@ -51,8 +54,20 @@ const routes = createBrowserRouter(
           element: <Fruits />,
         },
         {
+          path: "food-menu/:hotelId",
+          element: <FoodItemsPage />,
+        },
+        {
           path: "contact",
           element: <Contact />,
+        },
+        {
+          path: "forgot-password",
+          element: <ForgotPassword />,
+        },
+        {
+          path: "reset-password",
+          element: <ResetPassword />,
         },
         {
           path: "chatbot",
