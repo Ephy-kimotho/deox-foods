@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import useCartStore from "../stores/useCartStore";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 
 // Sample meals data with calories
@@ -12,6 +12,7 @@ const meals = [
     price: 12.99,
     calories: 250,
     image: "https://via.placeholder.com/600x400?text=Pizza+Margherita",
+    quantity: 1,
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ const meals = [
     price: 8.99,
     calories: 450,
     image: "https://via.placeholder.com/600x400?text=Burger",
+    quantity: 1,
   },
   {
     id: 3,
@@ -28,6 +30,7 @@ const meals = [
     price: 14.99,
     calories: 600,
     image: "https://via.placeholder.com/600x400?text=Pasta+Alfredo",
+    quantity: 1,
   },
   {
     id: 4,
@@ -36,6 +39,7 @@ const meals = [
     price: 18.99,
     calories: 350,
     image: "https://via.placeholder.com/600x400?text=Sushi",
+    quantity: 1,
   },
 ];
 
@@ -56,12 +60,13 @@ const Meals = () => {
   const addToCart = useCartStore((state) => state.addItemToCart);
 
   const handleAddToCart = () => {
-    addToCart({ ...meal, quantity: 1 });
+    addToCart(meal, meal.id);
     toast.success(`${meal.name} added to cart`);
   };
 
   return (
     <section className="min-h-screen bg-zinc-200 dark:bg-night-200 flex items-center justify-center p-5 w-full">
+      <Toaster position="top-center" />
       <div className="w-full max-w-7xl bg-transparent p-8 rounded-xl shadow-lg">
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-2 gap-8"

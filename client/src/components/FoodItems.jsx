@@ -19,6 +19,7 @@ const meals = [
     description: "Delicious pizza with fresh mozzarella",
     price: 12.99,
     image: "https://via.placeholder.com/150?text=Pizza+Margherita",
+    quantity: 1,
   },
   {
     id: 2,
@@ -27,6 +28,7 @@ const meals = [
     description: "Juicy beef burger with fries",
     price: 8.99,
     image: "https://via.placeholder.com/150?text=Burger",
+    quantity: 1,
   },
   {
     id: 3,
@@ -35,6 +37,7 @@ const meals = [
     description: "Creamy pasta with parmesan cheese",
     price: 14.99,
     image: "https://via.placeholder.com/150?text=Pasta+Alfredo",
+    quantity: 1,
   },
   {
     id: 4,
@@ -43,6 +46,7 @@ const meals = [
     description: "Fresh sushi with tuna and salmon",
     price: 18.99,
     image: "https://via.placeholder.com/150?text=Sushi",
+    quantity: 1,
   },
 ];
 
@@ -75,8 +79,8 @@ function FoodItemsPage() {
     setFilteredMeals(filtered);
   };
 
-  const handleAddToCart = (meal) => {
-    addToCart({ ...meal, quantity: 1 });
+  const handleAddToCart = (meal, id) => {
+    addToCart(meal, id);
     toast.success(`${meal.name} added to cart`);
   };
 
@@ -155,7 +159,7 @@ function FoodItemsPage() {
                     View Details
                   </Link>
                   <button
-                    onClick={() => handleAddToCart(meal)}
+                    onClick={() => handleAddToCart(meal, meal.id)}
                     className="ml-2 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors"
                   >
                     Add to Cart
