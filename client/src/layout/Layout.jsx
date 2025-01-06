@@ -1,27 +1,32 @@
 /* place the layout component here */
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { TbMessageChatbotFilled } from "react-icons/tb";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { useState,  } from "react";
+import Navbar from "../components/common/Navbar";
+import Footer from "../components/common/Footer";
+import Chatbot from "../components/Chatbot";
 
 function Layout() {
-  const { pathname } = useLocation();
-  const isLocationChatBot = pathname === "/chatbot";
-   return (
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
+  return (
     <div>
       <Navbar />
       <div className="flex flex-col justify-between">
         <main className="flex relative">
           <Outlet />
 
-          {!isLocationChatBot && (
-            <Link
-              to="chatbot"
-              className="fixed z-40 bottom-20 right-6 w-16 h-16 grid place-items-center rounded-full  text-center p-2 bg-night-200 dark:bg-zinc-400 text-zinc-200 dark:text-night-200"
-            >
-              <TbMessageChatbotFilled className="text-4xl" />
-            </Link>
-          )}
+          <Chatbot isVisible={isVisible} toggleVisibility={toggleVisibility} />
+
+          <button
+            type="button"
+            onClick={toggleVisibility}
+            className="fixed z-40 bottom-6 right-6 w-12 h-12 grid place-items-center rounded-full  text-center p-2 bg-night-200 dark:bg-zinc-400 text-zinc-200 dark:text-night-200"
+          >
+            <TbMessageChatbotFilled className="text-3xl" />
+          </button>
         </main>
         <Footer />
       </div>
