@@ -1,6 +1,3 @@
-import { useState } from "react";
-import Chatbot from "./Chatbot";
-import { FaComments } from "react-icons/fa";
 import Slider from "react-slick";
 import SearchSection from "./SearchSection";
 import restaurant1 from "../assets/images/restaurant1.jpg";
@@ -12,12 +9,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
-  const [isChatbotVisible, setIsChatbotVisible] = useState(false);
-
-  const toggleChatbot = () => {
-    setIsChatbotVisible((prev) => !prev);
-  };
-
   const dummyRestaurants = [
     { id: 1, name: "Restaurant 1", image: restaurant1 },
     { id: 2, name: "Restaurant 2", image: restaurant2 },
@@ -67,18 +58,8 @@ const Home = () => {
           </Slider>
         </div>
       </div>
-      {/* Chatbot */}
-      <Chatbot isVisible={isChatbotVisible} toggleVisibility={toggleChatbot} />
-      {/* Toggle Chatbot Button */}
-      <button
-        onClick={toggleChatbot}
-        className="fixed bottom-4 right-4 p-3 rounded-full bg-orange-400 text-white hover:bg-orange-500 focus:outline-none z-50"
-      >
-        {isChatbotVisible ? "✖" : <FaComments size={20} />}
-      </button>
     </div>
   );
 };
 
 export default Home;
-
