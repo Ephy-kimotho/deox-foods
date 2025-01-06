@@ -8,12 +8,13 @@ import Cart from "../components/Cart";
 import MyOrders from "../components/MyOrders";
 import About from "../components/About";
 import Restaurants from "../components/Restaurants";
-import Fruits from "../components/Fruits";
 import Contact from "../components/Contact";
-import ChatbotLayout from "../components/chatbot/layout/page";
 import FoodItemsPage from "../components/FoodItems";
 import ForgotPassword from "../components/ForgotPasword";
 import ResetPassword from "../components/ResetPassword";
+import Profile from "../components/Profile";
+import ProtectedRoute from "../components/common/ProtectedRoute";
+import Error404 from "../components/Error404";
 
 const routes = createBrowserRouter(
   [
@@ -46,15 +47,11 @@ const routes = createBrowserRouter(
           element: <About />,
         },
         {
-          path: "restraunts",
+          path: "restaurants",
           element: <Restaurants />,
         },
         {
-          path: "fruits",
-          element: <Fruits />,
-        },
-        {
-          path: "food-menu/:hotelId",
+          path: "/food-menu/:hotelId",
           element: <FoodItemsPage />,
         },
         {
@@ -70,8 +67,16 @@ const routes = createBrowserRouter(
           element: <ResetPassword />,
         },
         {
-          path: "chatbot",
-          element: <ChatbotLayout />,
+          path: "/profile",
+          element: (
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "*",
+          element: <Error404 />,
         },
       ],
     },
