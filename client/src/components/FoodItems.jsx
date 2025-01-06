@@ -1,45 +1,48 @@
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import axios from "axios"; // For making API requests
+import { meals } from "../data";
+import useCartStore from "../stores/useCartStore";
 
-const hotels = [
-  "NAKSHI HOTEL",
-  "GOLDEN FRIES",
-  "1960 HOTEL",
-  "MAGGY'S HOTEL"
-]; // Example hotels for the filter
-
-const meals = [
-  { id: 1, name: "Pizza Margherita", hotel: "NAKSHI HOTEL", description: "Delicious pizza with fresh mozzarella", price: 12.99 },
-  { id: 2, name: "Burger", hotel: "GOLDEN FRIES", description: "Juicy beef burger with fries", price: 8.99 },
-  { id: 3, name: "Pasta Alfredo", hotel: "1960 HOTEL", description: "Creamy pasta with parmesan cheese", price: 14.99 },
-  { id: 4, name: "Sushi", hotel: "MAGGY'S HOTEL", description: "Fresh sushi with tuna and salmon", price: 18.99 },
-  // Add more meals as needed
-];
+const hotels = ["NAKSHI HOTEL", "GOLDEN FRIES", "1960 HOTEL", "MAGGY'S HOTEL"];
 
 function FoodItemsPage() {
-  const { hotelId } = useParams(); // Get hotel ID from the URL (e.g., /food-menu/:hotelId)
-  console.log(hotelId)
+  const { hotelId } = useParams();
+  const addItemToCart = useCartStore((state) => state.addItemToCart);
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedHotel, setSelectedHotel] = useState(hotelId || "");
+  const [selectedHotel, setSelectedHotel] = useState("");
   const [filteredMeals, setFilteredMeals] = useState(meals);
 
+  // Sync selectedHotel with URL
   useEffect(() => {
-    // Filter meals whenever search term or selected hotel changes
+    setSelectedHotel(hotelId || "");
+  }, [hotelId]);
+
+  // Filter meals whenever search term or selected hotel changes
+  useEffect(() => {
     filterMeals(searchTerm, selectedHotel);
   }, [searchTerm, selectedHotel]);
 
   // Handle search
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    setSearchTerm(e.target.value.trim());
   };
 
-  // Handle hotel filter
+  // Handle hotel filter and update URL
   const handleHotelFilter = (e) => {
-    setSelectedHotel(e.target.value);
+    const hotel = e.target.value.trim();
+
+    if (hotel === "") {
+      setSelectedHotel("");
+      setFilteredMeals(meals);
+      navigate("/food-menu/:hotelId");
+    } else {
+      setSelectedHotel(hotel);
+      navigate(`/food-menu/${hotel}`);
+    }
   };
 
-  // Filter meals based on search term and selected hotel
+  // Filter meals logic
   const filterMeals = (search, hotel) => {
     let filtered = meals;
 
@@ -58,20 +61,20 @@ function FoodItemsPage() {
 
   return (
     <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5">
-      <div className="container mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold text-center text-night-200 mb-6">
-          Food Menu
+      <div className="container mx-auto max-w-7xl mt-20">
+        <h1 className="text-3xl font-bold text-center text-night-200 dark:text-orange-300 mb-6">
+          Foods Menu
         </h1>
 
         {/* Search and Filter */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row gap-2 justify-between items-center mb-6">
           <div className="w-full sm:w-1/2 flex items-center">
             <input
               type="text"
               placeholder="Search for a meal..."
               value={searchTerm}
               onChange={handleSearch}
-              className="w-full p-3 rounded-md bg-gray-100 dark:bg-night-300 text-night-200 dark:text-white focus:outline-none"
+              className="w-full p-3 rounded-md bg-gray-100 dark:bg-night-300 text-night-200 focus:outline-none placeholder:text-gray-600"
             />
           </div>
 
@@ -79,9 +82,9 @@ function FoodItemsPage() {
             <select
               value={selectedHotel}
               onChange={handleHotelFilter}
-              className="p-3 rounded-md bg-gray-100 dark:bg-night-300 text-night-200 dark:text-white focus:outline-none"
+              className="p-3 rounded-md bg-gray-100 dark:bg-night-300 text-night-200 focus:outline-none w-full sm:w-1/2"
             >
-              <option value="">Select Hotel</option>
+              <option value="">Filter by hotel</option>
               {hotels.map((hotel) => (
                 <option key={hotel} value={hotel}>
                   {hotel}
@@ -92,31 +95,36 @@ function FoodItemsPage() {
         </div>
 
         {/* Food Items List */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredMeals.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredMeals?.length > 0 ? (
             filteredMeals.map((meal) => (
               <div
                 key={meal.id}
-                className="bg-white dark:bg-night-300 p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+                className="dark:bg-night-300 p-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow bg-gray-200"
               >
-                <h3 className="text-xl font-semibold text-night-200 dark:text-white">
+                <img
+                  src={meal.image}
+                  alt={meal.name}
+                  className="w-full h-56 object-cover rounded-md"
+                />
+                <h3 className="text-xl capitalize font-semibold text-night-200 my-2">
                   {meal.name}
                 </h3>
-                <p className="text-sm text-night-400 dark:text-night-200 mt-2">
+                <p className="text-sm text-night-400 dark:text-night-200 ">
                   {meal.description}
                 </p>
-                <p className="text-lg font-semibold text-night-200 dark:text-white mt-4">
-                  ${meal.price.toFixed(2)}
+                <p className="text-lg font-semibold text-night-200 my-1 ">
+                  Ksh {meal.price.toFixed(2)}
                 </p>
-                <p className="text-sm text-night-400 dark:text-night-200 mt-1">
+                <p className="text-sm text-night-400 dark:text-night-200">
                   {meal.hotel}
                 </p>
-                <Link
-                  to={`/meal/${meal.id}`}
+                <button
+                  onClick={() => addItemToCart(meal, meal.id)}
                   className="mt-4 inline-block bg-orange-200 text-white py-2 px-4 rounded-lg hover:bg-orange-300 transition-colors"
                 >
-                  View Details
-                </Link>
+                  Add to Cart
+                </button>
               </div>
             ))
           ) : (
@@ -131,4 +139,3 @@ function FoodItemsPage() {
 }
 
 export default FoodItemsPage;
-
