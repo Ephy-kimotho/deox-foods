@@ -21,7 +21,7 @@ const Navbar = () => {
     <nav className="bg-gray-100 dark:bg-night-100 shadow-md py-4 font-sans fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto flex justify-between">
         {/* Logo with spacing from the left */}
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center ml-4 sm:m-0">
           <img src={logo} alt="Deox Foods Logo" className="w-12 h-12" />
         </Link>
 
@@ -33,13 +33,12 @@ const Navbar = () => {
               `text-xl font-semibold ${
                 isActive
                   ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                  : "text-gray-600 dark:text-gray-500 hover:text-orange-200 dark:hover:text-orange-200"
               }`
             }
           >
             Home
           </NavLink>
-
 
           <NavLink
             to="restaurants"
@@ -47,7 +46,7 @@ const Navbar = () => {
               `text-xl font-semibold ${
                 isActive
                   ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                  : "text-gray-600 dark:text-gray-500 hover:text-orange-200 dark:hover:text-orange-200"
               }`
             }
           >
@@ -60,7 +59,7 @@ const Navbar = () => {
               `text-xl font-semibold ${
                 isActive
                   ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                  : "text-gray-600 dark:text-gray-500 hover:text-orange-200 dark:hover:text-orange-200"
               }`
             }
           >
@@ -73,7 +72,7 @@ const Navbar = () => {
               `text-xl font-semibold ${
                 isActive
                   ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                  : "text-gray-600 dark:text-gray-500 hover:text-orange-200 dark:hover:text-orange-200"
               }`
             }
           >
@@ -85,7 +84,7 @@ const Navbar = () => {
               `text-xl font-semibold ${
                 isActive
                   ? "text-2xl font-bold text-orange-300"
-                  : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                  : "text-gray-600 dark:text-gray-500 hover:text-orange-200 dark:hover:text-orange-200"
               }`
             }
           >
@@ -94,19 +93,21 @@ const Navbar = () => {
         </div>
 
         {/* Cart */}
-        <div className="relative text-gray-800 w-10 dark:text-white ml-auto mr-4 lg:m-0 flex items-center">
-          <NavLink
-            to="cart"
-            className={({ isActive }) =>
-              `hover:text-orange-300 ${isActive && "text-orange-300"}`
-            }
-          >
-            <span className="absolute -top-[6px] right-2 font-bold">
-              {numOfItems}
-            </span>
-            <IoCart className="text-4xl" />
-          </NavLink>
-        </div>
+        {isAuthenticated && (
+          <div className="relative text-gray-800 w-10 dark:text-white ml-auto mr-4 lg:m-0 flex items-center">
+            <NavLink
+              to="cart"
+              className={({ isActive }) =>
+                `hover:text-orange-300 ${isActive && "text-orange-300"}`
+              }
+            >
+              <span className="absolute -top-[6px] right-2 font-bold text-green-600">
+                {numOfItems}
+              </span>
+              <IoCart className="text-4xl" />
+            </NavLink>
+          </div>
+        )}
 
         {/* Theme Toggle and Buttons on the Right */}
         <article className="hidden lg:flex items-center space-x-4">
@@ -168,7 +169,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="fixed top-0 right-0 h-full w-1/2 bg-gray-100 dark:bg-night-100 shadow-lg transform translate-x-0 transition-transform duration-300 flex flex-col justify-between">
+        <div className="fixed top-0 right-0 h-full w-[4/5] bg-gray-200 dark:bg-night-100 shadow-lg transform translate-x-0 transition-transform duration-300 flex flex-col justify-between px-3">
           <button
             className="absolute top-4 right-4 text-gray-600 dark:text-gray-400"
             onClick={() => setMenuOpen(false)}
@@ -196,7 +197,7 @@ const Navbar = () => {
                 `text-lg font-semibold ${
                   isActive
                     ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200 dark:hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -210,7 +211,7 @@ const Navbar = () => {
                 `text-lg font-semibold ${
                   isActive
                     ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200 dark:hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -223,7 +224,7 @@ const Navbar = () => {
                 `text-lg font-semibold ${
                   isActive
                     ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200 dark:hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -236,7 +237,7 @@ const Navbar = () => {
                 `text-lg font-semibold ${
                   isActive
                     ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200 dark:hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -249,7 +250,7 @@ const Navbar = () => {
                 `text-lg font-semibold ${
                   isActive
                     ? "text-xl font-bold text-orange-300"
-                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200"
+                    : "text-gray-600 dark:text-gray-400 hover:text-orange-200 dark:hover:text-orange-200"
                 }`
               }
               onClick={() => setMenuOpen(false)}

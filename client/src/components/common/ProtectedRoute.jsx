@@ -6,7 +6,11 @@ import { Navigate } from "react-router-dom";
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useContext(authContext);
 
-  return !isAuthenticated ? <Navigate to="/login" replace={true} /> : children;
+  return !isAuthenticated ? (
+    <Navigate to="/login?message=You must login first." />
+  ) : (
+    children
+  );
 }
 
 export default ProtectedRoute;

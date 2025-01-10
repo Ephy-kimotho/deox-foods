@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 
@@ -14,7 +15,7 @@ const SearchBar = ({ onSearch }) => {
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="p-2 md:p-3 rounded-l-full font-sans outline-none w-40 md:w-64 bg-white  dark:bg-gray-800 placeholder:text-night-100 dark:placeholder:text-gray-200"
+        className="p-2 md:p-3 rounded-l-full font-sans outline-none w-40 md:w-64 bg-white dark:bg-gray-800 placeholder:text-gray-600 dark:text-zinc-200"
         placeholder="Search..."
       />
       <button

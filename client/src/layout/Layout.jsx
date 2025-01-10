@@ -1,10 +1,11 @@
 /* place the layout component here */
 import { TbMessageChatbotFilled } from "react-icons/tb";
 import { Outlet } from "react-router-dom";
-import { useState,  } from "react";
+import { useState } from "react";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
 import Chatbot from "../components/Chatbot";
+import { Toaster } from "react-hot-toast";
 
 function Layout() {
   const [isVisible, setIsVisible] = useState(false);
@@ -15,6 +16,7 @@ function Layout() {
     <div>
       <Navbar />
       <div className="flex flex-col justify-between">
+        <Toaster position="top-center" />
         <main className="flex relative">
           <Outlet />
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { IoClose } from "react-icons/io5";
+import { BsFillSendFill } from "react-icons/bs";
 
 const Chatbot = ({ isVisible, toggleVisibility }) => {
   const [messages, setMessages] = useState([]); // State for storing messages
@@ -23,7 +24,7 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
   };
 
   return isVisible ? (
-    <div className="fixed bottom-20 right-10 w-80 h-96 bg-neutral-100 dark:bg-night-200 shadow-xl rounded-lg flex flex-col p-4 z-30 ">
+    <div className="fixed bottom-20 right-3 sm:right-6 md:right-10 w-[320px] sm:w-[600px] h-[400px] bg-neutral-200 dark:bg-night-200 shadow-xl rounded-lg flex flex-col p-4  z-30 ">
       {/* Header */}
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-bold text-gray-900 dark:text-gray-200">
@@ -52,15 +53,19 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
         ))}
       </div>
       {/* Input Section */}
-      <div className="mt-2 flex items-center gap-2">
+      <div className="mt-2 gap-2 flex items-center w-full ">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleInputKeyDown}
           placeholder="Type your message..."
-          className="flex-grow px-3 py-2 rounded border-2 border-gray-800 dark:border-gray-600 bg-gray-200 dark:bg-night-100 text-gray-900 dark:text-gray-200 placeholder:text-gray-600"
+          className="py-3 pl-3 rounded border-2 border-gray-800 dark:border-gray-600 bg-gray-200 dark:bg-night-100 text-gray-900 dark:text-gray-200 placeholder:text-gray-600 text-base text-wrap w-full"
         />
+
+        <button className="px-3 py-3 bg-orange-300 mr-2 rounded-md active:scale-95">
+          <BsFillSendFill className="text-gray-200 text-2xl " />
+        </button>
       </div>
     </div>
   ) : null;

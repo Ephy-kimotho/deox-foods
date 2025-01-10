@@ -1,16 +1,12 @@
-import {
-  Link,
-  useNavigate,
-  useSearchParams,
-  useLocation,
-} from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useContext } from "react";
 import { Formik, Form } from "formik";
+import { authContext } from "./AuthProvider";
 import Input from "./common/Input";
 import PasswordInput from "./common/PasswordInput";
 import AuthButton from "./common/AuthButton";
 import * as Yup from "yup";
-import { authContext } from "./AuthProvider";
+//import toast from "react-hot-toast";
 
 const schema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required."),
@@ -26,14 +22,23 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [searchParams] = useSearchParams();
   const { login } = useContext(authContext);
-  const { state } = useLocation();
   const navigate = useNavigate();
 
   const message = searchParams.get("message");
+  console.log(message);
 
-  if (message) {
-    alert(message);
-  }
+  /* if (message && message.length > 0) {
+    toast(message, {
+      style: {
+        backgroundColor: "#FFA500",
+        color: "#FFFFFF",
+        padding: "0.5rem 2rem",
+        fontSize: "1rem",
+        fontWeight: "bold",
+      },
+      icon: "⚠️",
+    });
+  } */
 
   const handleSubmit = async (values, actions) => {
     actions.setSubmitting(true);
@@ -45,9 +50,7 @@ function Login() {
 
     actions.resetForm();
     actions.setSubmitting(false);
-
-    const path = state?.redirectTo || "/";
-    navigate(path);
+    navigate("/");
   };
 
   const togglePassword = () => setShowPassword((state) => !state);
@@ -59,7 +62,7 @@ function Login() {
         validationSchema={schema}
         onSubmit={handleSubmit}
       >
-        <Form className="bg-gray-200 rounded-md w-4/5 max-w-2xl px-6 py-5 flex flex-col items-center gap-5">
+        <Form className="bg-gray-200 rounded-md w-11/12 max-w-2xl px-6 py-5 flex flex-col items-center gap-5">
           <h2 className="text-xl sm:text-3xl text-night-200 font-bold uppercase">
             Welcome Back
           </h2>

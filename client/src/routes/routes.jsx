@@ -36,11 +36,19 @@ const routes = createBrowserRouter(
         },
         {
           path: "cart",
-          element: <Cart />,
+          element: (
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "my-orders",
-          element: <MyOrders />,
+          element: (
+            <ProtectedRoute>
+              <MyOrders />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "about",
@@ -48,7 +56,11 @@ const routes = createBrowserRouter(
         },
         {
           path: "restaurants",
-          element: <Restaurants />,
+          element: (
+            <ProtectedRoute>
+              <Restaurants />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/food-menu/:hotelId",

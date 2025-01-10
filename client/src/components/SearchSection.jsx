@@ -5,17 +5,9 @@ import plate3 from "../assets/images/plate3.jpg";
 
 const SearchSection = () => {
   return (
-    <div className="relative h-screen bg-zinc-200 dark:bg-night-200 flex items-center justify-center p-4">
+    <section className="mt-24 relative  flex items-center justify-center ">
       <div
         className="relative z-10 text-left p-8 bg-gray-200 w-full max-w-screen-xl mx-auto rounded-lg"
-        style={{
-          marginTop: "80px",
-          marginBottom: "10px",
-          marginLeft: "5px",
-          marginRight: "5px",
-          height: "calc(100% - 90px)",
-          boxSizing: "border-box",
-        }}
       >
         <h1 className="text-3xl md:text-4xl font-bold mb-2 text-green-700">
           Hungry?
@@ -23,35 +15,32 @@ const SearchSection = () => {
         <h1 className="text-3xl md:text-4xl font-bold mb-2 text-black">
           Let&apos;s deliver Happiness to your
         </h1>
-        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-orange-500">
+        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-orange-400">
           doorstep!
         </h1>
         <p className="text-sm md:text-lg text-black mb-4">
           Discover a delightful variety of Dishes from the finest eateries
-          around Whether you&apos;re craving something adventurous or your
+          around. Whether you&apos;re craving something adventurous or your
           favorite comfort meal, DeoxFoods ensures fast and reliable delivery
-          straight to your doorstep.Let us transform your hunger into
+          straight to your doorstep. Let us transform your hunger into
           satisfaction with every bite.
         </p>
         <p className="text-sm md:text-lg text-green-700 mb-4">
           <span className="text-black">Deox</span>
-          <span className="text-orange-500">Foods</span> – Your Hunger&apos;s
+          <span className="text-orange-400">Foods</span> – Your Hunger&apos;s
           Nightmare!
         </p>
         <div className="flex flex-col items-start space-y-4 mb-8">
           <SearchBar />
           <div className="flex flex-wrap space-x-1 md:space-x-2">
-            <button className="px-1 py-1 md:px-2 md:py-2 border-2 border-gray-500 rounded-full hover:text-orange-500 dark:text-night-200">
+            <button className="px-1 py-1 md:px-2 md:py-2 border-2 border-gray-400 rounded-full hover:text-orange-400 transition-colors">
               Beans
             </button>
-            <button className="px-1 py-1 md:px-2 md:py-2 border-2 border-gray-500 rounded-full hover:text-orange-500 dark:text-night-200">
+            <button className="px-1 py-1 md:px-2 md:py-2 border-2 border-gray-400 rounded-full hover:text-orange-400 transition-colors">
               Rice
             </button>
-            <button className="px-1 py-1 md:px-2 md:py-2 border-2 border-gray-500 rounded-full hover:text-orange-500 dark:text-night-200">
+            <button className="px-1 py-1 md:px-2 md:py-2 border-2 border-gray-400 rounded-full hover:text-orange-400 transition-colors">
               Chapati
-            </button>
-            <button className="px-1 py-1 md:px-2 md:py-2 border-2 border-gray-500 rounded-full hover:text-orange-500 dark:text-night-200">
-              More
             </button>
           </div>
         </div>
@@ -75,7 +64,7 @@ const SearchSection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

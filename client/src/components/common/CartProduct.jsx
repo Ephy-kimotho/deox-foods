@@ -8,7 +8,7 @@ function CartProduct({ id, name, image, description, price, quantity }) {
 
   return (
     <article className="bg-white flex justify-between shadow-lg w-full py-2 px-2 rounded-md mb-4">
-      <div className="flex-grow flex gap-2 ">
+      <div className="flex-grow flex gap-1 ">
         <img
           src={image}
           alt={name}

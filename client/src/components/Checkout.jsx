@@ -9,12 +9,15 @@ import useCartStore from "../stores/useCartStore";
 
 const residentSchema = Yup.object({
   hostel: Yup.string().required("Required"),
-  roomNo: Yup.number().positive().min(1).required("Required"),
+  roomNumber: Yup.number().positive().min(1).required("Required"),
+  blockNumber: Yup.number().positive().min(1).required("Required"),
+  phone: Yup.string().required("Required"),
 });
 
 const nonresididentSchema = Yup.object({
   plotName: Yup.string().required("Required"),
-  houseNo: Yup.number().positive().min(1).required("Required"),
+  houseNumber: Yup.number().positive().min(1).required("Required"),
+  phone: Yup.string().required("Required"),
 });
 
 function Checkout({ closeCheckout }) {
@@ -37,7 +40,7 @@ function Checkout({ closeCheckout }) {
   return (
     <section>
       <div className="flex flex-col justify-center items-center">
-        <div className={`w-full ${isResident !== null && "hidden"}`}>
+        <div className={` ${isResident !== null && "hidden"}`}>
           <h3 className="font-openSans text-2xl text-night-200 text-center">
             Are you a resident student ?
           </h3>
@@ -61,8 +64,8 @@ function Checkout({ closeCheckout }) {
           <Formik
             initialValues={
               isResident
-                ? { hostel: "", roomNo: "" }
-                : { plotName: "", houseNo: "" }
+                ? { hostel: "", blockNumber: "", roomNumber: "", phone: "" }
+                : { plotName: "", houseNumber: "", phone: "" }
             }
             validationSchema={isResident ? residentSchema : nonresididentSchema}
             onSubmit={handlePayment}
@@ -80,8 +83,19 @@ function Checkout({ closeCheckout }) {
                   />
                   <Input
                     type="number"
-                    name="roomNo"
+                    name="blockNumber"
+                    placeholder="Enter your block number."
+                  />
+                  <Input
+                    type="number"
+                    name="roomNumber"
                     placeholder="Enter your room number."
+                  />
+
+                  <Input
+                    type="text"
+                    name="phone"
+                    placeholder="Enter your phone number."
                   />
                 </div>
               ) : (
@@ -93,13 +107,18 @@ function Checkout({ closeCheckout }) {
                   />
                   <Input
                     type="number"
-                    name="houseNo"
+                    name="houseNumber"
                     placeholder="Enter your house number."
+                  />
+                  <Input
+                    type="text"
+                    name="phone"
+                    placeholder="Enter your phone number."
                   />
                 </div>
               )}
 
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-5 sm:gap-0">
                 <Button
                   type="submit"
                   moreStyles="bg-green-600 hover:bg-green-800"
