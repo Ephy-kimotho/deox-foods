@@ -1,5 +1,6 @@
-/* place the layout component here */
+
 import { TbMessageChatbotFilled } from "react-icons/tb";
+import { IoClose } from "react-icons/io5"; // Close icon
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "../components/common/Navbar";
@@ -20,14 +21,20 @@ function Layout() {
         <main className="flex relative">
           <Outlet />
 
+          {/* Chatbot Component */}
           <Chatbot isVisible={isVisible} toggleVisibility={toggleVisibility} />
 
+          {/* Toggle Button */}
           <button
             type="button"
             onClick={toggleVisibility}
-            className="fixed z-40 bottom-6 right-6 w-12 h-12 grid place-items-center rounded-full  text-center p-2 bg-night-200 dark:bg-zinc-400 text-zinc-200 dark:text-night-200"
+            className="fixed z-40 bottom-6 right-6 w-12 h-12 grid place-items-center rounded-full p-2 bg-night-200 dark:bg-zinc-400 text-zinc-200 dark:text-night-200"
           >
-            <TbMessageChatbotFilled className="text-3xl" />
+            {isVisible ? (
+              <IoClose className="text-3xl" />
+            ) : (
+              <TbMessageChatbotFilled className="text-3xl" />
+            )}
           </button>
         </main>
         <Footer />
@@ -37,3 +44,4 @@ function Layout() {
 }
 
 export default Layout;
+
