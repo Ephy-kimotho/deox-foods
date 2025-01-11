@@ -1,10 +1,11 @@
 import { useParams, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { meals } from "../data";
 import useCartStore from "../stores/useCartStore";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
 
 // Sample meals data with ratings and nutritional info
-const meals = [
+/* const meals = [
   {
     id: 1,
     name: "Pizza Margherita",
@@ -57,13 +58,18 @@ const meals = [
     image: "https://via.placeholder.com/600x400?text=Sushi",
     quantity: 1,
   },
-];
+]; */
 
 const Meals = () => {
-  const { mealid } = useParams();
-  const meal = meals.find((meal) => meal.id === parseInt(mealid));
-  const relatedMeals = meals.filter((m) => m.id !== parseInt(mealid));
+  const { mealId } = useParams();
+  const addToCart = useCartStore((state) => state.addItemToCart);
 
+  const meal = meals.find((meal) => meal.id === parseInt(mealId));
+  const relatedMeals = meals.filter(
+    (m) => m.id !== parseInt(mealId) && Math.floor(Math.random() * 20) <= 4
+  );
+
+  /* EARLY RETURN IF MEAL IS NOT FOUND */
   if (!meal) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-zinc-200 dark:bg-night-200">
@@ -74,23 +80,22 @@ const Meals = () => {
     );
   }
 
-  //BUG: unknown type error
-  const addToCart = useCartStore((state) => state.addItemToCart);
-
+  /* Add  item to cart logic */
   const handleAddToCart = () => {
     addToCart(meal, meal.id);
     toast.success(`${meal.name} added to cart`);
   };
+
   // TODO: yet to add functionality for quick buy
-  const handleQuickBuy = () => {
+ /*  const handleQuickBuy = () => {
     toast.success(`Quick Buy: ${meal.name}`);
     // Add logic for direct checkout
-  };
+  }; */
 
   //TODO: yet to add dark mode functionality
   return (
-    <section className="min-h-screen bg-zinc-200 dark:bg-night-800 flex flex-col items-center justify-center p-5 w-full mt-10">
-      <div className="w-full max-w-7xl p-8 rounded-xl shadow-lg">
+    <section className="min-h-screen bg-zinc-200 dark:bg-night-200 flex flex-col items-center justify-center  w-full mt-20">
+      <div className="w-full max-w-7xl p-6 rounded-xl ">
         {/* Meal Details */}
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12"
@@ -99,42 +104,43 @@ const Meals = () => {
           transition={{ duration: 0.5 }}
         >
           {/* Meal Image */}
-          <div className="flex justify-center items-center">
-            <img
-              src={meal.image}
-              alt={meal.name}
-              className="w-full h-auto max-w-lg rounded-lg shadow-lg object-cover opacity-90"
-            />
-          </div>
+          <img
+            src={meal.image}
+            alt={meal.name}
+            className="h-[400px] rounded-md  aspect-square justify-self-center"
+            
+          />
 
           {/* Meal Information */}
-          <div className="flex flex-col justify-center space-y-6 bg-white dark:bg-night-700 bg-opacity-90 dark:bg-opacity-90 p-6 rounded-lg shadow-lg">
-            <h1 className="text-4xl font-semibold text-gray-800 dark:text-white">{meal.name}</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300">{meal.description}</p>
+          <div className="flex flex-col justify-center space-y-6 bg-zinc-100 px-6 rounded-lg shadow-lg py-6">
+            <h1 className="text-4xl font-semibold text-gray-800  capitalize">
+              {meal.name}
+            </h1>
+            <p className="text-lg text-gray-600">{meal.description}</p>
 
             {/* User Ratings */}
             <div className="flex items-center space-x-2">
               <span className="text-yellow-500 text-xl">⭐</span>
-              <p className="text-gray-800 dark:text-gray-300">{meal.rating.toFixed(1)} / 5.0</p>
+              <p className="text-gray-800 ">{meal.rating.toFixed(1)} / 5.0</p>
             </div>
 
             {/* Nutritional Information */}
             <div className="flex flex-col space-y-2">
               <div className="flex items-center space-x-2">
                 <span className="text-red-500 text-lg">🔥</span>
-                <p className="text-gray-800 dark:text-gray-300">{meal.calories} kcal</p>
+                <p className="text-gray-800 ">{meal.calories} kcal</p>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-blue-500 text-lg">🍗</span>
-                <p className="text-gray-800 dark:text-gray-300">{meal.protein}g Protein</p>
+                <p className="text-gray-800 ">{meal.protein}g Protein</p>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-orange-500 text-lg">🥑</span>
-                <p className="text-gray-800 dark:text-gray-300">{meal.fat}g Fat</p>
+                <p className="text-gray-800 ">{meal.fat}g Fat</p>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-green-500 text-lg">🍞</span>
-                <p className="text-gray-800 dark:text-gray-300">{meal.carbs}g Carbs</p>
+                <p className="text-gray-800 ">{meal.carbs}g Carbs</p>
               </div>
             </div>
 
@@ -146,19 +152,21 @@ const Meals = () => {
               >
                 Add to Cart
               </button>
-              <button
+             {/*  <button
                 onClick={handleQuickBuy}
                 className="bg-blue-500 text-white py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition-colors transform hover:scale-105"
               >
                 Quick Buy
-              </button>
+              </button> */}
             </div>
           </div>
         </motion.div>
 
         {/* Related Meals */}
         <div className="bg-white dark:bg-night-700 p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Related Meals</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-800  mb-4">
+            Related Meals
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {relatedMeals.map((relatedMeal) => (
               <div
@@ -168,12 +176,17 @@ const Meals = () => {
                 <img
                   src={relatedMeal.image}
                   alt={relatedMeal.name}
-                  className="w-full h-auto max-w-xs rounded-lg shadow-lg object-cover mb-4"
+                  className="w-full h-64 object-cover rounded-md mb-2"
                 />
-                <h3 className="text-lg font-medium text-gray-800 dark:text-white">{relatedMeal.name}</h3>
-                <p className="text-gray-600 dark:text-gray-300">${relatedMeal.price.toFixed(2)}</p>
+                <h3 className="text-lg font-medium text-gray-800  capitalize">
+                  {relatedMeal.name}
+                </h3>
+                <p className="text-gray-800  my-1">
+                  Ksh {relatedMeal.price.toFixed(2)}
+                </p>
+                <p className="text-gray-600">{relatedMeal.hotel}</p>
                 <Link
-                  to={`/meal/${relatedMeal.id}`}
+                  to={`/restaurants/${relatedMeal.hotel}/${relatedMeal.id}`}
                   className="mt-3 bg-blue-500 text-white py-2 px-6 rounded-full shadow-md hover:bg-blue-600 transition-colors"
                 >
                   View Details
@@ -188,4 +201,3 @@ const Meals = () => {
 };
 
 export default Meals;
-

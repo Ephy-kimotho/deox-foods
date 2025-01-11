@@ -1,23 +1,11 @@
-import { useState } from "react";
-import Chatbot from "./Chatbot";
-import { FaComments } from "react-icons/fa";
-import Slider from "react-slick";
 import SearchSection from "./SearchSection";
 import restaurant1 from "../assets/images/restaurant1.jpg";
 import restaurant2 from "../assets/images/restaurant2.jpg";
 import restaurant3 from "../assets/images/restaurant3.jpg";
 import restaurant4 from "../assets/images/restaurant4.jpg";
 import restaurant5 from "../assets/images/restaurant5.jpg";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
-  const [isChatbotVisible, setIsChatbotVisible] = useState(false);
-
-  const toggleChatbot = () => {
-    setIsChatbotVisible((prev) => !prev);
-  };
-
   const dummyRestaurants = [
     { id: 1, name: "Restaurant 1", image: restaurant1 },
     { id: 2, name: "Restaurant 2", image: restaurant2 },
@@ -26,59 +14,28 @@ const Home = () => {
     { id: 5, name: "Restaurant 5", image: restaurant5 },
   ];
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 4, slidesToScroll: 1 },
-      },
-      {
-        breakpoint: 600,
-        settings: { slidesToShow: 4, slidesToScroll: 1 },
-      },
-    ],
-  };
-
   return (
-    <div className="relative flex-grow bg-zinc-200 dark:bg-night-200 text-gray-900 dark:text-gray-200">
+    <section className="min-h-screen flex-grow relative bg-zinc-200 dark:bg-night-200 p-4">
       <SearchSection />
-      <div className="container mx-auto p-4 mb-4">
-        <h2 className="text-3xl font-bold text-center mb-4">
+      <div className="p-4 mt-10 mb-8 bg-gray-200  rounded-md">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-4">
           Nearby Restaurants
         </h2>
-        <div className="p-4 bg-gray-200 dark:bg-night-100 rounded-lg">
-          <Slider {...settings}>
-            {dummyRestaurants.map((restaurant) => (
-              <div key={restaurant.id} className="flex justify-center">
-                <img
-                  src={restaurant.image}
-                  alt={restaurant.name}
-                  className="rounded-full w-16 h-16 md:w-24 md:h-24"
-                />
-              </div>
-            ))}
-          </Slider>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {dummyRestaurants.map((restaurant) => (
+            <div key={restaurant.id} className="flex justify-center">
+              <img
+                src={restaurant.image}
+                alt={restaurant.name}
+                className="rounded-lg w-2/3 sm:h-36 sm:w-36 object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
-      {/* Chatbot */}
-      <Chatbot isVisible={isChatbotVisible} toggleVisibility={toggleChatbot} />
-      {/* Toggle Chatbot Button */}
-      <button
-        onClick={toggleChatbot}
-        className="fixed bottom-4 right-4 p-3 rounded-full bg-orange-400 text-white hover:bg-orange-500 focus:outline-none z-50"
-      >
-        {isChatbotVisible ? "✖" : <FaComments size={20} />}
-      </button>
-    </div>
+    </section>
   );
 };
 
 export default Home;
-

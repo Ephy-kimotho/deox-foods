@@ -1,9 +1,37 @@
 /* eslint-disable react/prop-types */
 import { useField } from "formik";
 import { FaUser, FaEnvelope } from "react-icons/fa";
+import { FaKey, FaHouse, FaPhone } from "react-icons/fa6";
 
 function Input({ type, ...props }) {
   const [fields, meta] = useField(props);
+
+  let Icon = null;
+
+  if (
+    props.name === "hostel" ||
+    props.name === "plotName" ||
+    props.name === "blockNumber"
+  ) {
+    Icon = FaHouse;
+  }
+
+  if (props.name === "roomNumber" || props.name === "houseNumber") {
+    Icon = FaKey;
+  }
+
+  if (props.name === "email") {
+    Icon = FaEnvelope;
+  }
+
+  if (props.name === "username") {
+    Icon = FaUser;
+  }
+
+  if (props.name === "phone") {
+    Icon = FaPhone;
+  }
+
   return (
     <section className="w-full">
       <div
@@ -21,7 +49,7 @@ function Input({ type, ...props }) {
           type="button"
           className="w-10 flex justify-center items-center cursor-default"
         >
-          {type === "text" ? <FaUser /> : <FaEnvelope />}
+          <Icon />
         </button>
       </div>
       {meta.touched && meta.error && (

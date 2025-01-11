@@ -2,13 +2,12 @@ import { useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 
 const Contact = () => {
-  const [isSending, setIsSending] = useState(false)
+  const [isSending, setIsSending] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -94,7 +93,9 @@ const Contact = () => {
                 <LoadingSpinner />
                 Sending...
               </span>
-            ) : "Send message"}
+            ) : (
+              "Send message"
+            )}
           </button>
         </form>
       </div>
@@ -104,7 +105,7 @@ const Contact = () => {
           Or reach out to us directly:
         </p>
         <p className="text-sm text-gray-700 dark:text-gray-200 mt-3">
-          Phone: +123 456 789
+          Phone: +254788256115
         </p>
         <p className="text-sm text-gray-700 dark:text-gray-200 my-2">
           Email: support@deoxfoods.com
@@ -114,7 +115,7 @@ const Contact = () => {
         </p>
         <p className="mt-4">
           <a
-            href="https://wa.me/123456789"
+            href="https://wa.me/254788256115"
             target="_blank"
             rel="noopener noreferrer"
             className="text-green-600 hover:underline text-sm"
