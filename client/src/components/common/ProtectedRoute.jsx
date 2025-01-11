@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useContext } from "react";
 import { authContext } from "../AuthProvider";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useContext(authContext);
+  const { pathname } = useLocation();
 
   return !isAuthenticated ? (
-    <Navigate to="/login?message=You must login first." />
+    <Navigate to="/login" state={{ redirectTo: pathname }} />
   ) : (
     children
   );

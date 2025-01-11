@@ -50,7 +50,7 @@ const ForgotPassword = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full mt-2 p-3 rounded-md bg-gray-100 dark:bg-night-200 text-night-200 dark:text-white border border-gray-300 dark:border-night-400 focus:outline-none  placeholder:text-gray-600 dark:placeholder:text-zinc-200"
+              className="w-full mt-2 p-3 rounded-md bg-gray-100 text-night-200 dark:text-white border border-gray-300 dark:border-night-400 focus:outline-none  placeholder:text-gray-600"
               placeholder="Enter your email"
             />
           </div>

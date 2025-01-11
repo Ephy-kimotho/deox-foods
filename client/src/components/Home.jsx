@@ -17,7 +17,7 @@ const Home = () => {
   return (
     <section className="min-h-screen flex-grow relative bg-zinc-200 dark:bg-night-200 p-4">
       <SearchSection />
-      <div className="container mx-auto p-4 my-4 bg-gray-200  rounded-md">
+      <div className="p-4 mt-10 mb-8 bg-gray-200  rounded-md">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-4">
           Nearby Restaurants
         </h2>

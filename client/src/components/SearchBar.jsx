@@ -10,17 +10,17 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex items-center justify-center border-1 border-orange-500 rounded-full overflow-hidden bg-white dark:bg-gray-800">
+    <div className="flex items-center justify-center  rounded-full overflow-hidden bg-white  shadow-lg">
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="p-2 md:p-3 rounded-l-full font-sans outline-none w-40 md:w-64 bg-white dark:bg-gray-800 placeholder:text-gray-600 dark:text-zinc-200"
+        className="p-2 md:p-3 rounded-l-full font-sans outline-none w-40 md:w-64 bg-white  placeholder:text-gray-600"
         placeholder="Search..."
       />
       <button
         onClick={handleSearch}
-        className="p-2 md:p-3 rounded-r-full flex items-center justify-center bg-white dark:bg-gray-800"
+        className="p-2 md:p-3 rounded-r-full flex items-center justify-center bg-white"
       >
         <FiSearch size={20} md:size={24} color="orange" />
       </button>

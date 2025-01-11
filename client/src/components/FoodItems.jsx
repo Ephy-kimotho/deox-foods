@@ -1,38 +1,29 @@
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
+import { meals } from "../data";
 import useCartStore from "../stores/useCartStore";
 
-
-const hotels = [
-  "NAKSHI HOTEL",
-  "GOLDEN FRIES",
-  "1960 HOTEL",
-  "MAGGY'S HOTEL",
-];
-
-
+const hotels = ["NAKSHI HOTEL", "GOLDEN FRIES", "1960 HOTEL", "MAGGY'S HOTEL"];
 
 function FoodItemsPage() {
   const { hotelId } = useParams();
-  const addItemToCart = useCartStore((state) => state.addItemToCart);
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedHotel, setSelectedHotel] = useState("");
   const [filteredMeals, setFilteredMeals] = useState(meals);
+  const addItemToCart = useCartStore((state) => state.addItemToCart);
+  const navigate = useNavigate();
 
   // Sync selectedHotel with URL
   useEffect(() => {
-    setSelectedHotel(hotelId || "");
+    setSelectedHotel(hotelId);
   }, [hotelId]);
 
   // Filter meals whenever search term or selected hotel changes
-
   useEffect(() => {
     filterMeals(searchTerm, selectedHotel);
   }, [searchTerm, selectedHotel]);
-
 
   // Handle search
   const handleSearch = (e) => {
@@ -46,10 +37,9 @@ function FoodItemsPage() {
     if (hotel === "") {
       setSelectedHotel("");
       setFilteredMeals(meals);
-      navigate("/food-menu/:hotelId");
     } else {
       setSelectedHotel(hotel);
-      navigate(`/food-menu/${hotel}`);
+      navigate(`/restaurants/${hotel}`);
     }
   };
 
@@ -66,13 +56,12 @@ function FoodItemsPage() {
     setFilteredMeals(filtered);
   };
 
-  const handleAddToCart = (meal, id) => {
+  /*   const handleAddToCart = (meal, id) => {
     addToCart(meal, id);
     toast.success(`${meal.name} added to cart`);
-  };
+  }; */
 
   return (
-
     <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5 mt-20">
       <Toaster position="top-center" />
       <div className="container mx-auto max-w-7xl">
@@ -81,7 +70,7 @@ function FoodItemsPage() {
         </h1>
 
         {/* Search and Filter */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between items-center mb-6">
           <div className="w-full sm:w-1/2 flex items-center">
             <input
               type="text"
@@ -89,7 +78,6 @@ function FoodItemsPage() {
               value={searchTerm}
               onChange={handleSearch}
               className="w-full p-3 rounded-md bg-gray-100 dark:bg-night-300 text-night-200 focus:outline-none placeholder:text-gray-600"
-
             />
           </div>
           <div className="w-full sm:w-1/3 flex justify-end">
@@ -119,15 +107,11 @@ function FoodItemsPage() {
             filteredMeals.map((meal) => (
               <motion.div
                 key={meal.id}
-
-                className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="bg-zinc-100  p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
               >
                 <img
                   src={meal.image}
                   alt={meal.name}
-
                   className="w-full h-56 object-cover rounded-md"
                 />
                 <h3 className="text-xl capitalize font-semibold text-night-200 my-2">
@@ -142,14 +126,21 @@ function FoodItemsPage() {
                 <p className="text-sm text-night-400 dark:text-night-200">
                   {meal.hotel}
                 </p>
-                <button
-                  onClick={() => addItemToCart(meal, meal.id)}
-                  className="mt-4 inline-block bg-orange-200 text-white py-2 px-4 rounded-lg hover:bg-orange-300 transition-colors"
-                >
-                  Add to Cart
-                </button>
-              </div>
-
+                <div className="flex gap-3 items-center">
+                  <Link
+                    to={`${meal.id}`}
+                    className="mt-4 inline-block bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-800 transition-colors"
+                  >
+                    View details
+                  </Link>
+                  <button
+                    onClick={() => addItemToCart(meal, meal.id)}
+                    className="mt-4 inline-block bg-orange-200 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </motion.div>
             ))
           ) : (
             <p className="col-span-full text-center text-gray-800 dark:text-white">

@@ -1,4 +1,4 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import { authContext } from "./AuthProvider";
@@ -6,7 +6,6 @@ import Input from "./common/Input";
 import PasswordInput from "./common/PasswordInput";
 import AuthButton from "./common/AuthButton";
 import * as Yup from "yup";
-//import toast from "react-hot-toast";
 
 const schema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required."),
@@ -20,25 +19,11 @@ const schema = Yup.object({
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const [searchParams] = useSearchParams();
   const { login } = useContext(authContext);
   const navigate = useNavigate();
+  const { state } = useLocation;
 
-  const message = searchParams.get("message");
-  console.log(message);
-
-  /* if (message && message.length > 0) {
-    toast(message, {
-      style: {
-        backgroundColor: "#FFA500",
-        color: "#FFFFFF",
-        padding: "0.5rem 2rem",
-        fontSize: "1rem",
-        fontWeight: "bold",
-      },
-      icon: "⚠️",
-    });
-  } */
+  const path = state?.redirectTo || "/";
 
   const handleSubmit = async (values, actions) => {
     actions.setSubmitting(true);
@@ -50,7 +35,7 @@ function Login() {
 
     actions.resetForm();
     actions.setSubmitting(false);
-    navigate("/");
+    navigate(path);
   };
 
   const togglePassword = () => setShowPassword((state) => !state);

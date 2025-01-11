@@ -15,6 +15,7 @@ import ResetPassword from "../components/ResetPassword";
 import Profile from "../components/Profile";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import Error404 from "../components/Error404";
+import Meals from "../components/Meals";
 
 const routes = createBrowserRouter(
   [
@@ -63,12 +64,16 @@ const routes = createBrowserRouter(
           ),
         },
         {
-          path: "/food-menu/:hotelId",
+          path: "/restaurants/:hotelId",
           element: <FoodItemsPage />,
         },
         {
-          path: "meal/:mealid",
-          element: <Meals />
+          path: "/restaurants/:hotelId/:mealId",
+          element: (
+            <ProtectedRoute>
+              <Meals />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "contact",

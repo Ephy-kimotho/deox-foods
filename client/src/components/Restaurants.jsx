@@ -10,7 +10,7 @@ const Restaurants = () => {
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {restaurants.map((restaurant) => (
-          <Link to={`/food-menu/${restaurant.name}`} key={restaurant.id}>
+          <Link to={`/restaurants/${restaurant.name}`} key={restaurant.id}>
             <div className="bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow pb-2 hover:scale-105">
               <img
                 src={restaurant.image}
@@ -26,7 +26,9 @@ const Restaurants = () => {
                 </p>
                 <p className="text-sm">
                   Rating:&nbsp;
-                  <span className="font-medium my-2">{restaurant.rating}⭐</span>
+                  <span className="font-medium my-2">
+                    {restaurant.rating}⭐
+                  </span>
                 </p>
                 <p className="text-sm">
                   Location: &nbsp;
