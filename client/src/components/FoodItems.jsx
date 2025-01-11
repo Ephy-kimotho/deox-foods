@@ -50,6 +50,7 @@ const meals = [
   },
 ];
 
+// ISSUE: why the food items do not load immediately after visiting the food items route.
 function FoodItemsPage() {
   const { hotelId } = useParams();
   const [searchTerm, setSearchTerm] = useState("");
