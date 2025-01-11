@@ -67,6 +67,10 @@ const routes = createBrowserRouter(
           element: <FoodItemsPage />,
         },
         {
+          path: "meal/:mealid",
+          element: <Meals />
+        },
+        {
           path: "contact",
           element: <Contact />,
         },

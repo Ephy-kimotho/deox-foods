@@ -1,9 +1,18 @@
-import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { meals } from "../data";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { motion } from "framer-motion";
 import useCartStore from "../stores/useCartStore";
 
-const hotels = ["NAKSHI HOTEL", "GOLDEN FRIES", "1960 HOTEL", "MAGGY'S HOTEL"];
+
+const hotels = [
+  "NAKSHI HOTEL",
+  "GOLDEN FRIES",
+  "1960 HOTEL",
+  "MAGGY'S HOTEL",
+];
+
+
 
 function FoodItemsPage() {
   const { hotelId } = useParams();
@@ -19,9 +28,11 @@ function FoodItemsPage() {
   }, [hotelId]);
 
   // Filter meals whenever search term or selected hotel changes
+
   useEffect(() => {
     filterMeals(searchTerm, selectedHotel);
   }, [searchTerm, selectedHotel]);
+
 
   // Handle search
   const handleSearch = (e) => {
@@ -42,32 +53,35 @@ function FoodItemsPage() {
     }
   };
 
-  // Filter meals logic
   const filterMeals = (search, hotel) => {
     let filtered = meals;
-
     if (search) {
       filtered = filtered.filter((meal) =>
         meal.name.toLowerCase().includes(search.toLowerCase())
       );
     }
-
     if (hotel) {
       filtered = filtered.filter((meal) => meal.hotel === hotel);
     }
-
     setFilteredMeals(filtered);
   };
 
+  const handleAddToCart = (meal, id) => {
+    addToCart(meal, id);
+    toast.success(`${meal.name} added to cart`);
+  };
+
   return (
-    <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5">
-      <div className="container mx-auto max-w-7xl mt-20">
-        <h1 className="text-3xl font-bold text-center text-night-200 dark:text-orange-300 mb-6">
-          Foods Menu
+
+    <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5 mt-20">
+      <Toaster position="top-center" />
+      <div className="container mx-auto max-w-7xl">
+        <h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
+          Food Menu
         </h1>
 
         {/* Search and Filter */}
-        <div className="flex flex-col sm:flex-row gap-2 justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6">
           <div className="w-full sm:w-1/2 flex items-center">
             <input
               type="text"
@@ -75,9 +89,9 @@ function FoodItemsPage() {
               value={searchTerm}
               onChange={handleSearch}
               className="w-full p-3 rounded-md bg-gray-100 dark:bg-night-300 text-night-200 focus:outline-none placeholder:text-gray-600"
+
             />
           </div>
-
           <div className="w-full sm:w-1/3 flex justify-end">
             <select
               value={selectedHotel}
@@ -95,16 +109,25 @@ function FoodItemsPage() {
         </div>
 
         {/* Food Items List */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredMeals?.length > 0 ? (
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {filteredMeals.length > 0 ? (
             filteredMeals.map((meal) => (
-              <div
+              <motion.div
                 key={meal.id}
-                className="dark:bg-night-300 p-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow bg-gray-200"
+
+                className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <img
                   src={meal.image}
                   alt={meal.name}
+
                   className="w-full h-56 object-cover rounded-md"
                 />
                 <h3 className="text-xl capitalize font-semibold text-night-200 my-2">
@@ -126,13 +149,14 @@ function FoodItemsPage() {
                   Add to Cart
                 </button>
               </div>
+
             ))
           ) : (
-            <p className="col-span-full text-center text-night-200 dark:text-white">
+            <p className="col-span-full text-center text-gray-800 dark:text-white">
               No meals found.
             </p>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
