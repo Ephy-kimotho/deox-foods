@@ -8,13 +8,13 @@ import Cart from "../components/Cart";
 import MyOrders from "../components/MyOrders";
 import About from "../components/About";
 import Restaurants from "../components/Restaurants";
-import Fruits from "../components/Fruits";
 import Contact from "../components/Contact";
-import ChatbotLayout from "../components/chatbot/layout/page";
 import FoodItemsPage from "../components/FoodItems";
 import ForgotPassword from "../components/ForgotPasword";
 import ResetPassword from "../components/ResetPassword";
-import Meals from "../components/Meals";
+import Profile from "../components/Profile";
+import ProtectedRoute from "../components/common/ProtectedRoute";
+import Error404 from "../components/Error404";
 
 const routes = createBrowserRouter(
   [
@@ -36,26 +36,34 @@ const routes = createBrowserRouter(
         },
         {
           path: "cart",
-          element: <Cart />,
+          element: (
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "my-orders",
-          element: <MyOrders />,
+          element: (
+            <ProtectedRoute>
+              <MyOrders />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "about",
           element: <About />,
         },
         {
-          path: "restraunts",
-          element: <Restaurants />,
+          path: "restaurants",
+          element: (
+            <ProtectedRoute>
+              <Restaurants />
+            </ProtectedRoute>
+          ),
         },
         {
-          path: "fruits",
-          element: <Fruits />,
-        },
-        {
-          path: "food-menu/:hotelId",
+          path: "/food-menu/:hotelId",
           element: <FoodItemsPage />,
         },
         {
@@ -75,8 +83,16 @@ const routes = createBrowserRouter(
           element: <ResetPassword />,
         },
         {
-          path: "chatbot",
-          element: <ChatbotLayout />,
+          path: "/profile",
+          element: (
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "*",
+          element: <Error404 />,
         },
       ],
     },
