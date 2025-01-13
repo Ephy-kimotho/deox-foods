@@ -1,13 +1,12 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { meals } from "../data";
 import useCartStore from "../stores/useCartStore";
+import toast, { Toaster } from "react-hot-toast";
 
 const hotels = ["NAKSHI HOTEL", "GOLDEN FRIES", "1960 HOTEL", "MAGGY'S HOTEL"];
 
-// ISSUE: why the food items do not load immediately after visiting the food items route.
 function FoodItemsPage() {
   const { hotelId } = useParams();
   const [searchTerm, setSearchTerm] = useState("");
@@ -135,7 +134,7 @@ function FoodItemsPage() {
                     View details
                   </Link>
                   <button
-                    onClick={() => addItemToCart(meal, meal.id)}
+                    onClick={() => { addItemToCart(meal, meal.id); toast.success(`${meal.name} added to cart`) }}
                     className="mt-4 inline-block bg-orange-200 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors"
                   >
                     Add to Cart

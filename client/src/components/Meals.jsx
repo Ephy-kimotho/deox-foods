@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { meals } from "../data";
 import useCartStore from "../stores/useCartStore";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 // Sample meals data with ratings and nutritional info
 /* const meals = [
@@ -87,14 +87,15 @@ const Meals = () => {
   };
 
   // TODO: yet to add functionality for quick buy
- /*  const handleQuickBuy = () => {
-    toast.success(`Quick Buy: ${meal.name}`);
-    // Add logic for direct checkout
-  }; */
+  /*  const handleQuickBuy = () => {
+     toast.success(`Quick Buy: ${meal.name}`);
+     // Add logic for direct checkout
+   }; */
 
   //TODO: yet to add dark mode functionality
   return (
     <section className="min-h-screen bg-zinc-200 dark:bg-night-200 flex flex-col items-center justify-center  w-full mt-20">
+      <Toaster position="top-center" />
       <div className="w-full max-w-7xl p-6 rounded-xl ">
         {/* Meal Details */}
         <motion.div
@@ -108,7 +109,7 @@ const Meals = () => {
             src={meal.image}
             alt={meal.name}
             className="h-[400px] rounded-md  aspect-square justify-self-center"
-            
+
           />
 
           {/* Meal Information */}
@@ -152,7 +153,7 @@ const Meals = () => {
               >
                 Add to Cart
               </button>
-             {/*  <button
+              {/*  <button
                 onClick={handleQuickBuy}
                 className="bg-blue-500 text-white py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition-colors transform hover:scale-105"
               >
