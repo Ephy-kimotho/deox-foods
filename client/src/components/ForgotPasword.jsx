@@ -1,28 +1,37 @@
 import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setMessage("");
+
+    // Show loading toast message
+    toast.loading("Sending reset email...", { id: "loading" });
 
     try {
-      // Simulate sending a password reset request
-      console.log("Sending reset email to:", email);
+      // Simulate a slight delay for the loading animation
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // Replace this with your actual API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Make the actual API call using axios
+      const response = await axios.post("http://127.0.0.1:8000/auth/reset-password/", { email }, { withCredentials: true });
 
-      setMessage("A password reset email has been sent to your email address.");
+      // Handle success or failure based on response
+      if (response.data.detail) {
+        toast.success("A password reset email has been sent to your email address.");
+      } else {
+        toast.error("Failed to send reset email. Please try again.");
+      }
     } catch (error) {
       console.error("Error sending reset email:", error);
-      setMessage("Failed to send reset email. Please try again.");
+      toast.error("Failed to send reset email. Please try again.");
     } finally {
       setIsSubmitting(false);
+      toast.remove("loading"); // Remove the loading toast
     }
   };
 
@@ -32,7 +41,7 @@ const ForgotPassword = () => {
         <h1 className="text-3xl font-bold text-night-200 text-center mb-4">
           Forgot Password
         </h1>
-        <p className="text-night-400  text-center mb-6">
+        <p className="text-night-400 text-center mb-6">
           Enter your email to receive a password reset link.
         </p>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -50,7 +59,7 @@ const ForgotPassword = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full mt-2 p-3 rounded-md bg-gray-100 text-night-200 dark:text-white border border-gray-300 dark:border-night-400 focus:outline-none  placeholder:text-gray-600"
+              className="w-full mt-2 p-3 rounded-md bg-gray-100 text-night-200 dark:text-white border border-gray-300 dark:border-night-400 focus:outline-none placeholder:text-gray-600"
               placeholder="Enter your email"
             />
           </div>
@@ -61,21 +70,14 @@ const ForgotPassword = () => {
               type="submit"
               disabled={isSubmitting}
               className={`w-full p-3 rounded-md font-semibold ${isSubmitting
-                  ? "bg-orange-300 cursor-not-allowed"
-                  : "bg-orange-400 hover:bg-orange-500"
+                ? "bg-orange-300 cursor-not-allowed"
+                : "bg-orange-400 hover:bg-orange-500"
                 } text-white focus:outline-none focus:ring-2 focus:ring-orange-200`}
             >
               {isSubmitting ? "Sending..." : "Send Reset Email"}
             </button>
           </div>
         </form>
-
-        {/* Message */}
-        {message && (
-          <p className="mt-4 text-center text-sm text-night-200 dark:text-gray-300">
-            {message}
-          </p>
-        )}
       </div>
     </section>
   );

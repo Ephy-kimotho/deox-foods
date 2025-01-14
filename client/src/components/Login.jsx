@@ -6,9 +6,12 @@ import Input from "./common/Input";
 import PasswordInput from "./common/PasswordInput";
 import AuthButton from "./common/AuthButton";
 import * as Yup from "yup";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
+// Validation schema using Yup
 const schema = Yup.object({
-  email: Yup.string().email("Invalid email address").required("Required."),
+  username: Yup.string().min(4, "Username should be more than 4 characters.").required("Required."),
   password: Yup.string()
     .min(8, "Password must be 8 or more characters.")
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter.")
@@ -21,7 +24,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(authContext);
   const navigate = useNavigate();
-  const { state } = useLocation;
+  const { state } = useLocation();
 
   const path = state?.redirectTo || "/";
 
@@ -29,13 +32,39 @@ function Login() {
     actions.setSubmitting(true);
     console.log(values);
 
-    /* FAKE AUTHENTICATION REPLACE WITH REAL VERSION */
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    login();
+    try {
+      // Add a slight delay for the loading animation to be visible
+      await new Promise((resolve) => setTimeout(resolve, 1500)); // Adjust the delay as needed
 
-    actions.resetForm();
-    actions.setSubmitting(false);
-    navigate(path);
+      // Make the API call to your backend for authentication
+      const response = await axios.post(
+        "http://127.0.0.1:8000/auth/login/", // Replace with your actual backend URL
+        values,
+        { withCredentials: true } // Send cookies with the request (useful for JWT sessions)
+      );
+
+      console.log("Login response:", response.data);
+
+      // Assuming you store a token or handle the user session here
+      login(); // Call your context to update the user state (authentication success)
+
+      toast.success("Login successful!");
+
+      // Reset the form and navigate
+      actions.resetForm();
+      navigate(path); // Redirect to the previous page or home page
+    } catch (error) {
+      console.error("Login error:", error);
+
+      // Display an error message from the server or a default message
+      const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
+      toast.error(errorMessage);
+
+      // Set form errors for display
+      actions.setErrors({ server: errorMessage });
+    } finally {
+      actions.setSubmitting(false); // Stop the loading animation
+    }
   };
 
   const togglePassword = () => setShowPassword((state) => !state);
@@ -43,7 +72,7 @@ function Login() {
   return (
     <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 flex justify-center items-center mt-10">
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ username: "", password: "" }}
         validationSchema={schema}
         onSubmit={handleSubmit}
       >
@@ -51,7 +80,11 @@ function Login() {
           <h2 className="text-xl sm:text-3xl text-night-200 font-bold uppercase">
             Welcome Back
           </h2>
-          <Input type="email" name="email" placeholder="Enter your email." />
+
+          {/* Username input */}
+          <Input type="text" name="username" placeholder="Enter your username." />
+
+          {/* Password input */}
           <PasswordInput
             type={showPassword ? "text" : "password"}
             name="password"
@@ -83,3 +116,4 @@ function Login() {
 }
 
 export default Login;
+

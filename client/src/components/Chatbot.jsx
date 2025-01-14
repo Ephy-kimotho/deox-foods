@@ -42,11 +42,10 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`${
-              message.isUser
-                ? "self-end bg-orange-400 text-white"
-                : "self-start bg-gray-300 dark:bg-gray-600 text-black dark:text-white"
-            } px-4 py-2 rounded-lg max-w-xs`}
+            className={`${message.isUser
+              ? "self-end bg-orange-400 text-white"
+              : "self-start bg-gray-300 dark:bg-gray-600 text-black dark:text-white"
+              } px-4 py-2 rounded-lg max-w-xs`}
           >
             {message.text}
           </div>
