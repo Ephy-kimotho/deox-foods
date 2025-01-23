@@ -22,7 +22,7 @@ const Home = () => {
           Nearby Restaurants
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-4">
           {dummyRestaurants.map((restaurant) => (
             <div key={restaurant.id} className="flex justify-center">
               <img

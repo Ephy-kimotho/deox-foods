@@ -1,32 +1,58 @@
 /* eslint-disable react/prop-types */
-import useCartStore from "../../stores/useCartStore";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { removeItemFromCart, getCartItems, postItemToCart } from "../../utils/utils";
+import { useToken } from "../AuthProvider";
+import { useCart } from "../CartProvider";
+import toast from "react-hot-toast";
 
-function CartProduct({ id, name, image, description, price, quantity }) {
-  const removeItemFromCart = useCartStore((state) => state.removeItemFromCart);
-  const changeQuantity = useCartStore((state) => state.changeQuantity);
+function CartProduct({ id, product_name, image, price, quantity }) {
+  const { token } = useToken();
+  const { setCart } = useCart();
+
+  const addItem = async (id) => {
+    try {
+      const message = await postItemToCart(id, token);
+      console.log(message);
+
+      const items = await getCartItems(token);
+      setCart(items);
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  const deleteItem = async () => {
+    try {
+      const message = await removeItemFromCart(id, token);
+      toast.success(message);
+
+      const cartItems = await getCartItems(token);
+      setCart(cartItems);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <article className="bg-white flex justify-between shadow-lg w-full py-2 px-2 rounded-md mb-4">
-      <div className="flex-grow flex gap-1 ">
+      <div className="flex gap-4  pr-8 ">
         <img
           src={image}
-          alt={name}
+          alt={product_name}
           className="w-24 h-24 rounded-md object-cover"
         />
 
-        <div className="space-y-1 font-openSans">
+        <div className="font-openSans  flex flex-col justify-center">
           <h3 className="text-lg text-night-100 font-bold capitalize">
-            {name}
+            {product_name}
           </h3>
-          <p className="text-sm text-gray-600">{description}</p>
           <p className="font-bold text-orange-300">Ksh. {price}</p>
         </div>
       </div>
 
-      <div className="w-100 sm:w-1/6 flex flex-col justify-around text-right">
+      <div className="w-100 sm:w-1/6 flex flex-col justify-around text-right mr-2">
         <button
-          onClick={() => removeItemFromCart(id)}
+          onClick={deleteItem}
           className="text-black hover:text-red-100 text-lg ml-auto font-normal"
         >
           <FaRegTrashCan />
@@ -34,14 +60,14 @@ function CartProduct({ id, name, image, description, price, quantity }) {
 
         <div className="space-x-2">
           <button
-            onClick={() => changeQuantity("minus", id)}
+            onClick={() => console.log("Subtracted one item.")}
             className="border-2 w-6 sm:w-1/3 lg:text-xl lg:font-bold text-center border-orange-300 bg-white text-orange-300 rounded-md"
           >
             -
           </button>
           <span className="font-bold text-night-100">{quantity}</span>
           <button
-            onClick={() => changeQuantity("plus", id)}
+            onClick={() => addItem(id)}
             className="bg-orange-300 w-6 sm:w-1/3 lg:text-xl lg:font-bold text-center text-white rounded-md"
           >
             +

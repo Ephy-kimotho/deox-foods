@@ -1,68 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { meals } from "../data";
-import useCartStore from "../stores/useCartStore";
-import toast, { Toaster } from "react-hot-toast";
-
-// Sample meals data with ratings and nutritional info
-/* const meals = [
-  {
-    id: 1,
-    name: "Pizza Margherita",
-    description: "Delicious pizza with fresh mozzarella",
-    price: 12.99,
-    calories: 250,
-    protein: 12,
-    fat: 10,
-    carbs: 30,
-    rating: 4.5,
-    image: "https://via.placeholder.com/600x400?text=Pizza+Margherita",
-    quantity: 1,
-  },
-  {
-    id: 2,
-    name: "Burger",
-    description: "Juicy beef burger with fries",
-    price: 8.99,
-    calories: 450,
-    protein: 20,
-    fat: 25,
-    carbs: 40,
-    rating: 4.0,
-    image: "https://via.placeholder.com/600x400?text=Burger",
-    quantity: 1,
-  },
-  {
-    id: 3,
-    name: "Pasta Alfredo",
-    description: "Creamy pasta with parmesan cheese",
-    price: 14.99,
-    calories: 600,
-    protein: 15,
-    fat: 20,
-    carbs: 50,
-    rating: 4.7,
-    image: "https://via.placeholder.com/600x400?text=Pasta+Alfredo",
-    quantity: 1,
-  },
-  {
-    id: 4,
-    name: "Sushi",
-    description: "Fresh sushi with tuna and salmon",
-    price: 18.99,
-    calories: 350,
-    protein: 25,
-    fat: 5,
-    carbs: 20,
-    rating: 4.9,
-    image: "https://via.placeholder.com/600x400?text=Sushi",
-    quantity: 1,
-  },
-]; */
+import  { Toaster } from "react-hot-toast";
 
 const Meals = () => {
   const { mealId } = useParams();
-  const addToCart = useCartStore((state) => state.addItemToCart);
 
   const meal = meals.find((meal) => meal.id === parseInt(mealId));
   const relatedMeals = meals.filter(
@@ -82,8 +24,7 @@ const Meals = () => {
 
   /* Add  item to cart logic */
   const handleAddToCart = () => {
-    addToCart(meal, meal.id);
-    toast.success(`${meal.name} added to cart`);
+    console.log("Item added to cart.");
   };
 
   // TODO: yet to add functionality for quick buy
@@ -109,7 +50,6 @@ const Meals = () => {
             src={meal.image}
             alt={meal.name}
             className="h-[400px] rounded-md  aspect-square justify-self-center"
-
           />
 
           {/* Meal Information */}

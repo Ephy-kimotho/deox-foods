@@ -1,28 +1,21 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
 
 export const authContext = createContext();
 
 function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState("");
 
-  const signup = () => setIsAuthenticated(true);
-
-  const login = () => setIsAuthenticated(true);
-
-  const logout = () => {
-    setIsAuthenticated(false);
-  };
-
-  const auth = {
-    isAuthenticated,
-    signup,
-    login,
-    logout,
-  };
-
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+  return (
+    <authContext.Provider value={{ token, setToken }}>
+      {children}
+    </authContext.Provider>
+  );
 }
 
 export default AuthProvider;
+
+export const useToken = () => {
+  return useContext(authContext);
+};

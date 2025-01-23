@@ -1,33 +1,143 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { meals } from "../data";
-import useCartStore from "../stores/useCartStore";
 import toast, { Toaster } from "react-hot-toast";
-
-const hotels = ["NAKSHI HOTEL", "GOLDEN FRIES", "1960 HOTEL", "MAGGY'S HOTEL"];
+import { useToken } from "./AuthProvider";
+import { postItemToCart, getCartItems } from "../utils/utils";
+import { useCart } from "./CartProvider";
+import axios from "axios";
 
 function FoodItemsPage() {
   const { hotelId } = useParams();
+  const { token } = useToken();
+  const { setCart } = useCart();
   const [searchTerm, setSearchTerm] = useState("");
+  const [hotels, setHotels] = useState([]);
   const [selectedHotel, setSelectedHotel] = useState("");
-  const [filteredMeals, setFilteredMeals] = useState(meals);
-  const addItemToCart = useCartStore((state) => state.addItemToCart);
+  const [allMeals, setAllMeals] = useState([]);
   const navigate = useNavigate();
+
+  // Get all restaurants to be used in the select element
+  useEffect(() => {
+    async function getRestaurants() {
+      try {
+        const res = await axios.get(
+          "http://127.0.0.1:8000/restaurant/api/restaurants/",
+          {
+            headers: {
+              Authorization: `Bearer ${token.trim()}`,
+            },
+          }
+        );
+
+        const restaurants = res.data.map((item) => item.name);
+        setHotels(restaurants);
+      } catch (error) {
+        console.error("Error fetching hotels: ", error);
+      }
+    }
+    getRestaurants();
+  }, [token]);
 
   // Sync selectedHotel with URL
   useEffect(() => {
     setSelectedHotel(hotelId);
   }, [hotelId]);
 
-  // Filter meals whenever search term or selected hotel changes
+  // Get all products associated to particular hotel
   useEffect(() => {
-    filterMeals(searchTerm, selectedHotel);
-  }, [searchTerm, selectedHotel]);
+    async function getHotelMeals() {
+      try {
+        const res = await axios.get(
+          `http://127.0.0.1:8000/restaurant/restaurant-products/${hotelId}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setAllMeals(res.data);
+      } catch (error) {
+        const errorMessage = error.response.data.detail;
+        toast.error(errorMessage);
+      }
+    }
+    getHotelMeals();
+  }, [hotelId, token]);
 
   // Handle search
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.trim());
+  };
+
+  // Add item to cart
+  const addItem = async (id) => {
+    try {
+      const message = await postItemToCart(id, token);
+      toast.success(message);
+
+      const items = await getCartItems(token);
+      setCart(items);
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  // Fucntion to generate the FoodItems
+  const generateFoodItems = (meals, term = "") => {
+    const filteredMeals = term
+      ? meals.filter((meal) =>
+          meal.product_name.toLowerCase().includes(term.toLocaleLowerCase())
+        )
+      : meals;
+
+    return filteredMeals.length > 0 ? (
+      filteredMeals.map((meal) => {
+        return (
+          <div
+            key={meal.id}
+            className="bg-zinc-100  p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+          >
+            <img
+              src={meal.product_image}
+              alt={meal.product_name}
+              className="w-full h-56 object-cover rounded-md"
+            />
+            <h3 className="text-xl capitalize font-semibold text-night-200 my-2">
+              {meal.product_name}
+            </h3>
+            <p className="text-sm text-night-400 dark:text-night-200 capitalize">
+              {meal.category}
+            </p>
+            <p className="text-sm text-night-400 dark:text-night-200 mt-1">
+              {meal.description}
+            </p>
+            <p className="text-lg font-semibold text-night-200 my-1 ">
+              Ksh {Number(meal.product_price).toFixed(2)}
+            </p>
+
+            <div className="flex gap-3 items-center">
+              {/*  <Link
+                to={`${meal.id}`}
+                className="mt-4 inline-block bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-800 transition-colors"
+              >
+                View details
+              </Link> */}
+              <button
+                onClick={() => addItem(meal.id)}
+                className="mt-4 inline-block bg-orange-200 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        );
+      })
+    ) : (
+      <p className="col-span-full text-center text-gray-800 dark:text-white">
+        No meals found.
+      </p>
+    );
   };
 
   // Handle hotel filter and update URL
@@ -36,33 +146,14 @@ function FoodItemsPage() {
 
     if (hotel === "") {
       setSelectedHotel("");
-      setFilteredMeals(meals);
     } else {
       setSelectedHotel(hotel);
       navigate(`/restaurants/${hotel}`);
     }
   };
 
-  const filterMeals = (search, hotel) => {
-    let filtered = meals;
-    if (search) {
-      filtered = filtered.filter((meal) =>
-        meal.name.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-    if (hotel) {
-      filtered = filtered.filter((meal) => meal.hotel === hotel);
-    }
-    setFilteredMeals(filtered);
-  };
-
-  /*   const handleAddToCart = (meal, id) => {
-    addToCart(meal, id);
-    toast.success(`${meal.name} added to cart`);
-  }; */
-
   return (
-    <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5 mt-20">
+    <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5 mt-20 pb-6">
       <Toaster position="top-center" />
       <div className="container mx-auto max-w-7xl">
         <h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
@@ -80,13 +171,15 @@ function FoodItemsPage() {
               className="w-full p-3 rounded-md bg-gray-100 dark:bg-night-300 text-night-200 focus:outline-none placeholder:text-gray-600"
             />
           </div>
-          <div className="w-full sm:w-1/3 flex justify-end">
+          <div className="w-full sm:w-1/2 flex justify-end">
             <select
               value={selectedHotel}
               onChange={handleHotelFilter}
               className="p-3 rounded-md bg-gray-100 dark:bg-night-300 text-night-200 focus:outline-none w-full sm:w-1/2"
             >
-              <option value="">Filter by hotel</option>
+              <option value="" disabled>
+                Filter by hotel
+              </option>
               {hotels.map((hotel) => (
                 <option key={hotel} value={hotel}>
                   {hotel}
@@ -103,50 +196,7 @@ function FoodItemsPage() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          {filteredMeals.length > 0 ? (
-            filteredMeals.map((meal) => (
-              <motion.div
-                key={meal.id}
-                className="bg-zinc-100  p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
-              >
-                <img
-                  src={meal.image}
-                  alt={meal.name}
-                  className="w-full h-56 object-cover rounded-md"
-                />
-                <h3 className="text-xl capitalize font-semibold text-night-200 my-2">
-                  {meal.name}
-                </h3>
-                <p className="text-sm text-night-400 dark:text-night-200 ">
-                  {meal.description}
-                </p>
-                <p className="text-lg font-semibold text-night-200 my-1 ">
-                  Ksh {meal.price.toFixed(2)}
-                </p>
-                <p className="text-sm text-night-400 dark:text-night-200">
-                  {meal.hotel}
-                </p>
-                <div className="flex gap-3 items-center">
-                  <Link
-                    to={`${meal.id}`}
-                    className="mt-4 inline-block bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-800 transition-colors"
-                  >
-                    View details
-                  </Link>
-                  <button
-                    onClick={() => { addItemToCart(meal, meal.id); toast.success(`${meal.name} added to cart`) }}
-                    className="mt-4 inline-block bg-orange-200 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors"
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              </motion.div>
-            ))
-          ) : (
-            <p className="col-span-full text-center text-gray-800 dark:text-white">
-              No meals found.
-            </p>
-          )}
+          {generateFoodItems(allMeals, searchTerm)}
         </motion.div>
       </div>
     </section>

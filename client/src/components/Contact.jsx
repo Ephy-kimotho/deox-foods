@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LoadingSpinner from "./LoadingSpinner";
+import { ClipLoader } from "react-spinners";
 
 const Contact = () => {
   const [isSending, setIsSending] = useState(false);
@@ -14,6 +14,15 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSubmit = async () => {
+    /* replace with real functionality to send email to company */
+    setIsSending(true);
+
+    await Promise((resolve) => setTimeout(resolve, 1500));
+
+    setIsSending(false);
+  };
+
   return (
     <div className="min-h-screen bg-zinc-200 dark:bg-night-200 flex flex-col items-center py-10 flex-grow">
       <h1 className="text-4xl font-bold text-gray-700 dark:text-orange-600 mt-16 mb-6">
@@ -25,7 +34,7 @@ const Contact = () => {
       </p>
 
       <div className="w-full max-w-xl bg-white rounded-lg shadow-lg p-6">
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="name"
@@ -90,7 +99,7 @@ const Contact = () => {
           >
             {isSending ? (
               <span className="flex items-center">
-                <LoadingSpinner />
+                <ClipLoader />
                 Sending...
               </span>
             ) : (

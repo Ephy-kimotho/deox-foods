@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useFormikContext } from "formik";
-import LoadingSpinner from "../LoadingSpinner";
+import { ClipLoader } from "react-spinners";
 
 function AuthButton({ action, children }) {
   const { isSubmitting } = useFormikContext();
@@ -14,8 +14,8 @@ function AuthButton({ action, children }) {
         } active:scale-95 tracking-wide text-lg sm:text-xl`}
       >
         {isSubmitting ? (
-          <span>
-            <LoadingSpinner />
+          <span className="flex justify-center items-center">
+            <ClipLoader size={20} color="white" />
             &nbsp;
             {`${action}`}
           </span>

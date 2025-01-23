@@ -1,17 +1,20 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Formik, Form } from "formik";
-import { authContext } from "./AuthProvider";
+import { useToken } from "./AuthProvider";
 import Input from "./common/Input";
 import PasswordInput from "./common/PasswordInput";
 import AuthButton from "./common/AuthButton";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { sanitizeFormData } from "../utils/utils";
 
 // Validation schema using Yup
 const schema = Yup.object({
-  username: Yup.string().min(4, "Username should be more than 4 characters.").required("Required."),
+  username: Yup.string()
+    .min(4, "Username should be more than 4 characters.")
+    .required("Required."),
   password: Yup.string()
     .min(8, "Password must be 8 or more characters.")
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter.")
@@ -22,7 +25,7 @@ const schema = Yup.object({
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useContext(authContext);
+  const { setToken } = useToken();
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -30,23 +33,21 @@ function Login() {
 
   const handleSubmit = async (values, actions) => {
     actions.setSubmitting(true);
-    console.log(values);
-
     try {
       // Add a slight delay for the loading animation to be visible
       await new Promise((resolve) => setTimeout(resolve, 1500)); // Adjust the delay as needed
 
+      const updatedValues = sanitizeFormData(values); // sanitizeFormData will remove any occurrence of whitespaces from all form values
+
       // Make the API call to your backend for authentication
       const response = await axios.post(
         "http://127.0.0.1:8000/auth/login/", // Replace with your actual backend URL
-        values,
+        updatedValues,
         { withCredentials: true } // Send cookies with the request (useful for JWT sessions)
       );
 
-      console.log("Login response:", response.data);
-
-      // Assuming you store a token or handle the user session here
-      login(); // Call your context to update the user state (authentication success)
+      // set access token to AuthProvider context
+      setToken(response.data.access);
 
       toast.success("Login successful!");
 
@@ -57,7 +58,8 @@ function Login() {
       console.error("Login error:", error);
 
       // Display an error message from the server or a default message
-      const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
+      const errorMessage =
+        error.response?.data?.detail || "Login failed. Please try again.";
       toast.error(errorMessage);
 
       // Set form errors for display
@@ -82,7 +84,11 @@ function Login() {
           </h2>
 
           {/* Username input */}
-          <Input type="text" name="username" placeholder="Enter your username." />
+          <Input
+            type="text"
+            name="username"
+            placeholder="Enter your username."
+          />
 
           {/* Password input */}
           <PasswordInput
@@ -116,4 +122,3 @@ function Login() {
 }
 
 export default Login;
-

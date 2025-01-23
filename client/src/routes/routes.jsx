@@ -65,7 +65,11 @@ const routes = createBrowserRouter(
         },
         {
           path: "/restaurants/:hotelId",
-          element: <FoodItemsPage />,
+          element: (
+            <ProtectedRoute>
+              <FoodItemsPage />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/restaurants/:hotelId/:mealId",

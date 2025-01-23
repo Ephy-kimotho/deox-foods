@@ -58,50 +58,52 @@ const About = () => {
           <h2 className="text-2xl font-bold text-[#2C3E50] dark:text-orange-300 text-center mb-4">
             Meet Our Team
           </h2>
-          <p className="text-gray-600 dark:text-gray-200 text-center mb-6">
-            The amazing team behind Deox Foods
-          </p>
         </div>
 
         {/* Team Images Section */}
-        <div className="flex flex-col sm:flex-row justify-center gap-8 bg-gray-200 py-8 px-3 rounded-md">
-          <div className="w-full sm:w-64">
-            <img
-              src={ceo}
-              alt="Deon Orina"
-              className="w-full h-56 object-cover rounded-lg shadow-lg"
-            />
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold text-[#2C3E50] ">
-                Deon Orina
-              </h3>
-              <p className="text-gray-600 ">Founder & CEO</p>
+        <div className="bg-gray-200 py-8 px-3 rounded-md">
+          <p className="text-gray-800 dark:text-gray-200 text-center mb-6 text-lg">
+            The amazing team behind Deox Foods
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-8">
+            <div className="w-full sm:w-64">
+              <img
+                src={ceo}
+                alt="Deon Orina"
+                className="w-full h-56 object-cover rounded-lg shadow-lg"
+              />
+              <div className="mt-4 text-center">
+                <h3 className="text-xl font-semibold text-[#2C3E50] ">
+                  Deon Orina
+                </h3>
+                <p className="text-gray-600 ">Founder & CEO</p>
+              </div>
             </div>
-          </div>
-          <div className="w-full sm:w-64">
-            <img
-              src={frontendTeam}
-              alt="Happy Customers"
-              className="w-full h-56 object-cover rounded-lg shadow-lg"
-            />
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold text-[#2C3E50]">
-                Frontend Team
-              </h3>
-              <p className="text-gray-600">Building the Future</p>
+            <div className="w-full sm:w-64">
+              <img
+                src={frontendTeam}
+                alt="Happy Customers"
+                className="w-full h-56 object-cover rounded-lg shadow-lg"
+              />
+              <div className="mt-4 text-center">
+                <h3 className="text-xl font-semibold text-[#2C3E50]">
+                  Frontend Team
+                </h3>
+                <p className="text-gray-600">Building the Future</p>
+              </div>
             </div>
-          </div>
-          <div className="w-full sm:w-64">
-            <img
-              src={backendTeam}
-              alt="Deox Foods Delivery"
-              className="w-full h-56 object-cover rounded-lg shadow-lg"
-            />
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold text-[#2C3E50]">
-                Backend Team
-              </h3>
-              <p className="text-gray-600 ">Building the Future</p>
+            <div className="w-full sm:w-64">
+              <img
+                src={backendTeam}
+                alt="Deox Foods Delivery"
+                className="w-full h-56 object-cover rounded-lg shadow-lg"
+              />
+              <div className="mt-4 text-center">
+                <h3 className="text-xl font-semibold text-[#2C3E50]">
+                  Backend Team
+                </h3>
+                <p className="text-gray-600 ">Building the Future</p>
+              </div>
             </div>
           </div>
         </div>

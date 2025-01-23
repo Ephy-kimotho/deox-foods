@@ -1,17 +1,32 @@
-import { useState } from "react";
-import useCartStore from "../stores/useCartStore";
+import { useState, useEffect } from "react";
 import Button from "./common/Button";
 import CartProduct from "./common/CartProduct";
 import Checkout from "./Checkout";
+import { getCartItems } from "../utils/utils";
+import { useToken } from "./AuthProvider";
+import { useCart } from "./CartProvider";
+import toast, { Toaster } from "react-hot-toast";
+import { getDeliveryFee } from "../utils/utils";
 
 function Cart() {
-  const cart = useCartStore((state) => state.cart);
   const [showCheckout, setShowCheckOut] = useState(false);
+  const { cart, setCart } = useCart();
+  const { token } = useToken();
 
-  const Subtotal = cart.reduce((sum, item) => {
+  useEffect(() => {
+    getCartItems(token).then((items) => setCart(items));
+  }, [token, setCart]);
+
+  useEffect(() => {
+    getDeliveryFee(token)
+    .then(response => console.log(response));
+  }, [token]);
+
+  const Subtotal = cart?.reduce((sum, item) => {
     sum += item.quantity * item.price;
     return sum;
   }, 0);
+
   const deliveryFee = 20;
   const total = deliveryFee + Subtotal;
 
@@ -21,7 +36,7 @@ function Cart() {
     if (cartHasItems) {
       setShowCheckOut(true);
     } else {
-      alert("Cart has no items");
+      toast("Cart has no items");
     }
   };
 
@@ -31,6 +46,7 @@ function Cart() {
 
   return (
     <section className="flex-grow min-h-screen py-4 bg-zinc-200 dark:bg-night-200 px-2 relative">
+      <Toaster position="top-center" />
       <header className="py-2 mt-20 mb-4 font-openSans  border-b-2 border-gray-600">
         <h2 className="text-orange-300 text-3xl font-bold">My Cart</h2>
       </header>
