@@ -1,29 +1,48 @@
-/* src/components/MyOrders.css */
+
 .my-orders {
-    padding: 2rem;
-  }
-  
-  .stage-description {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
-  }
-  
-  .stage-description span {
-    margin-left: 1rem;
-  }
-  
-  .text-green-500 {
-    color: #48bb78;
-  }
-  
-  .text-gray-500 {
-    color: #6b7280;
-  }
-  
-  .text-xs {
-    font-size: 12px;
-  }
+  padding: 2rem;
+}
+
+.orders-list-container {
+  max-height: 24rem; /* Limit height for scrollable area */
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-width: thin; /* Thin scrollbar for Firefox */
+}
+
+.orders-list-container::-webkit-scrollbar {
+  width: 8px; /* Thin scrollbar for WebKit browsers */
+}
+
+.orders-list-container::-webkit-scrollbar-thumb {
+  background: #cccccc; /* Customize scrollbar thumb color */
+  border-radius: 4px;
+}
+
+.orders-list-container::-webkit-scrollbar-thumb:hover {
+  background: #aaaaaa; /* Hover effect for scrollbar */
+}
+
+.stage-description {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.stage-description span {
+  margin-left: 1rem;
+}
+
+.text-green-500 {
+  color: #48bb78;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-xs {
+  font-size: 12px;
+}

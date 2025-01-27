@@ -8,30 +8,25 @@ function Input({ type, ...props }) {
 
   let Icon = null;
 
-  if (
-    props.name === "hostel" ||
-    props.name === "plotName" ||
-    props.name === "blockNumber"
-  ) {
-    Icon = FaHouse;
-  }
-
-  if (props.name === "roomNumber" || props.name === "houseNumber") {
-    Icon = FaKey;
+  if (props.name === "username") {
+    Icon = FaUser;
   }
 
   if (props.name === "email") {
     Icon = FaEnvelope;
   }
 
-  if (props.name === "username") {
-    Icon = FaUser;
+  if (props.name === "hostel_name" || props.name === "block_number") {
+    Icon = FaHouse;
   }
 
-  if (props.name === "phone") {
+  if (props.name === "room_number") {
+    Icon = FaKey;
+  }
+
+  if (props.name === "phone_number") {
     Icon = FaPhone;
   }
-
   return (
     <section className="w-full">
       <div

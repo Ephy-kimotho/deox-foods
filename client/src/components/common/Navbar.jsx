@@ -1,21 +1,16 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import ThemeToggle from "../ThemeToggle";
 import logo from "../../assets/images/deox-foods-logo.png";
 import { IoCart } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
-import useCartStore from "../../stores/useCartStore";
-import { authContext } from "../AuthProvider";
+import { useToken } from "../AuthProvider";
+import { useCart } from "../CartProvider";
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const cart = useCartStore((state) => state.cart);
-  const { isAuthenticated } = useContext(authContext);
-
-  const numOfItems = cart.reduce((sum, item) => {
-    sum = sum + item.quantity;
-    return sum;
-  }, 0);
+  const { token } = useToken();
+  const { numOfItems } = useCart();
 
   return (
     <nav className="bg-gray-100 dark:bg-night-100 shadow-md py-4 font-sans fixed top-0 left-0 right-0 z-50">
@@ -93,12 +88,12 @@ const Navbar = () => {
         </div>
 
         {/* Cart */}
-        {isAuthenticated && (
-          <div className="relative text-gray-800 w-10 dark:text-white ml-auto mr-4 lg:m-0 flex items-center">
+        {token && (
+          <div className="relative text-gray-800 w-10 dark:text-gray-500 ml-auto mr-4 lg:m-0 flex items-center">
             <NavLink
               to="cart"
               className={({ isActive }) =>
-                `hover:text-orange-300 ${isActive && "text-orange-300"}`
+                `hover:text-orange-300 ${isActive && "text-orange-200"}`
               }
             >
               <span className="absolute -top-[6px] right-2 font-bold text-green-600">
@@ -111,7 +106,7 @@ const Navbar = () => {
 
         {/* Theme Toggle and Buttons on the Right */}
         <article className="hidden lg:flex items-center space-x-4">
-          {isAuthenticated ? (
+          {token ? (
             <Link to="/profile">
               <FaUserCircle className="text-3xl dark:text-gray-200" />
             </Link>
@@ -262,7 +257,7 @@ const Navbar = () => {
           <div className="flex flex-col items-center space-y-4 mb-6 px-6">
             {/* Login and Signup Buttons */}
             <div className="flex space-x-4 w-full ">
-              {isAuthenticated ? (
+              {token ? (
                 <Link
                   to="/profile"
                   onClick={() => setMenuOpen(false)}

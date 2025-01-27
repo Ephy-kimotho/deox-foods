@@ -11,11 +11,12 @@ import Restaurants from "../components/Restaurants";
 import Contact from "../components/Contact";
 import FoodItemsPage from "../components/FoodItems";
 import ForgotPassword from "../components/ForgotPasword";
-import ResetPassword from "../components/ResetPassword";
 import Profile from "../components/Profile";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import Error404 from "../components/Error404";
 import Meals from "../components/Meals";
+import Delivery from "../components/Delivery";
+import RestaurantOrders from "../components/RestaurantOwner";
 
 const routes = createBrowserRouter(
   [
@@ -52,6 +53,10 @@ const routes = createBrowserRouter(
           ),
         },
         {
+          path: "deliveries",
+          element: <Delivery />,
+        },
+        {
           path: "about",
           element: <About />,
         },
@@ -65,7 +70,11 @@ const routes = createBrowserRouter(
         },
         {
           path: "/restaurants/:hotelId",
-          element: <FoodItemsPage />,
+          element: (
+            <ProtectedRoute>
+              <FoodItemsPage />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/restaurants/:hotelId/:mealId",
@@ -80,12 +89,12 @@ const routes = createBrowserRouter(
           element: <Contact />,
         },
         {
-          path: "forgot-password",
-          element: <ForgotPassword />,
+          path: "hotel",
+          element: <RestaurantOrders />,
         },
         {
-          path: "reset-password",
-          element: <ResetPassword />,
+          path: "forgot-password",
+          element: <ForgotPassword />,
         },
         {
           path: "/profile",

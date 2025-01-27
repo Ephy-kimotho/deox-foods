@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
-import { useState, useContext } from "react";
-import { authContext } from "./AuthProvider";
+import { useState } from "react";
 import AuthButton from "./common/AuthButton";
 import Input from "./common/Input";
 import PasswordInput from "./common/PasswordInput";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { sanitizeFormData } from "../utils/utils";
 
 // Validation schema using Yup
 const schema = Yup.object({
@@ -25,37 +25,39 @@ const schema = Yup.object({
 
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
-  const { signup } = useContext(authContext); // Assuming `signup` is used for authentication context logic
   const navigate = useNavigate();
 
   const handleSubmit = async (values, actions) => {
     try {
-      console.log("Submitting values: ", values);
+
 
       // Add a slight delay for the loading animation
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // Submit data to your API
-      const response = await axios.post("http://127.0.0.1:8000/auth/create/", values, { headers: { 'Content-Type': 'application/json' }, withCredentials: true }); // Replace '/api/signup' with your actual API endpoint
-      console.log("Response: ", response.data);
+      const updatedValues = sanitizeFormData(values); // sanitizeFormData will remove any occurrence of whitespaces from all form values
 
-      // Call signup context if necessary
-      signup();
+      // Submit data to your API
+      const response = await axios.post(
+        "http://127.0.0.1:8000/auth/create/",
+        updatedValues,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      ); // Replace '/api/signup' with your actual API endpoint
+      console.log("Response: ", response.data);
 
       // Show success toast
       toast.success("Account created successfully!");
 
       // Reset form and navigate to the home page
       actions.resetForm();
-      navigate("/");
+      navigate("/login");
     } catch (error) {
-      console.error("Signup error: ", error);
-
-      // Extract and show error message
+      console.error("Signup error: ", error.response.data.username[0]);
       const errorMessage =
-        error.response?.data?.message || "Signup failed. Please try again.";
+        error.response.data.username[0] || "Signup failed. Please try again.";
       toast.error(errorMessage);
-      actions.setErrors({ server: errorMessage });
     } finally {
       actions.setSubmitting(false); // Stop the loading animation
     }
@@ -115,4 +117,3 @@ function Signup() {
 }
 
 export default Signup;
-

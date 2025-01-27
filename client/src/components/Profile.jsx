@@ -1,13 +1,12 @@
 import { FaUserCircle } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
-import { authContext } from "./AuthProvider";
-import { useContext } from "react";
+import { useToken } from "./AuthProvider";
 
 function Profile() {
-  const { logout } = useContext(authContext);
+  const { setToken } = useToken();
 
   const signout = () => {
-    logout();
+    setToken("");
   };
 
   return (

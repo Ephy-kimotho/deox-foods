@@ -3,38 +3,46 @@ import { useState } from "react";
 import { Formik, Form } from "formik";
 import Input from "./common/Input";
 import Button from "./common/Button";
+//import { useNavigate } from "react-router-dom";
+import { useToken } from "./AuthProvider";
+import {
+  makeOrder,
+  sanitizeFormData,
+  sanitizePhonenumber,
+} from "../utils/utils";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
-import useCartStore from "../stores/useCartStore";
 
-const residentSchema = Yup.object({
-  hostel: Yup.string().required("Required"),
-  roomNumber: Yup.number().positive().min(1).required("Required"),
-  blockNumber: Yup.number().positive().min(1).required("Required"),
-  phone: Yup.string().required("Required"),
-});
-
-const nonresididentSchema = Yup.object({
-  plotName: Yup.string().required("Required"),
-  houseNumber: Yup.number().positive().min(1).required("Required"),
-  phone: Yup.string().required("Required"),
+const schema = Yup.object({
+  hostel_name: Yup.string().required("Required"),
+  block_number: Yup.string().required("Required"),
+  room_number: Yup.string().required("Required"),
+  phone_number: Yup.string().required("Required"),
 });
 
 function Checkout({ closeCheckout }) {
   const [isResident, setIsResident] = useState(null);
-  const navigate = useNavigate();
-  const clearCart = useCartStore((state) => state.clearCart);
+  //const navigate = useNavigate();
+  const { token } = useToken();
 
   const chooseResidency = (choice) => {
     setIsResident(choice);
   };
 
   /* REPLACE WITH REAL PAYMENT FUNCTION */
-  const handlePayment = () => {
-    alert("Paid successfully");
-    closeCheckout();
-    clearCart();
-    navigate("/");
+  const handlePayment = async (values, action) => {
+    try {
+      let updatedValues = sanitizeFormData(values); // sanitizeFormData  will remove whitespaces from all input values
+
+      updatedValues = sanitizePhonenumber(updatedValues); // sanitize phone number will ensure phone number starts with +254
+
+      makeOrder(token, updatedValues);
+      action.resetForm();
+     // navigate("/")
+      closeCheckout();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    //navigate("/");
   };
 
   return (
@@ -62,12 +70,13 @@ function Checkout({ closeCheckout }) {
 
         {isResident !== null && (
           <Formik
-            initialValues={
-              isResident
-                ? { hostel: "", blockNumber: "", roomNumber: "", phone: "" }
-                : { plotName: "", houseNumber: "", phone: "" }
-            }
-            validationSchema={isResident ? residentSchema : nonresididentSchema}
+            initialValues={{
+              hostel_name: "",
+              block_number: "",
+              room_number: "",
+              phone_number: "",
+            }}
+            validationSchema={schema}
             onSubmit={handlePayment}
           >
             <Form className="w-full">
@@ -78,23 +87,23 @@ function Checkout({ closeCheckout }) {
                 <div className=" space-y-4 mb-4">
                   <Input
                     type="text"
-                    name="hostel"
+                    name="hostel_name"
                     placeholder="Enter your hostel."
                   />
                   <Input
-                    type="number"
-                    name="blockNumber"
-                    placeholder="Enter your block number."
+                    type="text"
+                    name="block_number"
+                    placeholder="Enter your hostel floor."
                   />
                   <Input
-                    type="number"
-                    name="roomNumber"
+                    type="text"
+                    name="room_number"
                     placeholder="Enter your room number."
                   />
 
                   <Input
                     type="text"
-                    name="phone"
+                    name="phone_number"
                     placeholder="Enter your phone number."
                   />
                 </div>
@@ -102,17 +111,22 @@ function Checkout({ closeCheckout }) {
                 <div className="space-y-4 mb-4">
                   <Input
                     type="text"
-                    name="plotName"
+                    name="hostel_name"
+                    placeholder="Choose between gate or njokerio"
+                  />
+                  <Input
+                    type="text"
+                    name="block_number"
                     placeholder="Enter your plot name."
                   />
                   <Input
-                    type="number"
-                    name="houseNumber"
+                    type="text"
+                    name="room_number"
                     placeholder="Enter your house number."
                   />
                   <Input
                     type="text"
-                    name="phone"
+                    name="phone_number"
                     placeholder="Enter your phone number."
                   />
                 </div>
@@ -121,13 +135,13 @@ function Checkout({ closeCheckout }) {
               <div className="flex justify-between gap-5 sm:gap-0">
                 <Button
                   type="submit"
-                  moreStyles="bg-green-600 hover:bg-green-800"
+                  moreStyles="bg-green-600 hover:bg-green-800 px-3 sm:px-12"
                 >
                   Confirm Payment
                 </Button>
                 <Button
                   type="button"
-                  moreStyles="bg-red-100 hover:bg-red-600"
+                  moreStyles="bg-red-100 hover:bg-red-600 px-6 sm:px-12"
                   onClick={closeCheckout}
                 >
                   Cancel
