@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ClipLoader } from "react-spinners";
+import emailjs from "emailjs-com";
+import toast, { Toaster } from "react-hot-toast";
 
 const Contact = () => {
   const [isSending, setIsSending] = useState(false);
@@ -9,18 +10,39 @@ const Contact = () => {
     message: "",
   });
 
+  const clearForm = () => {
+    setFormData({ name: "", email: "", message: "" });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
-    /* replace with real functionality to send email to company */
+  const handleSubmit = (e) => {
+    e.preventDefault();
     setIsSending(true);
 
-    await Promise((resolve) => setTimeout(resolve, 1500));
-
-    setIsSending(false);
+    emailjs
+      .sendForm(
+        "service_fkxwqe7", // EmailJS Service ID
+        "template_ef01rgr", // EmailJS Template ID
+        e.target, // This will automatically collect the form data
+        "-hzfRaa9YXNOq7dsE" // EmailJS User ID
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          setIsSending(false);
+          clearForm()
+          toast.success("Your message was sent successfully!");
+        },
+        (error) => {
+          console.log(error.text);
+          setIsSending(false);
+          toast.error("Oops, something went wrong. Please try again.");
+        }
+      );
   };
 
   return (
@@ -28,6 +50,7 @@ const Contact = () => {
       <h1 className="text-4xl font-bold text-gray-700 dark:text-orange-600 mt-16 mb-6">
         Contact Deox Foods
       </h1>
+      <Toaster position="top-center" />
       <p className="text-lg text-gray-700 dark:text-gray-200 text-center max-w-2xl mb-10">
         Have any questions or feedback? We&apos;d love to hear from you! Reach
         out to us using the form below or via our contact details.
@@ -46,7 +69,7 @@ const Contact = () => {
               type="text"
               id="name"
               name="name"
-              className="mt-1 py-2 pl-3 w-full rounded-md  border border-gray-800 focus:outline-2 focus:border-none focus:outline-orange-200 placeholder:text-gray-500"
+              className="mt-1 py-2 pl-3 w-full rounded-md border border-gray-800 focus:outline-2 focus:border-none focus:outline-orange-200 placeholder:text-gray-500"
               placeholder="John Doe"
               value={formData.name}
               onChange={handleChange}
@@ -65,7 +88,7 @@ const Contact = () => {
               type="email"
               id="email"
               name="email"
-              className="mt-1 py-2 pl-3 w-full rounded-md  border border-gray-800 focus:outline-2 focus:border-none focus:outline-orange-200 placeholder:text-gray-500"
+              className="mt-1 py-2 pl-3 w-full rounded-md border border-gray-800 focus:outline-2 focus:border-none focus:outline-orange-200 placeholder:text-gray-500"
               placeholder="youremail@example.com"
               value={formData.email}
               onChange={handleChange}
@@ -84,7 +107,7 @@ const Contact = () => {
               id="message"
               name="message"
               rows="4"
-              className="mt-1 py-2 pl-3 w-full rounded-md  border border-gray-800 focus:outline-2 focus:border-none focus:outline-orange-200 placeholder:text-gray-500"
+              className="mt-1 py-2 pl-3 w-full rounded-md border border-gray-800 focus:outline-2 focus:border-none focus:outline-orange-200 placeholder:text-gray-500"
               required
               placeholder="Write your message here..."
               value={formData.message}
@@ -98,10 +121,7 @@ const Contact = () => {
             disabled={isSending}
           >
             {isSending ? (
-              <span className="flex items-center">
-                <ClipLoader />
-                Sending...
-              </span>
+              <span className="flex items-center">Sending...</span>
             ) : (
               "Send message"
             )}
@@ -114,13 +134,10 @@ const Contact = () => {
           Or reach out to us directly:
         </p>
         <p className="text-sm text-gray-700 dark:text-gray-200 mt-3">
-          Phone: +254788256115
+          Phone: 0788256115
         </p>
         <p className="text-sm text-gray-700 dark:text-gray-200 my-2">
           Email: support@deoxfoods.com
-        </p>
-        <p className="text-sm text-gray-700 dark:text-gray-200">
-          Address: 123 Food Street, Gourmet City
         </p>
         <p className="mt-4">
           <a

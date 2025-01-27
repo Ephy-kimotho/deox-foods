@@ -29,7 +29,7 @@ function Signup() {
 
   const handleSubmit = async (values, actions) => {
     try {
-      console.log("Submitting values: ", values);
+
 
       // Add a slight delay for the loading animation
       await new Promise((resolve) => setTimeout(resolve, 1500));

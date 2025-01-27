@@ -79,7 +79,7 @@ function Cart() {
           <Button
             onClick={displayCheckout}
             type="button"
-            moreStyles="bg-orange-300 hover:bg-orange-600"
+            moreStyles="bg-orange-300 hover:bg-orange-600 w-3/5 sm:w-52"
           >
             Confirm order
           </Button>

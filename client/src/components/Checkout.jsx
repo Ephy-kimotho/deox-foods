@@ -135,13 +135,13 @@ function Checkout({ closeCheckout }) {
               <div className="flex justify-between gap-5 sm:gap-0">
                 <Button
                   type="submit"
-                  moreStyles="bg-green-600 hover:bg-green-800"
+                  moreStyles="bg-green-600 hover:bg-green-800 px-3 sm:px-12"
                 >
                   Confirm Payment
                 </Button>
                 <Button
                   type="button"
-                  moreStyles="bg-red-100 hover:bg-red-600"
+                  moreStyles="bg-red-100 hover:bg-red-600 px-6 sm:px-12"
                   onClick={closeCheckout}
                 >
                   Cancel

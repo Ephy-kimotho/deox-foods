@@ -4,7 +4,7 @@ function Button({ children, onClick, type, moreStyles }) {
     <button
       type={type}
       onClick={onClick}
-      className={`${moreStyles} rounded-lg text-white font-openSans font-bold py-3 w-3/5 sm:w-2/6 capitalize active:scale-95 `}
+      className={`${moreStyles} rounded-lg text-white font-openSans font-bold py-3 capitalize active:scale-95 `}
     >
       {children}
     </button>

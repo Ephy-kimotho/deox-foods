@@ -28,7 +28,7 @@ function Layout() {
           <button
             type="button"
             onClick={toggleVisibility}
-            className="fixed z-40 bottom-6 right-6 w-12 h-12 grid place-items-center rounded-full p-2 bg-night-200 dark:bg-zinc-400 text-zinc-200 dark:text-night-200"
+            className="fixed z-40 bottom-2 right-6 w-12 h-12 grid place-items-center rounded-full p-2 bg-night-200 dark:bg-zinc-400 text-zinc-200 dark:text-night-200"
           >
             {isVisible ? (
               <IoClose className="text-3xl" />

@@ -19,12 +19,16 @@ const Restaurants = () => {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
-        },
-        {
           withCredentials: true,
         }
       );
-      const data = res.data;
+      const data = res.data.map((item) => {
+        const backendPath = "http://127.0.0.1:8000/";
+        return {
+          ...item,
+          picture: `${backendPath}${item.picture}`,
+        };
+      });
       setRestaurants(data);
     } catch (error) {
       console.error("Error: ", error);
@@ -51,7 +55,7 @@ const Restaurants = () => {
   return (
     <div className="p-6 bg-zinc-200 dark:bg-night-200 min-h-screen flex-grow">
       {/* Available Restaurants */}
-      <h2 className="text-3xl font-bold mt-20 mb-2 text-center text-gray-700 dark:text-orange-300 tracking-wider">
+      <h2 className="text-2xl sm:text-3xl font-bold mt-20 sm:mb-2 text-center text-gray-700 dark:text-orange-300 tracking-wider">
         Available Restaurants
       </h2>
       <p className="text-center mb-6 text-base sm:text-lg text-gray-600 dark:text-gray-500 font-semibold">
@@ -60,11 +64,11 @@ const Restaurants = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {restaurants.map((restaurant) => (
           <Link to={`/restaurants/${restaurant.name}`} key={restaurant.id}>
-            <div className="bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow pb-2 hover:scale-105">
+            <div className="bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow pb-2 hover:scale-105 h-[350px]">
               <img
-                src={restaurant.image}
+                src={restaurant.picture}
                 alt={restaurant.name}
-                className="w-full h-40 object-cover"
+                className="w-full h-2/3 object-cover"
               />
               <div className="p-4">
                 <h2 className="text-lg font-semibold text-gray-700  uppercase tracking-wide">

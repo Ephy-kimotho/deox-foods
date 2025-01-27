@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 export const postItemToCart = async (id, token) => {
   try {
     const res = await axios.post(
@@ -13,6 +12,7 @@ export const postItemToCart = async (id, token) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        withCredentials: true,
       }
     );
     return res.data.message;
@@ -27,9 +27,15 @@ export const getCartItems = async (token) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
 
-    return res.data.cart;
+    const updatedCart = res.data.cart.map((item) => ({
+      ...item,
+      image: `http://127.0.0.1:8000${item.image}`,
+    }));
+
+    return updatedCart;
   } catch (error) {
     console.error("Error geting the cart items: ", error);
   }
@@ -43,6 +49,7 @@ export const getDeliveryFee = async (token) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        withCredentials: true,
       }
     );
 
@@ -60,6 +67,7 @@ export const removeItemFromCart = async (id, token) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        withCredentials: true,
       }
     );
     const message = res.data.message;
@@ -78,6 +86,7 @@ export const makeOrder = async (token, values) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        withCredentials: true,
       }
     );
     console.log(res);

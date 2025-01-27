@@ -19,7 +19,7 @@ const OrderStatus = ({ stage }) => {
   ];
 
   return (
-    <div className="order-status flex justify-around my-4 bg-gray-100 p-4 rounded-md shadow-md">
+    <div className="flex justify-between my-4  rounded-md ">
       {stages.map((s, index) => (
         <div
           key={index}

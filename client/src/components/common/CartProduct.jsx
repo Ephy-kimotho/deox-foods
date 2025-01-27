@@ -1,15 +1,20 @@
 /* eslint-disable react/prop-types */
 import { FaRegTrashCan } from "react-icons/fa6";
-import { removeItemFromCart, getCartItems, postItemToCart } from "../../utils/utils";
 import { useToken } from "../AuthProvider";
 import { useCart } from "../CartProvider";
 import toast from "react-hot-toast";
+import axios from "axios";
+import {
+  removeItemFromCart,
+  getCartItems,
+  postItemToCart,
+} from "../../utils/utils";
 
 function CartProduct({ id, product_name, image, price, quantity }) {
   const { token } = useToken();
   const { setCart } = useCart();
 
-  const addItem = async (id) => {
+  const addQuantity = async (id) => {
     try {
       const message = await postItemToCart(id, token);
       console.log(message);
@@ -18,6 +23,25 @@ function CartProduct({ id, product_name, image, price, quantity }) {
       setCart(items);
     } catch (error) {
       console.error("Error: ", error);
+    }
+  };
+
+  const reduceQuantity = async (id) => {
+    try {
+      const res = await axios.delete(
+        `http://127.0.0.1:8000/restaurant/cart/remove/${id}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log(res);
+      const items = await getCartItems(token);
+      setCart(items);
+    } catch (error) {
+      console.error("Error reducing quantity: ", error);
     }
   };
 
@@ -60,14 +84,14 @@ function CartProduct({ id, product_name, image, price, quantity }) {
 
         <div className="space-x-2">
           <button
-            onClick={() => console.log("Subtracted one item.")}
+            onClick={() => reduceQuantity(id)}
             className="border-2 w-6 sm:w-1/3 lg:text-xl lg:font-bold text-center border-orange-300 bg-white text-orange-300 rounded-md"
           >
             -
           </button>
           <span className="font-bold text-night-100">{quantity}</span>
           <button
-            onClick={() => addItem(id)}
+            onClick={() => addQuantity(id)}
             className="bg-orange-300 w-6 sm:w-1/3 lg:text-xl lg:font-bold text-center text-white rounded-md"
           >
             +

@@ -1,7 +1,8 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
+import { IoArrowBackCircle } from "react-icons/io5";
 import { useToken } from "./AuthProvider";
 import { postItemToCart, getCartItems } from "../utils/utils";
 import { useCart } from "./CartProvider";
@@ -54,9 +55,14 @@ function FoodItemsPage() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            withCredentials: true,
           }
         );
-        setAllMeals(res.data);
+        const data = res.data.map((item) => ({
+          ...item,
+          product_image: `http://127.0.0.1:8000/${item.product_image}`,
+        }));
+        setAllMeals(data);
       } catch (error) {
         const errorMessage = error.response.data.detail;
         toast.error(errorMessage);
@@ -117,7 +123,7 @@ function FoodItemsPage() {
             </p>
 
             <div className="flex gap-3 items-center">
-              {/*  <Link
+               {/* <Link
                 to={`${meal.id}`}
                 className="mt-4 inline-block bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-800 transition-colors"
               >
@@ -156,9 +162,18 @@ function FoodItemsPage() {
     <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5 mt-20 pb-6">
       <Toaster position="top-center" />
       <div className="container mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
-          Food Menu
-        </h1>
+        <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-2 sm:m-0">
+          {hotelId}&apos;s Menu
+        </h2>
+
+        <Link
+          to="../"
+          relative="path"
+          className="flex gap-1 items-center mb-2 text-lg text-night-100 hover:text-orange-200 max-w-32 dark:text-gray-300 dark:hover:text-orange-200"
+        >
+          <IoArrowBackCircle />
+          Back
+        </Link>
 
         {/* Search and Filter */}
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between items-center mb-6">
