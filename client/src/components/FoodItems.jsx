@@ -98,7 +98,7 @@ function FoodItemsPage() {
       : meals;
 
     return filteredMeals.length > 0 ? (
-      filteredMeals.map((meal) => {
+      filteredMeals.map((meal) => {       
         return (
           <div
             key={meal.id}
@@ -123,12 +123,13 @@ function FoodItemsPage() {
             </p>
 
             <div className="flex gap-3 items-center">
-               {/* <Link
+              <Link
                 to={`${meal.id}`}
+                state={{ meal }}
                 className="mt-4 inline-block bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-800 transition-colors"
               >
                 View details
-              </Link> */}
+              </Link>
               <button
                 onClick={() => addItem(meal.id)}
                 className="mt-4 inline-block bg-orange-200 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors"

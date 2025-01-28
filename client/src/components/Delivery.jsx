@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { FadeLoader } from "react-spinners";
 import Button from "./common/Button";
-//import axios from "axios";
+import { useToken } from "./AuthProvider";
+import axios from "axios";
 
 const fakeData = [
   {
@@ -11,6 +12,7 @@ const fakeData = [
     productName: "Rice beans",
     phone: "0100678543",
     name: "Dennis",
+    order_no: 123,
   },
   {
     hostel: "L.Nakuru",
@@ -19,21 +21,18 @@ const fakeData = [
     productName: "2 Chapati",
     phone: "0723678543",
     name: "Mitchelle",
-  },
-  {
-    hostel: "Tsavo",
-    room: "31",
-    id: 3,
-    productName: "Ugali sukuma",
-    phone: "010059563",
-    name: "Stephen",
+    order_no: 321,
   },
 ];
 
 function Delivery() {
-  //const [deliveries, setDeliveries] = useState([]);
+  const [deliveries, setDeliveries] = useState(fakeData);
+  const { token } = useToken();
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+  console.log(count);
 
+  // GET THE DELIVERIES FOR THE DELIVERY GUY
   useEffect(() => {
     async function getDeliveries() {
       setLoading(true);
@@ -54,17 +53,56 @@ function Delivery() {
     getDeliveries();
   }, []);
 
-  const hanldeClick = async () => {
-    try {
-      /* REPLACE WITH REAL API CALL */
-      const res = await new Promise((resolve) =>
-        setTimeout(resolve("delivered"), 1000)
-      );
-      console.log(res);     
-    } catch (error) {
-      console.error("Error setting delivery status: ", error);
+  const hanldeClick = async (order_no) => {
+    if (count === 0) {
+      try {
+        /* PATCH DELIVERY STATUS TO ON TRANSIT */
+        const res = await axios.patch(
+          `http://127.0.0.1:8000/restaurant/api/orders/${order_no}/update-delivery-status/`,
+          {
+            delivery_status: "on_transit",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            withCredentials: true,
+          }
+        );
+        setCount(1);
+        console.log(res);
+      } catch (error) {
+        console.error("Error setting on transit delivery status: ", error);
+      }
+    } else if (count === 1) {
+      try {
+        /* PATCH DELIVERY STATUS TO ON DELIVERED*/
+        const res = await axios.patch(
+          `http://127.0.0.1:8000/restaurant/api/orders/${order_no}/update-delivery-status/`,
+          {
+            delivery_status: "complete",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+        setCount(2);
+        console.log(res);
+      } catch (error) {
+        console.error("Error setting delivered delivery status: ", error);
+      }
     }
   };
+
+  const buttonText =
+    count === 0
+      ? "Mark on transit"
+      : count === 1
+      ? "Mark As Delivered"
+      : "Delivered";
 
   return (
     <section className="min-h-screen flex-grow bg-zinc-200 dark:bg-night-200 pt-24 pb-6 ">
@@ -82,7 +120,7 @@ function Delivery() {
           </div>
         ) : (
           <div className="grid gap-1 sm:gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {fakeData.map((item) => (
+            {deliveries.map((item) => (
               <article
                 key={item.id}
                 className="p-2 bg-white mb-3 rounded-md pl-4 pb-3 font-openSans tracking-wide shadow-md"
@@ -92,16 +130,23 @@ function Delivery() {
                 </p>
                 <p className="text-night-100">Name: {item.name}</p>
                 <p className="my-1 text-night-100">Phone: {item.phone}</p>
-                <p className="text-teal-700">
+                <p className="text-night-100">
                   Hostel: {item.hostel} {item.room}
                 </p>
 
                 <Button
                   type="button"
-                  onClick={hanldeClick}
-                  moreStyles="w-36 bg-orange-200 text-sm py-1 mt-2"
+                  onClick={() => hanldeClick(item.order_no)}
+                  disabled={count === 2}
+                  moreStyles={`px-3 text-sm mt-4 disabled:cursor-not-allowed  ${
+                    count === 0
+                      ? "bg-orange-600"
+                      : count === 1
+                      ? "bg-sky-500"
+                      : "bg-green-600"
+                  }`}
                 >
-                  mark as delivered
+                  {buttonText}
                 </Button>
               </article>
             ))}

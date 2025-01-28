@@ -1,3 +1,4 @@
+/* UTILITY FUNCTIONS TO FETCH OR POST DATA */
 import axios from "axios";
 
 export const postItemToCart = async (id, token) => {
@@ -92,6 +93,38 @@ export const makeOrder = async (token, values) => {
     console.log(res);
   } catch (error) {
     console.error("Error making an order: ", error);
+  }
+};
+
+export const getUserDetails = async (token) => {
+  try {
+    const res = await axios.get("http://127.0.0.1:8000/auth/user_profile/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("Error getting user info:", error);
+  }
+};
+
+export const postMessageToBot = async (token, message) => {
+  try {
+    const res = await axios.post(
+      "http://127.0.0.1:8000/restaurant/chat/",
+      { message },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
+    return res;
+  } catch (error) {
+    console.error("Error posting message to chat bot: ", error);
   }
 };
 

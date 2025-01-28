@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { BeatLoader } from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import OrderStatus from "./OrderStatus";
 import OrderDetails from "./OrderDetails";
 import axios from "axios";
@@ -88,7 +88,7 @@ const MyOrders = ({ orderId }) => {
           <p className="uppercase font-bold text-blue-600 tracking-wider text-base sm:text-3xl">
             Loading past orders...
           </p>
-          <BeatLoader size={20} color="#f57710" />
+          <MoonLoader size={65} color="#111" />
         </div>
       </div>
     );
@@ -113,13 +113,13 @@ const MyOrders = ({ orderId }) => {
       {/* PAST ORDERS SECTION */}
       <div className="bg-white p-4 rounded-md">
         <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-4">
-          My Orders
+          My Past Orders
         </h2>
         {!pastOrdersExist ? (
           <p className="text-gray-600">No past orders.</p>
         ) : (
           <div>
-            <table className="w-full border-collapse rounded-lg overflow-hidden">
+            <table className="w-full border-collapse rounded-lg overflow-hidden shadow">
               <thead>
                 <tr className="bg-neutral-400 text-white uppercase tracking-wide">
                   <th className="px-4 py-2 text-left">Name</th>

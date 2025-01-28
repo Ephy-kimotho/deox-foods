@@ -1,29 +1,63 @@
 import { FaUserCircle } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 import { useToken } from "./AuthProvider";
+import { BeatLoader } from "react-spinners";
+import { useState, useEffect } from "react";
+import { getUserDetails } from "../utils/utils";
 
 function Profile() {
-  const { setToken } = useToken();
+  const { token, setToken } = useToken();
+  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      setIsLoading(true);
+      try {
+        const result = await getUserDetails(token);
+        setUser(result);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getUserInfo();
+  }, [token]);
 
   const signout = () => {
     setToken("");
   };
+
+  if (isLoading) {
+    return (
+      <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 px-4 font-sans relative">
+        <div className="flex flex-col justify-center items-center gap-4 w-[330px] sm:w-[512px] bg-white py-6  rounded-md shadow-md">
+          <p className="uppercase font-bold text-blue-600 tracking-wider text-base sm:text-3xl">
+            Loading user details...
+          </p>
+          <BeatLoader size={20} color="#f57710" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 px-4 font-sans relative">
       <div className="mt-28 flex flex-col gap-2 items-center ">
         <FaUserCircle className="text-2xl sm:text-4xl md:text-8xl dark:text-gray-200" />
         <p className="text-lg text-night-200 dark:text-gray-200 font-bold">
-          Hello John Doe
+          Hello {user?.username}
         </p>
       </div>
 
       <div className="mt-4 max-w-lg space-y-8  mx-auto p-4">
         <p className="border-b-2 border-gray-800 dark:text-gray-200">
-          <span className="font-bold">Username: &nbsp;</span>John Doe
+          <span className="font-bold">Username: &nbsp;</span>{user?.username}
         </p>
         <p className="border-b-2 border-gray-800 dark:text-gray-200">
-          <span className="font-bold">Email: &nbsp;</span>john@gmail.com
+          <span className="font-bold">Email: &nbsp;</span>{user?.email}
         </p>
       </div>
 

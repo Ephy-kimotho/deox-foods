@@ -55,8 +55,6 @@ function Login() {
       actions.resetForm();
       navigate(path); // Redirect to the previous page or home page
     } catch (error) {
-      console.error("Login error:", error);
-
       // Display an error message from the server or a default message
       const errorMessage =
         error.response?.data?.detail || "Login failed. Please try again.";

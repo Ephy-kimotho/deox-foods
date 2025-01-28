@@ -1,20 +1,34 @@
-import { useParams, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { meals } from "../data";
-import  { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { useCart } from "./CartProvider";
+import { getCartItems, postItemToCart } from "../utils/utils";
+import { useToken } from "./AuthProvider";
+import { IoArrowBackCircle } from "react-icons/io5";
 
 const Meals = () => {
-  const { mealId } = useParams();
+  const { state } = useLocation();
+  const { setCart } = useCart();
+  const { token } = useToken();
+  const meal = state?.meal;
 
-  const meal = meals.find((meal) => meal.id === parseInt(mealId));
-  const relatedMeals = meals.filter(
-    (m) => m.id !== parseInt(mealId) && Math.floor(Math.random() * 20) <= 4
-  );
+  // Add item to cart
+  const addItem = async (id) => {
+    try {
+      const message = await postItemToCart(id, token);
+      toast.success(message);
+
+      const items = await getCartItems(token);
+      setCart(items);
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
 
   /* EARLY RETURN IF MEAL IS NOT FOUND */
   if (!meal) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-zinc-200 dark:bg-night-200">
+      <div className="flex flex-grow justify-center items-center min-h-screen bg-zinc-200 dark:bg-night-200">
         <h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white">
           Meal not found
         </h1>
@@ -22,22 +36,18 @@ const Meals = () => {
     );
   }
 
-  /* Add  item to cart logic */
-  const handleAddToCart = () => {
-    console.log("Item added to cart.");
-  };
-
-  // TODO: yet to add functionality for quick buy
-  /*  const handleQuickBuy = () => {
-     toast.success(`Quick Buy: ${meal.name}`);
-     // Add logic for direct checkout
-   }; */
-
-  //TODO: yet to add dark mode functionality
   return (
     <section className="min-h-screen bg-zinc-200 dark:bg-night-200 flex flex-col items-center justify-center  w-full mt-20">
       <Toaster position="top-center" />
       <div className="w-full max-w-7xl p-6 rounded-xl ">
+        <Link
+          to="../"
+          relative="path"
+          className="flex gap-1 items-center mb-2 text-lg text-night-100 hover:text-orange-200 max-w-32 dark:text-gray-300 dark:hover:text-orange-200"
+        >
+          <IoArrowBackCircle />
+          Back
+        </Link>
         {/* Meal Details */}
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12"
@@ -47,48 +57,42 @@ const Meals = () => {
         >
           {/* Meal Image */}
           <img
-            src={meal.image}
-            alt={meal.name}
+            src={meal.product_image}
+            alt={meal.product_name}
             className="h-[400px] rounded-md  aspect-square justify-self-center"
           />
 
           {/* Meal Information */}
           <div className="flex flex-col justify-center space-y-6 bg-zinc-100 px-6 rounded-lg shadow-lg py-6">
             <h1 className="text-4xl font-semibold text-gray-800  capitalize">
-              {meal.name}
+              {meal.product_name}
             </h1>
             <p className="text-lg text-gray-600">{meal.description}</p>
-
-            {/* User Ratings */}
-            <div className="flex items-center space-x-2">
-              <span className="text-yellow-500 text-xl">⭐</span>
-              <p className="text-gray-800 ">{meal.rating.toFixed(1)} / 5.0</p>
-            </div>
 
             {/* Nutritional Information */}
             <div className="flex flex-col space-y-2">
               <div className="flex items-center space-x-2">
                 <span className="text-red-500 text-lg">🔥</span>
-                <p className="text-gray-800 ">{meal.calories} kcal</p>
+                <p className="text-gray-800 ">{meal.kilocalories} kcal</p>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-blue-500 text-lg">🍗</span>
-                <p className="text-gray-800 ">{meal.protein}g Protein</p>
+                <p className="text-gray-800 ">{meal.proteins}g Protein</p>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-orange-500 text-lg">🥑</span>
-                <p className="text-gray-800 ">{meal.fat}g Fat</p>
+                <p className="text-gray-800 ">{meal.fats}g Fat</p>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-green-500 text-lg">🍞</span>
-                <p className="text-gray-800 ">{meal.carbs}g Carbs</p>
+                <p className="text-gray-800 ">{meal.carbohydrates}g Carbs</p>
               </div>
             </div>
 
             {/* Actions */}
             <div className="flex items-center justify-between space-x-4">
               <button
-                onClick={handleAddToCart}
+                onClick={() => addItem(meal.id)}
                 className="bg-green-500 text-white py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105"
               >
                 Add to Cart
@@ -102,40 +106,6 @@ const Meals = () => {
             </div>
           </div>
         </motion.div>
-
-        {/* Related Meals */}
-        <div className="bg-white dark:bg-night-700 p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-800  mb-4">
-            Related Meals
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {relatedMeals.map((relatedMeal) => (
-              <div
-                key={relatedMeal.id}
-                className="flex flex-col items-center bg-zinc-100 dark:bg-night-600 p-4 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-transform"
-              >
-                <img
-                  src={relatedMeal.image}
-                  alt={relatedMeal.name}
-                  className="w-full h-64 object-cover rounded-md mb-2"
-                />
-                <h3 className="text-lg font-medium text-gray-800  capitalize">
-                  {relatedMeal.name}
-                </h3>
-                <p className="text-gray-800  my-1">
-                  Ksh {relatedMeal.price.toFixed(2)}
-                </p>
-                <p className="text-gray-600">{relatedMeal.hotel}</p>
-                <Link
-                  to={`/restaurants/${relatedMeal.hotel}/${relatedMeal.id}`}
-                  className="mt-3 bg-blue-500 text-white py-2 px-6 rounded-full shadow-md hover:bg-blue-600 transition-colors"
-                >
-                  View Details
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );

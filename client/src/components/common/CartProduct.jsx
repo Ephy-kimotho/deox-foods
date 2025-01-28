@@ -36,7 +36,6 @@ function CartProduct({ id, product_name, image, price, quantity }) {
           },
         }
       );
-
       console.log(res);
       const items = await getCartItems(token);
       setCart(items);
