@@ -1,4 +1,4 @@
-/* Place routes here */
+/* Updated routes with admin dashboard integration */
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../components/Home";
 import Login from "../components/Login";
@@ -17,6 +17,12 @@ import Error404 from "../components/Error404";
 import Meals from "../components/Meals";
 import Delivery from "../components/Delivery";
 import RestaurantOrders from "../components/RestaurantOwner";
+
+// Admin components
+import AdminDashBoard from "../admin";
+import Products from "../admin/pages/Products";
+import Categories from "../admin/pages/Categories";
+import Orders from "../admin/pages/Orders";
 
 const routes = createBrowserRouter(
   [
@@ -107,6 +113,29 @@ const routes = createBrowserRouter(
         {
           path: "*",
           element: <Error404 />,
+        },
+        // Admin routes
+        {
+          path: "admin",
+          // element: <ProtectedRoute>
+          //   <AdminDashBoard />
+          // </ProtectedRoute>,
+               element:   <AdminDashBoard />,
+             
+          children: [
+            {
+              path: "products",
+              element: <Products />,
+            },
+            {
+              path: "categories",
+              element: <Categories />,
+            },
+            {
+              path: "orders",
+              element: <Orders />,
+            },
+          ],
         },
       ],
     },
