@@ -163,7 +163,7 @@ function FoodItemsPage() {
     <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5 mt-20 pb-6">
       <Toaster position="top-center" />
       <div className="container mx-auto max-w-7xl">
-        <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-2 sm:m-0">
+        <h2 className="text-3xl font-bold text-center capitalize text-gray-800 dark:text-white mb-2 sm:m-0">
           {hotelId}&apos;s Menu
         </h2>
 

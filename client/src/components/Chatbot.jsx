@@ -52,7 +52,7 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
   };
 
   return isVisible ? (
-    <div className="fixed bottom-14 right-3 sm:right-6 md:right-10 w-[320px] sm:w-[600px] h-[400px] bg-neutral-200 dark:bg-night-200 shadow-xl rounded-lg flex flex-col p-4 z-30">
+    <div className="fixed bottom-14 right-3 sm:right-6 md:right-10 w-[330px] sm:w-[600px] h-[400px] bg-neutral-200 dark:bg-night-200 shadow-xl rounded-lg flex flex-col p-4 z-30">
       {/* Header */}
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-bold text-gray-900 dark:text-gray-200">
@@ -74,7 +74,7 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
               className={`flex ${
                 message.isUser
                   ? "self-end bg-orange-400 text-white"
-                  : "self-start bg-gray-500 dark:bg-gray-600 text-black dark:text-white"
+                  : "self-start bg-gray-500 dark:bg-gray-600 text-white dark:text-white"
               } px-4 py-2 rounded-lg max-w-xs`}
             >
               <span>{message.text}</span>

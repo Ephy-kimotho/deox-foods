@@ -6,21 +6,54 @@ import { getCartItems } from "../utils/utils";
 import { useToken } from "./AuthProvider";
 import { useCart } from "./CartProvider";
 import toast, { Toaster } from "react-hot-toast";
-import { getDeliveryFee } from "../utils/utils";
+//import { getDeliveryFee } from "../utils/utils";
 
 function Cart() {
   const [showCheckout, setShowCheckOut] = useState(false);
+  const [isOrderAllowed, setIsOrderAllowed] = useState(false);
   const { cart, setCart } = useCart();
   const { token } = useToken();
 
+  //GET CART ITEMS TO BE DISPLAYED
   useEffect(() => {
     getCartItems(token).then((items) => setCart(items));
   }, [token, setCart]);
 
+  //GET DELIVERY FEE
+ /*  useEffect(() => {
+    getDeliveryFee(token).then((response) => console.log(response));
+  }, [token]); */
+
+  // SIDE EFFECT TO KNOW IF AN ORDER's TIME IS VALID
   useEffect(() => {
-    getDeliveryFee(token)
-    .then(response => console.log(response));
-  }, [token]);
+    const checkOrderTime = () => {
+      /* Get the current Hour and minutes */
+      const currentDate = new Date();
+      const currentHour = currentDate.getHours();
+      const currentMinutes = currentDate.getMinutes();
+
+      /* Define the start and end hours in 24 clock system */
+      const startHour = 11;
+      const endHour = 16;
+
+      /* Logic to set isOrderAllowed to true or false */
+      if (currentHour > startHour && currentHour < endHour) {
+        setIsOrderAllowed(true);
+      } else if (currentHour === startHour && currentMinutes >= 0) {
+        setIsOrderAllowed(true);
+      } else if (currentHour === endHour && currentMinutes === 0) {
+        setIsOrderAllowed(true);
+      } else {
+        setIsOrderAllowed(false);
+      }
+    };
+    checkOrderTime();
+
+    /* call checkOrderTime after every 1 hour*/
+    const intervalID = setInterval(checkOrderTime, 3600000);
+
+    return () => clearInterval(intervalID);
+  }, []);
 
   const Subtotal = cart?.reduce((sum, item) => {
     sum += item.quantity * item.price;
@@ -33,10 +66,14 @@ function Cart() {
   const cartHasItems = cart?.length > 0;
 
   const displayCheckout = () => {
-    if (cartHasItems) {
-      setShowCheckOut(true);
+    if (isOrderAllowed) {
+      if (cartHasItems) {
+        setShowCheckOut(true);
+      } else {
+        toast("Cart has no items");
+      }
     } else {
-      toast("Cart has no items");
+      toast("Orders are allowed from 11am to 4pm.");
     }
   };
 
