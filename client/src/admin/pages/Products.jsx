@@ -1,44 +1,30 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
-// Dummy data for products
-const initialProducts = [
-  {
-    id: 1,
-    name: "Burger",
-    category: "Fast Food",
-    price: 10.99,
-    image: "https://via.placeholder.com/150",
-    vendor: "Burger King",
-    inStock: true,
-    description: "A delicious burger made with fresh ingredients.",
-  },
-  {
-    id: 2,
-    name: "Pizza",
-    category: "Italian",
-    price: 12.99,
-    image: "https://via.placeholder.com/150",
-    vendor: "Pizza Hut",
-    inStock: false,
-    description: "A classic Italian pizza with a variety of toppings.",
-  },
-  {
-    id: 3,
-    name: "Sushi",
-    category: "Japanese",
-    price: 15.99,
-    image: "https://via.placeholder.com/150",
-    vendor: "Sushi World",
-    inStock: true,
-    description: "Fresh sushi with fish and vegetables.",
-  },
-];
+
 
 export default function Products() {
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
 
-  const handleDelete = (id) => {
-    setProducts(products.filter((product) => product.id !== id));
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("/api/products");
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const deleteProduct = async (id) => {
+    try {
+      await axios.delete(`/api/products/${id}`);
+      setProducts(products.filter((product) => product.id !== id));
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
 
   return (

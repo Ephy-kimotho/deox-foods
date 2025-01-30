@@ -17,8 +17,13 @@ export const CategoryModal = (props) => {
       }
       return errors;
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // Mock function to handle form submission
+      const result = await fetchAPI("categories", "POST", values);
+      if (result) {
+        alert("Category added successfully!");
+        props.closeFunc();
+      }
       console.log("Category submitted:", values);
       alert("Category added successfully!");
       props.closeFunc();

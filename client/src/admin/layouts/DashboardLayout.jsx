@@ -17,7 +17,7 @@ export default function AdminDashBoard() {
     <div className="flex w-full h-screen bg-gray-50">
       {/* Sidebar */}
       <div
-        className={`fixed lg:relative z-30 lg:z-0 transform transition-transform duration-200 ease-in-out ${
+        className={`fixed lg:relative z-30 mt-10 lg:z-0 transform transition-transform duration-200 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
@@ -38,12 +38,12 @@ export default function AdminDashBoard() {
         <Navbar
           openModal={openModal}
           toggleSidebar={toggleSidebar} // Pass toggle function to Navbar
-          className="bg-white shadow-md fixed w-full z-10"
+          className="bg-white shadow-md fixed mt-20 w-full z-10"
         />
 
         {/* Page Content */}
         <main className="flex-1 w-full mt-16 lg:mt-0 px-4 lg:px-8 overflow-x-hidden overflow-y-auto p-4 lg:p-6">
-          <div className="w-full bg-white shadow-md rounded-lg p-4 lg:p-6">
+          <div className="w-full bg-white shadow-md rounded-lg p-4 lg:p-44">
             <Outlet />
           </div>
         </main>

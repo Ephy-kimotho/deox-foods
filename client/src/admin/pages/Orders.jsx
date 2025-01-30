@@ -1,135 +1,94 @@
-import { useState } from "react";
-
-const initialOrders = [
-  {
-    id: 1,
-    product: "Burger",
-    quantity: 2,
-    total: 21.98,
-    status: "Pending",
-  },
-  {
-    id: 2,
-    product: "Pizza",
-    quantity: 1,
-    total: 12.99,
-    status: "Pending",
-  },
-  {
-    id: 3,
-    product: "Sushi",
-    quantity: 3,
-    total: 47.97,
-    status: "Pending",
-  },
-];
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Orders() {
-  const [orders, setOrders] = useState(initialOrders);
+  const [orders, setOrders] = useState([]);
 
-  const updateStatus = (id, newStatus) => {
-    setOrders(
-      orders.map((order) =>
-        order.id === id
-          ? {
-              ...order,
-              status:
-                order.status === newStatus
-                  ? getPreviousStatus(newStatus)
-                  : newStatus,
-            }
-          : order
-      )
-    );
-  };
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
-  const getPreviousStatus = (currentStatus) => {
-    switch (currentStatus) {
-      case "Preparing":
-        return "Pending";
-      case "Packaged":
-        return "Preparing";
-      case "Delivered":
-        return "Packaged";
-      default:
-        return "Pending";
+  const [loading, setLoading] = useState(true);
+
+  const fetchOrders = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("/api/orders");
+      if (Array.isArray(response.data)) {
+        setOrders(response.data);
+      } else {
+        console.error("API response is not an array:", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleDelete = (id) => {
-    setOrders(orders.filter((order) => order.id !== id));
+  const updateStatus = async (id, newStatus) => {
+    try {
+      const response = await axios.put(`/api/orders/${id}`, { status: newStatus });
+      setOrders(orders.map((order) => (order.id === id ? { ...order, status: response.data.status } : order)));
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
   };
 
+  const deleteOrder = async (id) => {
+    try {
+      await axios.delete(`/api/orders/${id}`);
+      setOrders(orders.filter((order) => order.id !== id));
+    } catch (error) {
+      console.error("Error deleting order:", error);
+    }
+  };
   return (
-    <div className="p-4 text-black bg-gray-50 min-h-screen">
+    <div className="px-20 text-black bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold mb-4 text-center">Orders</h1>
-      <div className="space-y-4">
-        {orders.map((order) => (
-          <div
-            key={order.id}
-            className="flex flex-col sm:flex-row justify-between items-start sm:items-center border p-4 rounded-lg shadow bg-white space-y-4 sm:space-y-0"
-          >
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold">{order.product}</h2>
-              <p className="text-gray-600">Quantity: {order.quantity}</p>
-              <p className="text-gray-600">Total: ${order.total.toFixed(2)}</p>
-              <p
-                className={`mt-2 text-sm font-medium ${
-                  order.status === "Pending"
-                    ? "text-yellow-600"
-                    : order.status === "Preparing"
-                    ? "text-blue-600"
-                    : order.status === "Delivered"
-                    ? "text-green-600"
-                    : "text-gray-600"
-                }`}
-              >
-                Status: {order.status}
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button
-                className={`px-4 py-2 rounded text-sm ${
-                  order.status === "Preparing"
-                    ? "bg-green-500"
-                    : "bg-blue-500 hover:bg-blue-600"
-                } text-white`}
-                onClick={() => updateStatus(order.id, "Preparing")}
-              >
-                Preparing
-              </button>
-              <button
-                className={`px-4 py-2 rounded text-sm ${
-                  order.status === "Packaged"
-                    ? "bg-green-500"
-                    : "bg-blue-500 hover:bg-blue-600"
-                } text-white`}
-                onClick={() => updateStatus(order.id, "Packaged")}
-                disabled={order.status === "Pending"}
-              >
-                Packaged
-              </button>
-              <button
-                className={`px-4 py-2 rounded text-sm ${
-                  order.status === "Delivered"
-                    ? "bg-green-500"
-                    : "bg-blue-500 hover:bg-blue-600"
-                } text-white`}
-                onClick={() => updateStatus(order.id, "Delivered")}
-                disabled={order.status === "Pending" || order.status === "Preparing"}
-              >
-                Delivered
-              </button>
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded text-sm hover:bg-red-600"
-                onClick={() => handleDelete(order.id)}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+      {loading ? (
+  <p>Loading orders...</p>
+) : (
+  Array.isArray(orders) && orders.length > 0 ? (
+    orders.map((order) => (
+      <div key={order.id} className="border p-4 rounded-lg shadow bg-white">
+        {/* Order display */}
       </div>
+    ))
+  ) : (
+    <p>No orders available or invalid data format</p>
+  )
+)}
+
+<div className="space-y-4">
+  {Array.isArray(orders) && orders.length > 0 ? (
+    orders.map((order) => (
+      <div key={order.id} className="border p-4 rounded-lg shadow bg-white">
+        <h2 className="text-lg font-semibold">{order.product}</h2>
+        <p className="text-gray-600">Quantity: {order.quantity}</p>
+        <p className="text-gray-600">Total: ${order.total.toFixed(2)}</p>
+        <p className={`mt-2 text-sm font-medium text-${order.status === "Pending" ? "yellow" : "green"}-600`}>
+          Status: {order.status}
+        </p>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          onClick={() => updateStatus(order.id, "Preparing")}
+        >
+          Preparing
+        </button>
+        <button
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          onClick={() => deleteOrder(order.id)}
+        >
+          Delete
+        </button>
+      </div>
+    ))
+  ) : (
+    <p>No orders available or invalid data format</p>
+  )}
+</div>
+
     </div>
   );
 }

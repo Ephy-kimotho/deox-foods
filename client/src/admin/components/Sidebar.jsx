@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react"; // Icons for the menu
+import { Menu, X, Box, List, ShoppingCart } from "lucide-react"; // Importing icons
 
 export default function Sidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -10,13 +10,15 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative mt-10">
       {/* Mobile Menu Icon */}
-      <div className="bg-gray-900 text-white p-4 flex justify-between items-center md:hidden">
+      <div className="bg-gray-900 mt-10 text-white p-4 flex justify-between items-center md:hidden">
         <h1 className="text-xl font-semibold">Admin Panel</h1>
-        <button onClick={toggleSidebar} className="text-white">
-          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <button onClick={toggleSidebar} className="text-gray-300 hover:text-white transition-colors duration-200">
+  {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+</button>
+
+
       </div>
 
       {/* Sidebar */}
@@ -33,24 +35,27 @@ export default function Sidebar() {
             <li>
               <Link
                 to="/admin/products"
-                className="block px-6 py-3 text-sm font-medium hover:bg-gray-800 rounded-lg transition duration-200 ease-in-out"
+                className="flex items-center px-6 py-3 text-sm font-medium hover:bg-gray-800 rounded-lg transition duration-200 ease-in-out"
               >
+                <Box size={20} className="mr-3" />
                 Products
               </Link>
             </li>
             <li>
               <Link
                 to="/admin/categories"
-                className="block px-6 py-3 text-sm font-medium hover:bg-gray-800 rounded-lg transition duration-200 ease-in-out"
+                className="flex items-center px-6 py-3 text-sm font-medium hover:bg-gray-800 rounded-lg transition duration-200 ease-in-out"
               >
+                <List size={20} className="mr-3" />
                 Categories
               </Link>
             </li>
             <li>
               <Link
                 to="/admin/orders"
-                className="block px-6 py-3 text-sm font-medium hover:bg-gray-800 rounded-lg transition duration-200 ease-in-out"
+                className="flex items-center px-6 py-3 text-sm font-medium hover:bg-gray-800 rounded-lg transition duration-200 ease-in-out"
               >
+                <ShoppingCart size={20} className="mr-3" />
                 Orders
               </Link>
             </li>

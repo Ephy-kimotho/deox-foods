@@ -22,6 +22,7 @@ export default function Navbar({ openModal, toggleSidebar, className }) {
         </svg>
       </button>
 
+
       {/* Other Navbar Content */}
       <div className="flex items-center gap-4">
         <button
