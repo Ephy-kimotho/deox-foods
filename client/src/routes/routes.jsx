@@ -16,13 +16,6 @@ import ProtectedRoute from "../components/common/ProtectedRoute";
 import Error404 from "../components/Error404";
 import Meals from "../components/Meals";
 import Delivery from "../components/Delivery";
-import RestaurantOrders from "../components/RestaurantOwner";
-
-// Admin components
-import AdminDashBoard from "../admin";
-import Products from "../admin/pages/Products";
-import Categories from "../admin/pages/Categories";
-import Orders from "../admin/pages/Orders";
 
 const routes = createBrowserRouter(
   [
@@ -68,35 +61,19 @@ const routes = createBrowserRouter(
         },
         {
           path: "restaurants",
-          element: (
-            <ProtectedRoute>
-              <Restaurants />
-            </ProtectedRoute>
-          ),
+          element: <Restaurants />,
         },
         {
           path: "/restaurants/:hotelId",
-          element: (
-            <ProtectedRoute>
-              <FoodItemsPage />
-            </ProtectedRoute>
-          ),
+          element: <FoodItemsPage />,
         },
         {
           path: "/restaurants/:hotelId/:mealId",
-          element: (
-            <ProtectedRoute>
-              <Meals />
-            </ProtectedRoute>
-          ),
+          element: <Meals />,
         },
         {
           path: "contact",
           element: <Contact />,
-        },
-        {
-          path: "hotel",
-          element: <RestaurantOrders />,
         },
         {
           path: "forgot-password",
@@ -113,29 +90,6 @@ const routes = createBrowserRouter(
         {
           path: "*",
           element: <Error404 />,
-        },
-        // Admin routes
-        {
-          path: "admin",
-          // element: <ProtectedRoute>
-          //   <AdminDashBoard />
-          // </ProtectedRoute>,
-               element:   <AdminDashBoard />,
-             
-          children: [
-            {
-              path: "products",
-              element: <Products />,
-            },
-            {
-              path: "categories",
-              element: <Categories />,
-            },
-            {
-              path: "orders",
-              element: <Orders />,
-            },
-          ],
         },
       ],
     },

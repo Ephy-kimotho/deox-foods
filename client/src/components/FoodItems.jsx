@@ -1,19 +1,22 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
-import { IoArrowBackCircle } from "react-icons/io5";
-import { useToken } from "./AuthProvider";
+import { ArrowLeftCircle } from "lucide-react"
 import { postItemToCart, getCartItems } from "../utils/utils";
 import { useCart } from "./CartProvider";
+import { BASE_URL } from "../utils/utils";
+import { useToken } from "./AuthProvider";
 import axios from "axios";
 
 function FoodItemsPage() {
   const { hotelId } = useParams();
-  const { token } = useToken();
   const { setCart } = useCart();
+  const { token } = useToken();
+  const { pathname } = useLocation();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [hotels, setHotels] = useState([]);
+
   const [selectedHotel, setSelectedHotel] = useState("");
   const [allMeals, setAllMeals] = useState([]);
   const navigate = useNavigate();
@@ -22,23 +25,21 @@ function FoodItemsPage() {
   useEffect(() => {
     async function getRestaurants() {
       try {
-        const res = await axios.get(
-          "http://127.0.0.1:8000/restaurant/api/restaurants/",
-          {
-            headers: {
-              Authorization: `Bearer ${token.trim()}`,
-            },
-          }
-        );
-
-        const restaurants = res.data.map((item) => item.name);
+        const res = await axios.get(`${BASE_URL}/restaurant/restaurants/`);
+        const restaurants = res.data.map((item) => ({
+          name: item.name,
+          id: item.id,
+        }));
         setHotels(restaurants);
       } catch (error) {
         console.error("Error fetching hotels: ", error);
       }
     }
     getRestaurants();
-  }, [token]);
+  }, []);
+
+  // Get the current hotels's name
+  const currentHotel = hotels.find((hotel) => hotel.id === Number(hotelId));
 
   // Sync selectedHotel with URL
   useEffect(() => {
@@ -50,18 +51,13 @@ function FoodItemsPage() {
     async function getHotelMeals() {
       try {
         const res = await axios.get(
-          `http://127.0.0.1:8000/restaurant/restaurant-products/${hotelId}/`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            withCredentials: true,
-          }
+          `${BASE_URL}/restaurant/restaurant/${hotelId}/products/`
         );
         const data = res.data.map((item) => ({
           ...item,
-          product_image: `http://127.0.0.1:8000/${item.product_image}`,
+          product_image: `${BASE_URL}/${item.product_image}`,
         }));
+         console.log(data);
         setAllMeals(data);
       } catch (error) {
         const errorMessage = error.response.data.detail;
@@ -69,7 +65,7 @@ function FoodItemsPage() {
       }
     }
     getHotelMeals();
-  }, [hotelId, token]);
+  }, [hotelId]);
 
   // Handle search
   const handleSearch = (e) => {
@@ -78,14 +74,19 @@ function FoodItemsPage() {
 
   // Add item to cart
   const addItem = async (id) => {
-    try {
-      const message = await postItemToCart(id, token);
-      toast.success(message);
+    if (token) {
+      try {
+        const message = await postItemToCart(id, token);
+        toast.success(message);
 
-      const items = await getCartItems(token);
-      setCart(items);
-    } catch (error) {
-      console.error("Error: ", error);
+        const items = await getCartItems(token);
+        setCart(items);
+      } catch (error) {
+        console.error("Error: ", error);
+      }
+    } else {
+      toast("You have to login first.");
+      navigate("/login", { state: { redirectTo: pathname } });
     }
   };
 
@@ -98,7 +99,7 @@ function FoodItemsPage() {
       : meals;
 
     return filteredMeals.length > 0 ? (
-      filteredMeals.map((meal) => {       
+      filteredMeals.map((meal) => {
         return (
           <div
             key={meal.id}
@@ -112,9 +113,6 @@ function FoodItemsPage() {
             <h3 className="text-xl capitalize font-semibold text-night-200 my-2">
               {meal.product_name}
             </h3>
-            <p className="text-sm text-night-400 dark:text-night-200 capitalize">
-              {meal.category}
-            </p>
             <p className="text-sm text-night-400 dark:text-night-200 mt-1">
               {meal.description}
             </p>
@@ -123,13 +121,13 @@ function FoodItemsPage() {
             </p>
 
             <div className="flex gap-3 items-center">
-              <Link
+              {/*  <Link
                 to={`${meal.id}`}
                 state={{ meal }}
                 className="mt-4 inline-block bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-800 transition-colors"
               >
                 View details
-              </Link>
+              </Link> */}
               <button
                 onClick={() => addItem(meal.id)}
                 className="mt-4 inline-block bg-orange-200 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors"
@@ -149,14 +147,9 @@ function FoodItemsPage() {
 
   // Handle hotel filter and update URL
   const handleHotelFilter = (e) => {
-    const hotel = e.target.value.trim();
-
-    if (hotel === "") {
-      setSelectedHotel("");
-    } else {
-      setSelectedHotel(hotel);
-      navigate(`/restaurants/${hotel}`);
-    }
+    const hotelId = e.target.value.trim();
+    setSelectedHotel(hotelId);
+    navigate(`/restaurants/${hotelId}`);
   };
 
   return (
@@ -164,7 +157,7 @@ function FoodItemsPage() {
       <Toaster position="top-center" />
       <div className="container mx-auto max-w-7xl">
         <h2 className="text-3xl font-bold text-center capitalize text-gray-800 dark:text-white mb-2 sm:m-0">
-          {hotelId}&apos;s Menu
+          {currentHotel?.name}&apos;s Menu
         </h2>
 
         <Link
@@ -172,7 +165,7 @@ function FoodItemsPage() {
           relative="path"
           className="flex gap-1 items-center mb-2 text-lg text-night-100 hover:text-orange-200 max-w-32 dark:text-gray-300 dark:hover:text-orange-200"
         >
-          <IoArrowBackCircle />
+          <ArrowLeftCircle size={22} strokeWidth={2.25} />
           Back
         </Link>
 
@@ -197,8 +190,8 @@ function FoodItemsPage() {
                 Filter by hotel
               </option>
               {hotels.map((hotel) => (
-                <option key={hotel} value={hotel}>
-                  {hotel}
+                <option key={hotel.id} value={hotel.id}>
+                  {hotel.name}
                 </option>
               ))}
             </select>
@@ -206,14 +199,11 @@ function FoodItemsPage() {
         </div>
 
         {/* Food Items List */}
-        <motion.div
+        <div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
         >
           {generateFoodItems(allMeals, searchTerm)}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

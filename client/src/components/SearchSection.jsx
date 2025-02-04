@@ -3,18 +3,12 @@ import plate1 from "../assets/images/plate1.jpg";
 import plate2 from "../assets/images/plate2.jpg";
 import plate3 from "../assets/images/plate3.jpg";
 import { useNavigate } from "react-router-dom";
-import { useToken } from "./AuthProvider";
 
 const SearchSection = () => {
-  const { token } = useToken();
   const navigate = useNavigate();
 
   const handleClick = () => {
-    if (token) {
-      navigate("/restaurants");
-    } else {
-      navigate("/login", { state: { redirectTo: "/restaurants" } });
-    }
+    navigate("/restaurants");
   };
 
   return (
@@ -47,7 +41,7 @@ const SearchSection = () => {
             type="button"
             onClick={handleClick}
             moreStyles={
-              "bg-orange-300 w-40 sm:w-44 md:w-52 shadow-lg active:shadow-none active:scale-95  mr-1 tracking-wide"
+              "bg-orange-300 w-36 text-sm sm:text-base sm:w-44 md:w-52 shadow-lg active:shadow-none active:scale-95  mr-1 tracking-wide"
             }
           >
             view restaurants.
@@ -69,7 +63,7 @@ const SearchSection = () => {
             <img
               src={plate1}
               alt="Plate 1"
-              className="w-16 h-16 md:w-24 md:h-24 rounded-full"
+              className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full"
             />
           </div>
         </div>

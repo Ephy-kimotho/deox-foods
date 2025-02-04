@@ -1,41 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { useToken } from "./AuthProvider";
 import axios from "axios";
-import { BounceLoader } from "react-spinners";
+import { SyncLoader } from "react-spinners";
+import { BASE_URL } from "../utils/utils";
+
 
 const Restaurants = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { token } = useToken();
 
   const getRestaurants = useCallback(async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get(
-        "http://127.0.0.1:8000/restaurant/api/restaurants/",
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-      const data = res.data.map((item) => {
-        const backendPath = "http://127.0.0.1:8000/";
-        return {
-          ...item,
-          picture: `${backendPath}${item.picture}`,
-        };
-      });
+      const res = await axios.get(`${BASE_URL}/restaurant/restaurants/`);
+      const data = res.data;
+      console.log(data);
       setRestaurants(data);
     } catch (error) {
       console.error("Error: ", error);
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     getRestaurants();
@@ -47,7 +33,7 @@ const Restaurants = () => {
         <p className="text-xl sm:text-2xl md:text-3xl font-bold mb-8 mt-20  text-gray-700 dark:text-gray-300 font-sans">
           Loading Restaurants...
         </p>
-        <BounceLoader size={50} color="#f57710" />
+        <SyncLoader size={20} margin={10} color="#f57710" />
       </div>
     );
   }
@@ -63,7 +49,7 @@ const Restaurants = () => {
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {restaurants.map((restaurant) => (
-          <Link to={`/restaurants/${restaurant.name}`} key={restaurant.id}>
+          <Link to={`/restaurants/${restaurant.id}`} key={restaurant.id}>
             <div className="bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow pb-2 hover:scale-105 h-[350px]">
               <img
                 src={restaurant.picture}

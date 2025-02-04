@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { sanitizeFormData } from "../utils/utils";
+import { BASE_URL } from "../utils/utils";
 
 // Validation schema using Yup
 const schema = Yup.object({
@@ -33,20 +34,18 @@ function Login() {
 
   const handleSubmit = async (values, actions) => {
     actions.setSubmitting(true);
-    try {
-      // Add a slight delay for the loading animation to be visible
-      await new Promise((resolve) => setTimeout(resolve, 1500)); // Adjust the delay as needed
+    try { 
 
       const updatedValues = sanitizeFormData(values); // sanitizeFormData will remove any occurrence of whitespaces from all form values
 
       // Make the API call to your backend for authentication
       const response = await axios.post(
-        "http://127.0.0.1:8000/auth/login/", // Replace with your actual backend URL
+        `${BASE_URL}/auth/token/`, 
         updatedValues,
         { withCredentials: true } // Send cookies with the request (useful for JWT sessions)
       );
 
-      // set access token to AuthProvider context
+      // set access token to AuthProvider context     
       setToken(response.data.access);
 
       toast.success("Login successful!");

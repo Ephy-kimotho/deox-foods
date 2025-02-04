@@ -1,12 +1,14 @@
 /* UTILITY FUNCTIONS TO FETCH OR POST DATA */
 import axios from "axios";
 
+export const BASE_URL = "http://127.0.0.1:8001";
+
 export const postItemToCart = async (id, token) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/restaurant/cart/add/",
+      `${BASE_URL}/restaurant/cart/add/`,
       {
-        product_id: id,
+        product: Number(id),
         quantity: 1,
       },
       {
@@ -24,7 +26,7 @@ export const postItemToCart = async (id, token) => {
 
 export const getCartItems = async (token) => {
   try {
-    const res = await axios.get("http://127.0.0.1:8000/restaurant/cart/view/", {
+    const res = await axios.get(`${BASE_URL}/restaurant/cart/view/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,7 +35,7 @@ export const getCartItems = async (token) => {
 
     const updatedCart = res.data.cart.map((item) => ({
       ...item,
-      image: `http://127.0.0.1:8000${item.image}`,
+      image: `${BASE_URL}/${item.image}`,
     }));
 
     return updatedCart;
@@ -44,15 +46,12 @@ export const getCartItems = async (token) => {
 
 export const getDeliveryFee = async (token) => {
   try {
-    const res = await axios.get(
-      "http://127.0.0.1:8000/restaurant/cart/delivery-fee/",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      }
-    );
+    const res = await axios.get(`${BASE_URL}/restaurant/cart/delivery-fee/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
 
     return res;
   } catch (error) {
@@ -63,7 +62,7 @@ export const getDeliveryFee = async (token) => {
 export const removeItemFromCart = async (id, token) => {
   try {
     const res = await axios.delete(
-      `http://127.0.0.1:8000/restaurant/cart/remove/${id}/`,
+      `${BASE_URL}/restaurant/cart/remove/${id}/`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -81,7 +80,7 @@ export const removeItemFromCart = async (id, token) => {
 export const makeOrder = async (token, values) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/restaurant/order/create/",
+      `${BASE_URL}/restaurant/order/create/`,
       values,
       {
         headers: {
@@ -98,7 +97,7 @@ export const makeOrder = async (token, values) => {
 
 export const getUserDetails = async (token) => {
   try {
-    const res = await axios.get("http://127.0.0.1:8000/auth/user_profile/", {
+    const res = await axios.get(`${BASE_URL}/auth/user_profile/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -113,7 +112,7 @@ export const getUserDetails = async (token) => {
 export const postMessageToBot = async (token, message) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/restaurant/chat/",
+      `${BASE_URL}/restaurant/chat/`,
       { message },
       {
         headers: {

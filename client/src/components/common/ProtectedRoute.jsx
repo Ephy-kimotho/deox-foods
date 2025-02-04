@@ -7,7 +7,7 @@ function ProtectedRoute({ children }) {
   const { pathname } = useLocation();
 
   return !token ? (
-    <Navigate to="/login" state={{ redirectTo: pathname }} />
+    <Navigate to="/login" state={{ redirectTo: pathname }} replace />
   ) : (
     children
   );

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
-import ThemeToggle from "../ThemeToggle";
+import ThemeToggle from "./ThemeToggle";
 import logo from "../../assets/images/deox-foods-logo.png";
 import { IoCart } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
@@ -14,14 +14,14 @@ const Navbar = () => {
 
   return (
     <nav className="bg-gray-100 dark:bg-night-100 shadow-md py-4 font-sans fixed top-0 left-0 right-0 z-50">
-      <div className="container mx-auto flex justify-between">
+      <div className="flex  justify-between px-4">
         {/* Logo with spacing from the left */}
-        <Link to="/" className="flex items-center ml-4 sm:m-0">
+        <Link to="/" className="flex">
           <img src={logo} alt="Deox Foods Logo" className="w-12 h-12" />
         </Link>
 
         {/* Desktop Links in the Center */}
-        <div className="hidden lg:flex items-center space-x-12">
+        <div className="hidden lg:flex items-center gap-14">
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -105,13 +105,13 @@ const Navbar = () => {
         )}
 
         {/* Theme Toggle and Buttons on the Right */}
-        <article className="hidden lg:flex items-center space-x-4">
+        <article className="hidden lg:flex items-center gap-5">
           {token ? (
             <Link to="/profile">
               <FaUserCircle className="text-3xl dark:text-gray-200" />
             </Link>
           ) : (
-            <div className="space-x-3">
+            <div className="space-x-4">
               <Link
                 to="login"
                 className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-800 dark:border-none hover:border-orange-300 hover:text-orange-300 py-2 px-4 rounded-md dark:hover:text-gray-800 dark:hover:bg-gray-200 dark:hover:font-bold"
@@ -170,7 +170,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="fixed top-0 right-0 h-full w-[4/5] bg-gray-200 dark:bg-night-100 shadow-lg transform translate-x-0 transition-transform duration-300 flex flex-col justify-between px-3">
+        <div className="fixed top-0 right-0 h-full w-[4/5] bg-gray-200 dark:bg-night-100 shadow-lg transform translate-x-0 transition-transform duration-300 flex flex-col justify-between px-6">
           <button
             className="absolute top-4 right-4 text-gray-600 dark:text-gray-400"
             onClick={() => setMenuOpen(false)}
@@ -275,7 +275,7 @@ const Navbar = () => {
                   </p>
                 </Link>
               ) : (
-                <div className="space-x-4">
+                <div className="flex gap-6 flex-col mb-5">
                   <Link
                     to="login"
                     onClick={() => {
@@ -294,15 +294,24 @@ const Navbar = () => {
                   >
                     Sign Up
                   </Link>
+                  <Link
+                    to="admin"
+                    onClick={() => {
+                      setMenuOpen(false);
+                    }}
+                    className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-md border border-gray-800 dark:border-none"
+                  >
+                    Admin
+                  </Link>
                 </div>
               )}
             </div>
 
-            <div className="flex items-center space-x-2  w-full">
+            <div
+              className="flex justify-center items-center  w-full"
+            >
               <ThemeToggle className="w-4 h-4" />
-              <span className="text-gray-600 dark:text-gray-400 text-base font-semibold">
-                Theme
-              </span>
+             
             </div>
           </div>
         </div>

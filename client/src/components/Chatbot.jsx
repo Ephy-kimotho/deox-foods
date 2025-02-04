@@ -74,7 +74,7 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
               className={`flex ${
                 message.isUser
                   ? "self-end bg-orange-400 text-white"
-                  : "self-start bg-gray-500 dark:bg-gray-600 text-white dark:text-white"
+                  : "self-start bg-gray-800 dark:bg-gray-600 text-white dark:text-white"
               } px-4 py-2 rounded-lg max-w-xs`}
             >
               <span>{message.text}</span>

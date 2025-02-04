@@ -56,7 +56,7 @@ const Contact = () => {
         out to us using the form below or via our contact details.
       </p>
 
-      <div className="w-full max-w-xl bg-white rounded-lg shadow-lg p-6">
+      <div className="w-11/12 max-w-xl bg-white rounded-lg shadow-lg p-6">
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label

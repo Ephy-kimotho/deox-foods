@@ -10,6 +10,7 @@ function Profile() {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({});
 
+  /* Get user details for display */
   useEffect(() => {
     const getUserInfo = async () => {
       setIsLoading(true);
@@ -26,7 +27,9 @@ function Profile() {
     getUserInfo();
   }, [token]);
 
+  /* sign out function */
   const signout = () => {
+    localStorage.removeItem("authToken");
     setToken("");
   };
 
@@ -54,10 +57,12 @@ function Profile() {
 
       <div className="mt-4 max-w-lg space-y-8  mx-auto p-4">
         <p className="border-b-2 border-gray-800 dark:text-gray-200">
-          <span className="font-bold">Username: &nbsp;</span>{user?.username}
+          <span className="font-bold">Username: &nbsp;</span>
+          {user?.username}
         </p>
         <p className="border-b-2 border-gray-800 dark:text-gray-200">
-          <span className="font-bold">Email: &nbsp;</span>{user?.email}
+          <span className="font-bold">Email: &nbsp;</span>
+          {user?.email}
         </p>
       </div>
 

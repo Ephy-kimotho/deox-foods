@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { BASE_URL } from "../utils/utils";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -14,15 +15,19 @@ const ForgotPassword = () => {
     toast.loading("Sending reset email...", { id: "loading" });
 
     try {
-      // Simulate a slight delay for the loading animation
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
+     
       // Make the actual API call using axios
-      const response = await axios.post("http://127.0.0.1:8000/auth/reset-password/", { email }, { withCredentials: true });
+      const response = await axios.post(
+        `${BASE_URL}/auth/reset-password/`,
+        { email },
+        { withCredentials: true }
+      );
 
       // Handle success or failure based on response
       if (response.data.detail) {
-        toast.success("A password reset email has been sent to your email address.");
+        toast.success(
+          "A password reset email has been sent to your email address."
+        );
       } else {
         toast.error("Failed to send reset email. Please try again.");
       }
@@ -69,10 +74,11 @@ const ForgotPassword = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full p-3 rounded-md font-semibold ${isSubmitting
-                ? "bg-orange-300 cursor-not-allowed"
-                : "bg-orange-400 hover:bg-orange-500"
-                } text-white focus:outline-none focus:ring-2 focus:ring-orange-200`}
+              className={`w-full p-3 rounded-md font-semibold ${
+                isSubmitting
+                  ? "bg-orange-300 cursor-not-allowed"
+                  : "bg-orange-400 hover:bg-orange-500"
+              } text-white focus:outline-none focus:ring-2 focus:ring-orange-200`}
             >
               {isSubmitting ? "Sending..." : "Send Reset Email"}
             </button>
@@ -84,4 +90,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-

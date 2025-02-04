@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { sanitizeFormData } from "../utils/utils";
+import { BASE_URL } from "../utils/utils";
 
 // Validation schema using Yup
 const schema = Yup.object({
@@ -38,7 +39,7 @@ function Signup() {
 
       // Submit data to your API
       const response = await axios.post(
-        "http://127.0.0.1:8000/auth/create/",
+        `${BASE_URL}/auth/create/`,
         updatedValues,
         {
           headers: { "Content-Type": "application/json" },

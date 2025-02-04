@@ -3,6 +3,7 @@ import { FadeLoader } from "react-spinners";
 import Button from "./common/Button";
 import { useToken } from "./AuthProvider";
 import axios from "axios";
+import { BASE_URL } from "../utils/utils";
 
 const fakeData = [
   {
@@ -58,13 +59,13 @@ function Delivery() {
       try {
         /* PATCH DELIVERY STATUS TO ON TRANSIT */
         const res = await axios.patch(
-          `http://127.0.0.1:8000/restaurant/api/orders/${order_no}/update-delivery-status/`,
+          `${BASE_URL}/restaurant/api/orders/${order_no}/update-delivery-status/`,
           {
             delivery_status: "on_transit",
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             },
             withCredentials: true,
           }
@@ -78,7 +79,7 @@ function Delivery() {
       try {
         /* PATCH DELIVERY STATUS TO ON DELIVERED*/
         const res = await axios.patch(
-          `http://127.0.0.1:8000/restaurant/api/orders/${order_no}/update-delivery-status/`,
+          `${BASE_URL}/restaurant/api/orders/${order_no}/update-delivery-status/`,
           {
             delivery_status: "complete",
           },
