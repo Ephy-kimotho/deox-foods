@@ -3,51 +3,38 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { useToken } from "../AuthProvider";
 import { useCart } from "../CartProvider";
 import toast from "react-hot-toast";
-import axios from "axios";
 import {
   removeItemFromCart,
   getCartItems,
-  postItemToCart,
+  updateCartItem,
 } from "../../utils/utils";
 
-function CartProduct({ id, product_name, image, price, quantity }) {
+function CartProduct({
+  product,
+  price,
+  product_image,
+  product_name,
+  quantity,
+}) {
   const { token } = useToken();
   const { setCart } = useCart();
 
-  const addQuantity = async (id) => {
+  const updateItem = async (product, newQuantity) => {
     try {
-      const message = await postItemToCart(id, token);
-      console.log(message);
+      const res = await updateCartItem(product, newQuantity, token);
+      toast.success(res.data.detail);
 
-      const items = await getCartItems(token);
-      setCart(items);
+      const cartItems = await getCartItems(token);
+      setCart(cartItems);
     } catch (error) {
-      console.error("Error: ", error);
-    }
-  };
-
-  const reduceQuantity = async (id) => {
-    try {
-      const res = await axios.delete(
-        `http://127.0.0.1:8000/restaurant/cart/remove/${id}/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(res);
-      const items = await getCartItems(token);
-      setCart(items);
-    } catch (error) {
-      console.error("Error reducing quantity: ", error);
+      console.error(error);
     }
   };
 
   const deleteItem = async () => {
     try {
-      const message = await removeItemFromCart(id, token);
-      toast.success(message);
+      await removeItemFromCart(Number(product), token);
+      toast.success("Item removed from cart.");
 
       const cartItems = await getCartItems(token);
       setCart(cartItems);
@@ -60,7 +47,7 @@ function CartProduct({ id, product_name, image, price, quantity }) {
     <article className="bg-white flex justify-between shadow-lg w-full py-2 px-2 rounded-md mb-4">
       <div className="flex gap-4  pr-8 ">
         <img
-          src={image}
+          src={product_image}
           alt={product_name}
           className="w-24 h-24 rounded-md object-cover"
         />
@@ -83,14 +70,19 @@ function CartProduct({ id, product_name, image, price, quantity }) {
 
         <div className="space-x-2">
           <button
-            onClick={() => reduceQuantity(id)}
+            onClick={() => {
+              const newQuantity = quantity - 1;
+              if (newQuantity > 0) {
+                updateItem(product, newQuantity);
+              }
+            }}
             className="border-2 w-6 sm:w-1/3 lg:text-xl lg:font-bold text-center border-orange-300 bg-white text-orange-300 rounded-md"
           >
             -
           </button>
           <span className="font-bold text-night-100">{quantity}</span>
           <button
-            onClick={() => addQuantity(id)}
+            onClick={() => updateItem(product, quantity + 1)}
             className="bg-orange-300 w-6 sm:w-1/3 lg:text-xl lg:font-bold text-center text-white rounded-md"
           >
             +

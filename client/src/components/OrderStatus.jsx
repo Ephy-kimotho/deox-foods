@@ -17,14 +17,17 @@ const OrderStatus = ({ stage }) => {
     { title: "Delivered", icon: <FaHome /> },
     { title: "Completed", icon: <FaCheckCircle /> },
   ];
+  const currentStageIndex = stages.findIndex(
+    (s) => s.title.toLocaleLowerCase() === stage.toLocaleLowerCase()
+  );
 
   return (
-    <div className="flex justify-between my-4  rounded-md ">
+    <div className="flex justify-between rounded-md">
       {stages.map((s, index) => (
         <div
           key={index}
           className={`text-center ${
-            index <= stage ? "text-green-500" : "text-orange-500"
+            index <= currentStageIndex ? "text-green-500" : "text-orange-500"
           }`}
         >
           <div className="text-2xl mb-1">{s.icon}</div>

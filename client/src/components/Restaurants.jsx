@@ -4,7 +4,6 @@ import axios from "axios";
 import { SyncLoader } from "react-spinners";
 import { BASE_URL } from "../utils/utils";
 
-
 const Restaurants = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +13,6 @@ const Restaurants = () => {
       setIsLoading(true);
       const res = await axios.get(`${BASE_URL}/restaurant/restaurants/`);
       const data = res.data;
-      console.log(data);
       setRestaurants(data);
     } catch (error) {
       console.error("Error: ", error);
@@ -40,7 +38,6 @@ const Restaurants = () => {
 
   return (
     <div className="p-6 bg-zinc-200 dark:bg-night-200 min-h-screen flex-grow">
-      {/* Available Restaurants */}
       <h2 className="text-2xl sm:text-3xl font-bold mt-20 sm:mb-2 text-center text-gray-700 dark:text-orange-300 tracking-wider">
         Available Restaurants
       </h2>

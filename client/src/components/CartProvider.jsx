@@ -8,7 +8,7 @@ function CartProvider({ children }) {
   const [numOfItems, setNumOfItems] = useState(0);
 
   useEffect(() => {
-    const count = cart?.reduce((sum, item) => {
+    const count = cart?.cart_items?.reduce((sum, item) => {
       return (sum += item.quantity);
     }, 0);
 

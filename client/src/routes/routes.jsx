@@ -16,6 +16,7 @@ import ProtectedRoute from "../components/common/ProtectedRoute";
 import Error404 from "../components/Error404";
 import Meals from "../components/Meals";
 import Delivery from "../components/Delivery";
+import ResetPassword from "../components/ResetPassword";
 
 const routes = createBrowserRouter(
   [
@@ -78,6 +79,10 @@ const routes = createBrowserRouter(
         {
           path: "forgot-password",
           element: <ForgotPassword />,
+        },
+        {
+          path: "reset-password",
+          element: <ResetPassword />,
         },
         {
           path: "/profile",

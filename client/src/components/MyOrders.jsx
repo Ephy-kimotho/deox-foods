@@ -1,85 +1,41 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { MoonLoader } from "react-spinners";
 import OrderStatus from "./OrderStatus";
-import OrderDetails from "./OrderDetails";
-import axios from "axios";
+import { useToken } from "./AuthProvider";
+import { getMyOrders } from "../utils/utils";
 
-const fakeorders = [
-  {
-    orderId: 1,
-    name: "Rice beans",
-    price: 100,
-    quantity: 1,
-  },
-  {
-    orderId: 2,
-    name: " 4 Chapati's lentils",
-    price: 150,
-    quantity: 1,
-  },
-  {
-    orderId: 3,
-    name: "Ugali beef",
-    price: 130,
-    quantity: 3,
-  },
-];
-
-const MyOrders = ({ orderId }) => {
-  const [latestOrder, setLatestOrder] = useState(); // Track all orders
-  const [pastOrders, setPastOrders] = useState(fakeorders); // Get past orders
+const MyOrders = () => {
+  const [pastOrders, setPastOrders] = useState([]); // Get past orders
   const [isLoading, setIsLoading] = useState(false); // Track errors
-
-  /* GET THE LATEST ORDER STATUS */
-  useEffect(() => {
-    const fetchOrderStatus = async () => {
-      try {
-        const response = await axios.get(`/api/orders/${orderId}/status/`);
-
-        console.log(response);
-        const data = response.data;
-        setLatestOrder({
-          orderId,
-          stage: data.currentStage,
-          dateTime: data.dateTime,
-        });
-      } catch (err) {
-        console.log("Error geting the latest order status: ", err);
-      }
-    };
-
-    if (orderId) {
-      fetchOrderStatus();
-    }
-  }, [orderId]);
+  const { token } = useToken();
 
   /* GET PAST ORDERS  */
   useEffect(() => {
     const fetchPastOrders = async () => {
       setIsLoading(true);
       try {
-        // REPLACE WITH REAL API
-        //const res = axios.get("api/orders");
-        const res = await new Promise((resolve) =>
-          setTimeout(() => {
-            resolve("PAST ORDERS SENT");
-          }, 1000)
-        );
-        console.log(res);
-        //const data = res.data;
-        //setPastOrders(data);
+        const result = await getMyOrders(token);
+        setPastOrders(result.orders);
       } catch (error) {
-        console.error("Error getting past orders: ", error);
+        console.error("Error", error);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchPastOrders();
-  }, []);
+  }, [token]);
 
-  const pastOrdersExist = pastOrders?.length !== 0;
+  let orderId = "";
+  let deliveryStatus = "";
+
+  if (pastOrders.length > 0) {
+    deliveryStatus = pastOrders[0].delivery_status;
+    orderId = pastOrders[0].order_no;
+  }
+
+  const orders = pastOrders?.map((item) => item.products).flat();
+  const pastOrdersExist = orders.length !== 0;
 
   if (isLoading) {
     return (
@@ -97,21 +53,18 @@ const MyOrders = ({ orderId }) => {
   return (
     <div className="my-orders pt-28 px-4 min-h-screen flex-grow bg-zinc-200 dark:bg-night-200">
       {/* LATEST ORDER SECTION */}
-      {latestOrder && (
-        <div className="mb-8 p-4  bg-white rounded-lg">
+
+      {orderId && (
+        <div className="mb-8 px-6 py-3 bg-white rounded-lg">
           <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-4">
-            Latest Order
+            My Latest Order
           </h2>
-          <OrderStatus stage={latestOrder.stage} />
-          <OrderDetails
-            stage={latestOrder.stage}
-            dateTime={latestOrder.dateTime}
-          />
+          <OrderStatus stage={deliveryStatus} />
         </div>
       )}
 
       {/* PAST ORDERS SECTION */}
-      <div className="bg-white p-4 rounded-md">
+      <div className="bg-white p-4 rounded-md mt-2 mb-12">
         <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-4">
           My Past Orders
         </h2>
@@ -123,20 +76,22 @@ const MyOrders = ({ orderId }) => {
               <thead>
                 <tr className="bg-neutral-400 text-white uppercase tracking-wide">
                   <th className="px-4 py-2 text-left">Name</th>
-                  <th className="px-4 py-2 text-left">Price</th>
-                  <th className="px-4 py-2 text-left">Quantity</th>
+                  <th className="px-6 py-2 ">Price</th>
+                  <th className="px-4 py-2 text-center">Quantity</th>
                 </tr>
               </thead>
 
               <tbody>
-                {pastOrders?.map(({ name, price, quantity, orderId }) => (
+                {orders.map(({ product_name, total_price, quantity }, key) => (
                   <tr
-                    key={orderId}
-                    className="bg-white hover:bg-gray-500 border-b-2 border-neutral-200 last:border-none"
+                    key={key}
+                    className="bg-white hover:bg-slate-700 border-b-2 border-neutral-200 last:border-none hover:text-white"
                   >
-                    <td className="px-4 py-3">{name}</td>
-                    <td className="px-4 py-3">Ksh. {price}</td>
-                    <td className="px-4 py-3">{quantity}</td>
+                    <td className="pl-4 sm:px-4 py-3">{product_name}</td>
+                    <td className="px-2 text-center sm:text-left py-3 w-12">
+                      Ksh. {total_price}
+                    </td>
+                    <td className="sm:px-4 py-3 text-center">{quantity}</td>
                   </tr>
                 ))}
               </tbody>

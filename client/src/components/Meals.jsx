@@ -1,23 +1,43 @@
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 import { useCart } from "./CartProvider";
 import { getCartItems, postItemToCart } from "../utils/utils";
 import { useToken } from "./AuthProvider";
-import { IoArrowBackCircle } from "react-icons/io5";
+import { ArrowLeftCircle } from "lucide-react";
 
 const Meals = () => {
   const { state } = useLocation();
-  const { setCart } = useCart();
+  const { hotelId } = useParams();
+  const { setCart, cart } = useCart();
   const { token } = useToken();
+  const navigate = useNavigate();
   const meal = state?.meal;
 
-  // Add item to cart
+  // verify add Item function
+  const verifyAdd = (id) => {
+    // check if a user is authenticated
+    if (!token) {
+      toast("You have to login first.");
+      navigate("/login", { state: { redirectTo: `/restaurants/${hotelId}` } });
+    } else {
+      const isItemInCart = cart?.cart_items?.some(
+        (item) => item.product === id
+      );
+      if (isItemInCart) {
+        toast("Item is already in cart.");
+      } else {
+        addItem(id);
+      }
+    }
+  };
+
+  // Add item to cart function
   const addItem = async (id) => {
     try {
-      const message = await postItemToCart(id, token);
-      toast.success(message);
+      await postItemToCart(Number(id), token);
 
+      toast.success("Item added to cart.");
       const items = await getCartItems(token);
       setCart(items);
     } catch (error) {
@@ -45,7 +65,7 @@ const Meals = () => {
           relative="path"
           className="flex gap-1 items-center mb-2 text-lg text-night-100 hover:text-orange-200 max-w-32 dark:text-gray-300 dark:hover:text-orange-200"
         >
-          <IoArrowBackCircle />
+          <ArrowLeftCircle size={22} strokeWidth={2.25} />
           Back
         </Link>
         {/* Meal Details */}
@@ -64,10 +84,15 @@ const Meals = () => {
 
           {/* Meal Information */}
           <div className="flex flex-col justify-center space-y-6 bg-zinc-100 px-6 rounded-lg shadow-lg py-6">
-            <h1 className="text-4xl font-semibold text-gray-800  capitalize">
-              {meal.product_name}
-            </h1>
-            <p className="text-lg text-gray-600">{meal.description}</p>
+            <div>
+              <h1 className="text-4xl font-semibold text-gray-800  capitalize">
+                {meal.product_name}
+              </h1>
+              <p className="text-lg text-gray-600 mt-2 mb-5">
+                ksh: {meal.product_price}
+              </p>
+              <p className="text-lg text-gray-600">{meal.description}</p>
+            </div>
 
             {/* Nutritional Information */}
             <div className="flex flex-col space-y-2">
@@ -92,17 +117,11 @@ const Meals = () => {
             {/* Actions */}
             <div className="flex items-center justify-between space-x-4">
               <button
-                onClick={() => addItem(meal.id)}
+                onClick={() => verifyAdd(meal.id)}
                 className="bg-green-500 text-white py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105"
               >
                 Add to Cart
               </button>
-              {/*  <button
-                onClick={handleQuickBuy}
-                className="bg-blue-500 text-white py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition-colors transform hover:scale-105"
-              >
-                Quick Buy
-              </button> */}
             </div>
           </div>
         </motion.div>

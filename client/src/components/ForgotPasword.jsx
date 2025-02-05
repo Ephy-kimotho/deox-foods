@@ -23,11 +23,14 @@ const ForgotPassword = () => {
         { withCredentials: true }
       );
 
+      console.log(response);
+      
       // Handle success or failure based on response
       if (response.data.detail) {
         toast.success(
           "A password reset email has been sent to your email address."
         );
+        setEmail('');
       } else {
         toast.error("Failed to send reset email. Please try again.");
       }

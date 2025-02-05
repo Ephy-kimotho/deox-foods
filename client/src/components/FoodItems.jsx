@@ -1,7 +1,7 @@
 import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { ArrowLeftCircle } from "lucide-react"
+import { ArrowLeftCircle } from "lucide-react";
 import { postItemToCart, getCartItems } from "../utils/utils";
 import { useCart } from "./CartProvider";
 import { BASE_URL } from "../utils/utils";
@@ -10,7 +10,7 @@ import axios from "axios";
 
 function FoodItemsPage() {
   const { hotelId } = useParams();
-  const { setCart } = useCart();
+  const { setCart, cart } = useCart();
   const { token } = useToken();
   const { pathname } = useLocation();
 
@@ -38,9 +38,6 @@ function FoodItemsPage() {
     getRestaurants();
   }, []);
 
-  // Get the current hotels's name
-  const currentHotel = hotels.find((hotel) => hotel.id === Number(hotelId));
-
   // Sync selectedHotel with URL
   useEffect(() => {
     setSelectedHotel(hotelId);
@@ -57,7 +54,6 @@ function FoodItemsPage() {
           ...item,
           product_image: `${BASE_URL}/${item.product_image}`,
         }));
-         console.log(data);
         setAllMeals(data);
       } catch (error) {
         const errorMessage = error.response.data.detail;
@@ -65,28 +61,41 @@ function FoodItemsPage() {
       }
     }
     getHotelMeals();
-  }, [hotelId]);
+  }, [hotelId, searchTerm]);
 
   // Handle search
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.trim());
   };
 
-  // Add item to cart
-  const addItem = async (id) => {
-    if (token) {
-      try {
-        const message = await postItemToCart(id, token);
-        toast.success(message);
-
-        const items = await getCartItems(token);
-        setCart(items);
-      } catch (error) {
-        console.error("Error: ", error);
-      }
-    } else {
+  // verify add Item function
+  const verifyAdd = (id) => {
+    // check if a user is authenticated
+    if (!token) {
       toast("You have to login first.");
       navigate("/login", { state: { redirectTo: pathname } });
+    } else {
+      const isItemInCart = cart?.cart_items?.some(
+        (item) => item.product === id
+      );
+      if (isItemInCart) {
+        toast("Item is already in cart.");
+      } else {
+        addItem(id);
+      }
+    }
+  };
+
+  // Add item to cart function
+  const addItem = async (id) => {
+    try {
+      await postItemToCart(Number(id), token);
+
+      toast.success("Item added to cart.");
+      const items = await getCartItems(token);
+      setCart(items);
+    } catch (error) {
+      console.error("Error: ", error);
     }
   };
 
@@ -102,7 +111,7 @@ function FoodItemsPage() {
       filteredMeals.map((meal) => {
         return (
           <div
-            key={meal.id}
+            key={meal.product_name}
             className="bg-zinc-100  p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
           >
             <img
@@ -121,15 +130,15 @@ function FoodItemsPage() {
             </p>
 
             <div className="flex gap-3 items-center">
-              {/*  <Link
-                to={`${meal.id}`}
+              <Link
+                to={`${meal.product_name}`}
                 state={{ meal }}
                 className="mt-4 inline-block bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-800 transition-colors"
               >
                 View details
-              </Link> */}
+              </Link>
               <button
-                onClick={() => addItem(meal.id)}
+                onClick={() => verifyAdd(meal.id)}
                 className="mt-4 inline-block bg-orange-200 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors"
               >
                 Add to Cart
@@ -151,6 +160,9 @@ function FoodItemsPage() {
     setSelectedHotel(hotelId);
     navigate(`/restaurants/${hotelId}`);
   };
+
+  // Get the current hotels's name
+  const currentHotel = hotels.find((hotel) => hotel.id === Number(hotelId));
 
   return (
     <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5 mt-20 pb-6">
@@ -199,9 +211,7 @@ function FoodItemsPage() {
         </div>
 
         {/* Food Items List */}
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {generateFoodItems(allMeals, searchTerm)}
         </div>
       </div>

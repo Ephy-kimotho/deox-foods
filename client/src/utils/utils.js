@@ -1,5 +1,6 @@
 /* UTILITY FUNCTIONS TO FETCH OR POST DATA */
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const BASE_URL = "http://127.0.0.1:8001";
 
@@ -8,17 +9,17 @@ export const postItemToCart = async (id, token) => {
     const res = await axios.post(
       `${BASE_URL}/restaurant/cart/add/`,
       {
-        product: Number(id),
+        product: id,
         quantity: 1,
       },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true,
       }
     );
-    return res.data.message;
+
+    return res;
   } catch (error) {
     console.error("Error adding item to cart: ", error);
   }
@@ -26,36 +27,41 @@ export const postItemToCart = async (id, token) => {
 
 export const getCartItems = async (token) => {
   try {
-    const res = await axios.get(`${BASE_URL}/restaurant/cart/view/`, {
+    const res = await axios.get(`${BASE_URL}/restaurant/cart_view/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      withCredentials: true,
     });
 
-    const updatedCart = res.data.cart.map((item) => ({
+    /*  const updatedCart = res.data.cart.map((item) => ({
       ...item,
       image: `${BASE_URL}/${item.image}`,
     }));
-
-    return updatedCart;
+ */
+    return res.data;
   } catch (error) {
-    console.error("Error geting the cart items: ", error);
+    //console.error("Error geting the cart items: ", error);
+    toast(error.response.data.detail);
   }
 };
 
-export const getDeliveryFee = async (token) => {
+export const updateCartItem = async (id, quantity, token) => {
   try {
-    const res = await axios.get(`${BASE_URL}/restaurant/cart/delivery-fee/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const res = axios.patch(
+      `${BASE_URL}/restaurant/cart/update/${id}/`,
+      {
+        product: id,
+        quantity,
       },
-      withCredentials: true,
-    });
-
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return res;
   } catch (error) {
-    console.log("Error geting deleivery fee: ", error);
+    console.error("Error updating cart item: ", error);
   }
 };
 
@@ -67,11 +73,9 @@ export const removeItemFromCart = async (id, token) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true,
       }
     );
-    const message = res.data.message;
-    return message;
+    return res;
   } catch (error) {
     console.error("Error removing item from cart:", error);
   }
@@ -79,17 +83,17 @@ export const removeItemFromCart = async (id, token) => {
 
 export const makeOrder = async (token, values) => {
   try {
+    console.log(values);
     const res = await axios.post(
-      `${BASE_URL}/restaurant/order/create/`,
+      `${BASE_URL}/restaurant/initiate-payment/`,
       values,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true,
       }
     );
-    console.log(res);
+    return res;
   } catch (error) {
     console.error("Error making an order: ", error);
   }
@@ -127,11 +131,42 @@ export const postMessageToBot = async (token, message) => {
   }
 };
 
-/* ENSURE A PHONE NUMBER STARTS WITH +254 COUNTRY CODE */
+export const getMyOrders = async (token) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/auth/myorders/`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error geting my orders: ", error);
+  }
+};
+
+export const updateDeliveryStatus = async (orderId, token) => {
+  try {
+    const res = await axios.patch(
+      `${BASE_URL}/restaurant/update-delivery-status/${orderId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return res;
+  } catch (error) {
+    console.error("Error updating delivery status: ", error);
+  }
+};
+
+/* ENSURE A PHONE NUMBER STARTS WITH 254 COUNTRY CODE */
 export const sanitizePhonenumber = (values) => {
   const { phone_number } = values;
-  if (!phone_number.startsWith("+254")) {
-    const updatedPhone = phone_number.slice(1).padStart(13, "+254");
+  if (!phone_number.startsWith("254")) {
+    const updatedPhone = phone_number.slice(1).padStart(12, "254");
     return {
       ...values,
       phone_number: updatedPhone,

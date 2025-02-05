@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Formik, Form } from "formik";
+import { useParams, useNavigate } from "react-router-dom";
 import PasswordInput from "./common/PasswordInput";
 import AuthButton from "./common/AuthButton";
 import axios from "axios";
 import * as Yup from "yup";
-import { sanitizeFormData } from "../utils/utils";
+import { toast } from "react-hot-toast";
+import { BASE_URL } from "../utils/utils";
 
 const schema = Yup.object({
   newPassword: Yup.string()
-    .min(8, "Password must be 8 or more characters.")
+    .min(8, "Password must be at least 8 characters.")
     .required("Required."),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("newPassword"), null], "Passwords must match.")
@@ -16,6 +18,8 @@ const schema = Yup.object({
 });
 
 const ResetPassword = () => {
+  const { uidb64, token } = useParams(); // Get values from URL
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePassword = () => setShowPassword((state) => !state);
@@ -23,16 +27,28 @@ const ResetPassword = () => {
   const handleSubmit = async (values, actions) => {
     actions.setSubmitting(true);
 
-    const updatedValues = sanitizeFormData(values); // remove whitespaces from the all values in FormData values
-
     try {
-      const response = await axios.post("/api/reset-password", updatedValues);
-      console.log("Response:", response.data);
+      // Updated field names to match the backend expected format
+      const payload = {
+        new_password: values.newPassword,
+        confirm_password: values.confirmPassword,
+      };
 
-      // Show success message or redirect user
+      const response = await axios.post(
+        `${BASE_URL}/auth/reset-password-confirm/${uidb64}/${token}/`,
+        payload,
+        { withCredentials: true }
+      );
+      console.log(response);
+      toast.success("Password reset successful! Redirecting...");
       actions.resetForm();
+      setTimeout(() => navigate("/login"), 500);
     } catch (error) {
       console.error("Error resetting password:", error);
+
+      const errorMessage =
+        error?.response?.data?.error || "Failed to reset password.";
+      toast.error(errorMessage);
     } finally {
       actions.setSubmitting(false);
     }
