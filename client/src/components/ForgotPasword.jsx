@@ -15,7 +15,6 @@ const ForgotPassword = () => {
     toast.loading("Sending reset email...", { id: "loading" });
 
     try {
-     
       // Make the actual API call using axios
       const response = await axios.post(
         `${BASE_URL}/auth/reset-password/`,

@@ -55,7 +55,11 @@ const MyOrders = () => {
       {/* LATEST ORDER SECTION */}
 
       {orderId && (
-        <div className="mb-8 px-6 py-3 bg-white rounded-lg">
+        <div
+          className={`${
+            deliveryStatus === "completed" ? "hidden" : "block"
+          } mb-8 px-6 py-3 bg-white rounded-lg`}
+        >
           <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-4">
             My Latest Order
           </h2>

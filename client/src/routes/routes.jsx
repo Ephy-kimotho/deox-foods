@@ -15,7 +15,6 @@ import Profile from "../components/Profile";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import Error404 from "../components/Error404";
 import Meals from "../components/Meals";
-import Delivery from "../components/Delivery";
 import ResetPassword from "../components/ResetPassword";
 
 const routes = createBrowserRouter(
@@ -53,10 +52,6 @@ const routes = createBrowserRouter(
           ),
         },
         {
-          path: "deliveries",
-          element: <Delivery />,
-        },
-        {
           path: "about",
           element: <About />,
         },
@@ -81,7 +76,7 @@ const routes = createBrowserRouter(
           element: <ForgotPassword />,
         },
         {
-          path: "reset-password",
+          path: "/reset-password-confirm/:uidb64/:token",
           element: <ResetPassword />,
         },
         {

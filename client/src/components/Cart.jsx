@@ -20,20 +20,16 @@ function Cart() {
     });
   }, [token, setCart]);
 
- 
   // SIDE EFFECT TO KNOW IF AN ORDER's TIME IS VALID
-  /* useEffect(() => {
+  useEffect(() => {
     const checkOrderTime = () => {
-      
       const currentDate = new Date();
       const currentHour = currentDate.getHours();
       const currentMinutes = currentDate.getMinutes();
 
-     
       const startHour = 11;
       const endHour = 16;
 
-      
       if (currentHour > startHour && currentHour < endHour) {
         setIsOrderAllowed(true);
       } else if (currentHour === startHour && currentMinutes >= 0) {
@@ -46,11 +42,10 @@ function Cart() {
     };
     checkOrderTime();
 
-   
     const intervalID = setInterval(checkOrderTime, 3600000);
 
     return () => clearInterval(intervalID);
-  }, []); */
+  }, []);
 
   const cartHasItems = cart?.cart_items?.length > 0;
   const subtotal = cart?.cart_total || 0;

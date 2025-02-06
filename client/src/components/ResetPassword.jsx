@@ -10,7 +10,10 @@ import { BASE_URL } from "../utils/utils";
 
 const schema = Yup.object({
   newPassword: Yup.string()
-    .min(8, "Password must be at least 8 characters.")
+    .min(8, "Password must be 8 or more characters.")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter.")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter.")
+    .matches(/[0-9]/, "Password must contain at least one digit.")
     .required("Required."),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("newPassword"), null], "Passwords must match.")
@@ -26,12 +29,10 @@ const ResetPassword = () => {
 
   const handleSubmit = async (values, actions) => {
     actions.setSubmitting(true);
-
     try {
       // Updated field names to match the backend expected format
       const payload = {
-        new_password: values.newPassword,
-        confirm_password: values.confirmPassword,
+        password: values.newPassword.trim(),
       };
 
       const response = await axios.post(
@@ -42,7 +43,7 @@ const ResetPassword = () => {
       console.log(response);
       toast.success("Password reset successful! Redirecting...");
       actions.resetForm();
-      setTimeout(() => navigate("/login"), 500);
+      navigate("/login");
     } catch (error) {
       console.error("Error resetting password:", error);
 
