@@ -2,7 +2,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const BASE_URL = "http://127.0.0.1:8001";
+export const BASE_URL = "https://api.deoxfoods.com/";
 
 export const postItemToCart = async (id, token) => {
   try {
