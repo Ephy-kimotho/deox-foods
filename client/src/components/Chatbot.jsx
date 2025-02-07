@@ -38,7 +38,7 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
         };
         setMessages((prevMessages) => [...prevMessages, botResponse]);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setIsLoading(false);
       }

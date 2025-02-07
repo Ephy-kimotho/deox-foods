@@ -30,24 +30,16 @@ function Signup() {
 
   const handleSubmit = async (values, actions) => {
     try {
-
-
       // Add a slight delay for the loading animation
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const updatedValues = sanitizeFormData(values); // sanitizeFormData will remove any occurrence of whitespaces from all form values
 
       // Submit data to your API
-      const response = await axios.post(
-        `${BASE_URL}/auth/create/`,
-        updatedValues,
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      ); // Replace '/api/signup' with your actual API endpoint
-      console.log("Response: ", response.data);
-
+      await axios.post(`${BASE_URL}/auth/create/`, updatedValues, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }); // Replace '/api/signup' with your actual API endpoint
       // Show success toast
       toast.success("Account created successfully!");
 

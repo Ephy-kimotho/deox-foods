@@ -31,14 +31,12 @@ const Contact = () => {
         "-hzfRaa9YXNOq7dsE" // EmailJS User ID
       )
       .then(
-        (result) => {
-          console.log(result.text);
+        () => {
           setIsSending(false);
-          clearForm()
+          clearForm();
           toast.success("Your message was sent successfully!");
         },
-        (error) => {
-          console.log(error.text);
+        () => {
           setIsSending(false);
           toast.error("Oops, something went wrong. Please try again.");
         }

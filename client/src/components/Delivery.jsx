@@ -31,8 +31,7 @@ function Delivery() {
   const { token } = useToken();
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
-  console.log(count);
-
+ 
   // GET THE DELIVERIES FOR THE DELIVERY GUY
   useEffect(() => {
     async function getDeliveries() {
@@ -43,7 +42,6 @@ function Delivery() {
           setTimeout(resolve("Geting delivery data", 1200));
         });
 
-        console.log(res);
       } catch (error) {
         console.error("Error getting delivery data:", error);
       } finally {
@@ -71,7 +69,6 @@ function Delivery() {
           }
         );
         setCount(1);
-        console.log(res);
       } catch (error) {
         console.error("Error setting on transit delivery status: ", error);
       }
@@ -91,7 +88,6 @@ function Delivery() {
           }
         );
         setCount(2);
-        console.log(res);
       } catch (error) {
         console.error("Error setting delivered delivery status: ", error);
       }

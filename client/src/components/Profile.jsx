@@ -35,7 +35,7 @@ function Profile() {
 
   if (isLoading) {
     return (
-      <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 px-4 font-sans relative">
+      <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 px-4 font-sans relative flex justify-center items-center ">
         <div className="flex flex-col justify-center items-center gap-4 w-[330px] sm:w-[512px] bg-white py-6  rounded-md shadow-md">
           <p className="uppercase font-bold text-blue-600 tracking-wider text-base sm:text-3xl">
             Loading user details...

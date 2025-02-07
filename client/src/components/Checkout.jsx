@@ -6,7 +6,7 @@ import Button from "./common/Button";
 import { useNavigate } from "react-router-dom";
 import { useToken } from "./AuthProvider";
 import { useCart } from "./CartProvider";
-//import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 import {
   makeOrder,
   getCartItems,
@@ -28,7 +28,6 @@ function Checkout({ closeCheckout }) {
   const navigate = useNavigate();
   const { token } = useToken();
 
-
   /* REPLACE WITH REAL PAYMENT FUNCTION */
   const handlePayment = async (values, action) => {
     try {
@@ -37,9 +36,8 @@ function Checkout({ closeCheckout }) {
       updatedValues = sanitizePhonenumber(updatedValues); // sanitize phone number will ensure phone number starts with +254
 
       const res = await makeOrder(token, updatedValues);
-      console.log(res);
       setOrderId(res.data.order_number);
-      //toast.success(res.data.message);
+      toast.success(res.data.message);
       action.resetForm();
 
       const cartItems = await getCartItems(token);
@@ -50,7 +48,6 @@ function Checkout({ closeCheckout }) {
     } catch (error) {
       console.error("Error:", error);
     }
-    //navigate("/");
   };
 
   return (

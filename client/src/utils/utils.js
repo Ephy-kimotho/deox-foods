@@ -32,15 +32,8 @@ export const getCartItems = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    /*  const updatedCart = res.data.cart.map((item) => ({
-      ...item,
-      image: `${BASE_URL}/${item.image}`,
-    }));
- */
     return res.data;
   } catch (error) {
-    //console.error("Error geting the cart items: ", error);
     toast(error.response.data.detail);
   }
 };
@@ -83,7 +76,6 @@ export const removeItemFromCart = async (id, token) => {
 
 export const makeOrder = async (token, values) => {
   try {
-    console.log(values);
     const res = await axios.post(
       `${BASE_URL}/restaurant/initiate-payment/`,
       values,

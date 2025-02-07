@@ -21,8 +21,6 @@ const ForgotPassword = () => {
         { email },
         { withCredentials: true }
       );
-
-      console.log(response);
       
       // Handle success or failure based on response
       if (response.data.detail) {

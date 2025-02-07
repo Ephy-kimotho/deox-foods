@@ -12,8 +12,8 @@ const SearchSection = () => {
   };
 
   return (
-    <section className="mt-24 relative  flex items-center justify-center ">
-      <div className="relative z-10 text-left p-8 bg-gray-200 w-full max-w-screen-xl mx-auto rounded-lg">
+    <section className="mt-24 relative flex items-center justify-center">
+      <div className="relative z-10 text-left p-8 md:pb-16 bg-gray-200 w-full rounded-lg min-h-[400px]">
         <h1 className="text-3xl md:text-4xl font-bold mb-2 text-green-700">
           Hungry?
         </h1>
@@ -52,7 +52,7 @@ const SearchSection = () => {
           <img
             src={plate3}
             alt="Plate 3"
-            className="w-12 h-12 md:w-22 md:h-22 rounded-full"
+            className="w-12 h-12 md:w-14 md:h-14 rounded-full"
           />
           <div className="flex items-end space-x-2">
             <img

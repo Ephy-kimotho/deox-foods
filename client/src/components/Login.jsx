@@ -34,25 +34,27 @@ function Login() {
 
   const handleSubmit = async (values, actions) => {
     actions.setSubmitting(true);
-    try { 
-
+    try {
       const updatedValues = sanitizeFormData(values); // sanitizeFormData will remove any occurrence of whitespaces from all form values
 
       // Make the API call to your backend for authentication
       const response = await axios.post(
-        `${BASE_URL}/auth/token/`, 
+        `${BASE_URL}/auth/token/`,
         updatedValues,
-        { withCredentials: true } // Send cookies with the request (useful for JWT sessions)
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
       );
 
-      // set access token to AuthProvider context     
+      // set access token to AuthProvider context
       setToken(response.data.access);
-
       toast.success("Login successful!");
 
       // Reset the form and navigate
       actions.resetForm();
-      navigate(path); // Redirect to the previous page or home page
+      navigate(path);
     } catch (error) {
       // Display an error message from the server or a default message
       const errorMessage =

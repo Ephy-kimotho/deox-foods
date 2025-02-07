@@ -35,12 +35,11 @@ const ResetPassword = () => {
         password: values.newPassword.trim(),
       };
 
-      const response = await axios.post(
+      await axios.post(
         `${BASE_URL}/auth/reset-password-confirm/${uidb64}/${token}/`,
         payload,
         { withCredentials: true }
       );
-      console.log(response);
       toast.success("Password reset successful! Redirecting...");
       actions.resetForm();
       navigate("/login");
