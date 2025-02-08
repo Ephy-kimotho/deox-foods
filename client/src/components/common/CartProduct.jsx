@@ -34,7 +34,6 @@ function CartProduct({
   const deleteItem = async () => {
     try {
       await removeItemFromCart(Number(product), token);
-      toast.success("Item removed from cart.");
 
       const cartItems = await getCartItems(token);
       setCart(cartItems);

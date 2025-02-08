@@ -1,8 +1,8 @@
 /* UTILITY FUNCTIONS TO FETCH OR POST DATA */
 import axios from "axios";
-import toast from "react-hot-toast";
 
-/* Development URL: http://127.0.0.1:8001/ */
+/* Development URL: http://127.0.0.1:8001 */
+/* Production URL: https://api.deoxfoods.com */
 export const BASE_URL = "https://api.deoxfoods.com";
 
 export const postItemToCart = async (id, token) => {
@@ -35,7 +35,7 @@ export const getCartItems = async (token) => {
     });
     return res.data;
   } catch (error) {
-    toast(error.response.data.detail);
+    console.error(error.response.data.detail);
   }
 };
 
@@ -108,7 +108,9 @@ export const getUserDetails = async (token) => {
 
 export const postMessageToBot = async (message) => {
   try {
-    const res = await axios.post(`${BASE_URL}restaurant/chatbot/`, { message });
+    const res = await axios.post(`${BASE_URL}/restaurant/chatbot/`, {
+      message,
+    });
     return res.data.response;
   } catch (error) {
     console.error("Error posting message to chat bot: ", error);

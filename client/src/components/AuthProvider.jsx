@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useContext, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export const authContext = createContext();
 
@@ -14,6 +15,26 @@ function AuthProvider({ children }) {
   /* Whenever the token changes update local storage.*/
   useEffect(() => {
     localStorage.setItem("authToken", JSON.stringify(token));
+  }, [token]);
+
+  useEffect(() => {
+    try {
+      const decodedToken = jwtDecode(token); // decode JWT
+      const expirationTime = decodedToken.exp * 1000; // convert exp time to ms
+      const delay = expirationTime - Date.now(); // get the delay to expiration
+
+      if (delay <= 0) {
+        window.location.href = "/login";
+      } else {
+        const timerId = setTimeout(() => {
+          window.location.href = "/login";
+        }, delay);
+        return () => clearTimeout(timerId);
+      }
+    } catch (error) {
+      console.error("Error decoding JWT", error);
+      window.location.href = "/login";
+    }
   }, [token]);
 
   return (
