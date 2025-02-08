@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { BsFillSendFill } from "react-icons/bs";
-import PropTypes from "prop-types";
 import { postMessageToBot } from "../utils/utils";
-import { useToken } from "./AuthProvider";
+import { decode } from "html-entities";
 import { PulseLoader } from "react-spinners";
+import PropTypes from "prop-types";
 
 const Chatbot = ({ isVisible, toggleVisibility }) => {
   const [messages, setMessages] = useState([]); // State for storing messages
   const [input, setInput] = useState(""); // State for input field
   const [expandedReasoning, setExpandedReasoning] = useState(null); // State to track reasoning toggle
   const [isLoading, setIsLoading] = useState(false);
-  const { token } = useToken();
 
   const handleSendMessage = async () => {
     if (input.trim()) {
@@ -20,20 +19,12 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInput(""); // Clear input field
 
-      // Simulated bot response
-      /*   const botResponse = {
-        text: "Hello! How can I assist you today?",
-        reasoning: "The user greeted me, so I responded with a friendly acknowledgment.",
-        isUser: false,
-      };
-      setMessages((prevMessages) => [...prevMessages, botResponse]); */
       try {
         setIsLoading(true);
-        const res = await postMessageToBot(token, input.trim());
-        const response = res.data.message;
+        const res = await postMessageToBot(input);
+        const response = decode(res);
         const botResponse = {
           text: response,
-          reasoning: "",
           isUser: false,
         };
         setMessages((prevMessages) => [...prevMessages, botResponse]);
@@ -52,7 +43,7 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
   };
 
   return isVisible ? (
-    <div className="fixed bottom-14 right-3 sm:right-6 md:right-10 w-[330px] sm:w-[600px] h-[400px] bg-neutral-200 dark:bg-night-200 shadow-xl rounded-lg flex flex-col p-4 z-30">
+    <div className="fixed bottom-14 right-3 sm:right-6 md:right-10 w-[330px] h-[400px] sm:w-[600px] md:w-[700px] lg:w-[850px] bg-neutral-200 dark:bg-night-200 shadow-xl rounded-lg flex flex-col p-4 z-30">
       {/* Header */}
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-bold text-gray-900 dark:text-gray-200">
@@ -73,17 +64,12 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
             <div
               className={`flex ${
                 message.isUser
-                  ? "self-end bg-orange-400 text-white"
-                  : "self-start bg-gray-800 dark:bg-gray-600 text-white dark:text-white"
-              } px-4 py-2 rounded-lg max-w-xs`}
+                  ? "self-end bg-orange-400 text-white text-right"
+                  : "self-start bg-gray-800 dark:bg-gray-600 text-white dark:text-white w-4/5 max-w-md"
+              } px-4 py-2 rounded-lg `}
             >
               <span>{message.text}</span>
             </div>
-            {isLoading && (
-              <span className="self-start ml-3 text-black dark:text-white">
-                <PulseLoader size={10} color="#999" />
-              </span>
-            )}
             {!message.isUser && message.reasoning && (
               <div className="text-sm text-gray-600 dark:text-gray-400 ml-2">
                 <button
@@ -107,7 +93,14 @@ const Chatbot = ({ isVisible, toggleVisibility }) => {
             )}
           </div>
         ))}
+        {/* Show loader only when the bot is thinking */}
+        {isLoading && (
+          <div className="flex self-start bg-gray-800 dark:bg-gray-600 text-white px-4 py-2 rounded-lg max-w-xs">
+            <PulseLoader size={8} color="#fff" />
+          </div>
+        )}
       </div>
+
       {/* Input Section */}
       <div className="mt-2 gap-2 flex items-center w-full">
         <input

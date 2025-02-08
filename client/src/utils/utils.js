@@ -2,6 +2,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
+/* Development URL: http://127.0.0.1:8001/ */
 export const BASE_URL = "https://api.deoxfoods.com";
 
 export const postItemToCart = async (id, token) => {
@@ -105,19 +106,10 @@ export const getUserDetails = async (token) => {
   }
 };
 
-export const postMessageToBot = async (token, message) => {
+export const postMessageToBot = async (message) => {
   try {
-    const res = await axios.post(
-      `${BASE_URL}/restaurant/chat/`,
-      { message },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      }
-    );
-    return res;
+    const res = await axios.post(`${BASE_URL}restaurant/chatbot/`, { message });
+    return res.data.response;
   } catch (error) {
     console.error("Error posting message to chat bot: ", error);
   }
