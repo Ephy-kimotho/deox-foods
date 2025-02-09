@@ -22,7 +22,6 @@ const MyOrders = () => {
         setIsLoading(false);
       }
     };
-
     fetchPastOrders();
   }, [token]);
 
@@ -39,12 +38,12 @@ const MyOrders = () => {
 
   if (isLoading) {
     return (
-      <div className="p-24 min-h-screen flex-grow bg-zinc-200 dark:bg-night-200 flex flex-col items-center justify-center">
-        <div className="flex flex-col justify-center items-center gap-4 w-[330px] sm:w-[512px] bg-white py-6  rounded-md shadow-md">
-          <p className="uppercase font-bold text-blue-600 tracking-wider text-base sm:text-3xl">
-            Loading past orders...
+      <div className="p-6 bg-zinc-200 w-full  dark:bg-night-200 min-h-screen flex-grow flex   flex-col items-center justify-center">
+        <div className="max-w-md bg-white flex gap-3 p-10 rounded-md shadow-md  flex-col justify-center items-center">
+          <p className="text-xl sm:text-2xl md:text-3xl font-bold  text-gray-700  font-sans">
+            Loading Past orders...
           </p>
-          <MoonLoader size={65} color="#111" />
+          <MoonLoader size={40} margin={10} color="#112233" />
         </div>
       </div>
     );

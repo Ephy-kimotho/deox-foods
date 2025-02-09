@@ -6,6 +6,7 @@ import { postItemToCart, getCartItems } from "../utils/utils";
 import { useCart } from "./CartProvider";
 import { BASE_URL } from "../utils/utils";
 import { useToken } from "./AuthProvider";
+import { SyncLoader } from "react-spinners";
 import axios from "axios";
 
 function FoodItemsPage() {
@@ -16,6 +17,7 @@ function FoodItemsPage() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [hotels, setHotels] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedHotel, setSelectedHotel] = useState("");
   const [allMeals, setAllMeals] = useState([]);
@@ -47,6 +49,7 @@ function FoodItemsPage() {
   useEffect(() => {
     async function getHotelMeals() {
       try {
+        setIsLoading(true);
         const res = await axios.get(
           `${BASE_URL}/restaurant/restaurant/${hotelId}/products/`
         );
@@ -58,6 +61,8 @@ function FoodItemsPage() {
       } catch (error) {
         const errorMessage = error.response.data.detail;
         toast.error(errorMessage);
+      } finally {
+        setIsLoading(false);
       }
     }
     getHotelMeals();
@@ -161,6 +166,18 @@ function FoodItemsPage() {
     navigate(`/restaurants/${hotelId}`);
   };
 
+  // show Loader when fetching foods
+  if (isLoading) {
+    return (
+      <div className="p-6 bg-zinc-200 dark:bg-night-200 min-h-screen flex-grow flex   flex-col items-center justify-center">
+        <p className="text-xl sm:text-2xl md:text-3xl font-bold mb-8 mt-20  text-gray-700 dark:text-gray-300 font-sans">
+          Loading Food items...
+        </p>
+        <SyncLoader size={20} margin={10} color="#f57710" />
+      </div>
+    );
+  }
+
   // Get the current hotels's name
   const currentHotel = hotels.find((hotel) => hotel.id === Number(hotelId));
 
@@ -169,7 +186,7 @@ function FoodItemsPage() {
       <Toaster position="top-center" />
       <div className="container mx-auto max-w-7xl">
         <h2 className="text-3xl font-bold text-center capitalize text-gray-800 dark:text-white mb-2 sm:m-0">
-          {currentHotel?.name}&apos;s Menu
+          {currentHotel?.name ? currentHotel?.name : "Food"}&apos;s Menu
         </h2>
 
         <Link

@@ -1,18 +1,33 @@
 import SearchSection from "./SearchSection";
-import restaurant1 from "../assets/images/restaurant1.jpg";
-import restaurant2 from "../assets/images/restaurant2.jpg";
-import restaurant3 from "../assets/images/restaurant3.jpg";
-import restaurant4 from "../assets/images/restaurant4.jpg";
-import restaurant5 from "../assets/images/restaurant5.jpg";
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { BASE_URL } from "../utils/utils";
+import axios from "axios";
 
 const Home = () => {
-  const dummyRestaurants = [
-    { id: 1, name: "Restaurant 1", image: restaurant1 },
-    { id: 2, name: "Restaurant 2", image: restaurant2 },
-    { id: 3, name: "Restaurant 3", image: restaurant3 },
-    { id: 4, name: "Restaurant 4", image: restaurant4 },
-    { id: 5, name: "Restaurant 5", image: restaurant5 },
-  ];
+  const [restaurants, setRestaurants] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getRestaurants = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.get(`${BASE_URL}/restaurant/restaurants/`);
+      const data = res.data.map((item) => ({
+        id: item.id,
+        picture: item.picture,
+        name: item.name,
+      }));
+      setRestaurants(data);
+    } catch (error) {
+      console.error("Error: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    getRestaurants();
+  }, [getRestaurants]);
 
   return (
     <section className="min-h-screen flex-grow relative bg-zinc-200 dark:bg-night-200 p-4">
@@ -23,15 +38,23 @@ const Home = () => {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4">
-          {dummyRestaurants.map((restaurant) => (
-            <div key={restaurant.id} className="flex justify-center">
-              <img
-                src={restaurant.image}
-                alt={restaurant.name}
-                className="rounded-lg w-2/3 sm:h-36 sm:w-36 object-cover"
-              />
-            </div>
-          ))}
+          {isLoading ? (
+            <p className="text-night-200 text-center font-bold text-lg sm:text-2xl">
+              Loading Images...
+            </p>
+          ) : (
+            restaurants.map((restaurant) => (
+              <Link key={restaurant.id} to={`/restaurants/${restaurant.id}`}>
+                <div className="flex justify-center">
+                  <img
+                    src={restaurant.picture}
+                    alt={restaurant.name}
+                    className="rounded-lg w-2/3 sm:h-36 sm:w-36 object-cover"
+                  />
+                </div>
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </section>
