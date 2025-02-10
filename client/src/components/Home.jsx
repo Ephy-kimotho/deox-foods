@@ -37,7 +37,7 @@ const Home = () => {
           Nearby Restaurants
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4">
+        <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {isLoading ? (
             <p className="text-night-200 text-center font-bold text-lg sm:text-2xl">
               Loading Images...
@@ -49,7 +49,7 @@ const Home = () => {
                   <img
                     src={restaurant.picture}
                     alt={restaurant.name}
-                    className="rounded-lg w-2/3 sm:h-36 sm:w-36 object-cover"
+                    className="rounded-lg w-11/12  sm:h-36 sm:w-36 md:w-64 md:h-56 object-cover"
                   />
                 </div>
               </Link>

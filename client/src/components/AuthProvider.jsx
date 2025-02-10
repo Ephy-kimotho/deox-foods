@@ -1,20 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext } from "react";
 
 export const authContext = createContext();
 
-/* Lazy state initialization function */
-const getInitialToken = () =>
-  JSON.parse(localStorage.getItem("authToken")) || "";
-
 function AuthProvider({ children }) {
-  const [token, setToken] = useState(getInitialToken);
-
-  /* Whenever the token changes update local storage.*/
-  useEffect(() => {
-    localStorage.setItem("authToken", JSON.stringify(token));
-  }, [token]);
+  const [token, setToken] = useState("");
 
   return (
     <authContext.Provider value={{ token, setToken }}>

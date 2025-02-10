@@ -52,7 +52,7 @@ const SearchSection = () => {
           <img
             src={plate3}
             alt="Plate 3"
-            className="w-12 h-12 md:w-14 md:h-14 rounded-full"
+            className="w-10 h-10 md:w-14 md:h-14 rounded-full"
           />
           <div className="flex items-end space-x-2">
             <img
