@@ -1,5 +1,5 @@
+import { BASE_URL } from "../../utils/utils";
 
-const BASE_URL = "http://127.0.0.1:8001";
 export const fetchAPI = async (endpoint, method = 'GET', body = null, token) => {
     try {
         if (!token) throw new Error("No authentication token found");
