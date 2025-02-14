@@ -5,11 +5,12 @@ import { useToken } from "./AuthProvider";
 import Input from "./common/Input";
 import PasswordInput from "./common/PasswordInput";
 import AuthButton from "./common/AuthButton";
-import * as Yup from "yup";
-import axios from "axios";
 import { toast } from "react-hot-toast";
 import { sanitizeFormData } from "../utils/utils";
 import { BASE_URL } from "../utils/utils";
+import { TriangleAlert } from "lucide-react";
+import * as Yup from "yup";
+import axios from "axios";
 
 // Validation schema using Yup
 const schema = Yup.object({
@@ -17,10 +18,10 @@ const schema = Yup.object({
     .min(4, "Username should be more than 4 characters.")
     .required("Required."),
   password: Yup.string()
-    .min(8, "Password must be 8 or more characters.")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter.")
+    /*  .min(8, "Password must be 8 or more characters.") */
+    /*   .matches(/[A-Z]/, "Password must contain at least one uppercase letter.")
     .matches(/[a-z]/, "Password must contain at least one lowercase letter.")
-    .matches(/[0-9]/, "Password must contain at least one digit.")
+    .matches(/[0-9]/, "Password must contain at least one digit.") */
     .required("Required."),
 });
 
@@ -49,12 +50,34 @@ function Login() {
       );
 
       // set access token to AuthProvider context
-      setToken(response.data.access);
-      toast.success("Login successful!");
-
+      const accessToken = response.data.access;
+      setToken(accessToken);
       // Reset the form and navigate
       actions.resetForm();
-      navigate(path);
+
+      const res = await axios.get(`${BASE_URL}/restaurant/user-type/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const userType = res.data.user_type;
+      if (userType === "restaurant") {
+        navigate("/admin", {
+          state: { restaurantName: res.data.restaurant_name },
+        });
+      } else if (userType === "customer" && path === "/admin") {
+        setToken("");
+        toast.custom(
+          <div className="py-3 px-3 rounded-md bg-white shadow-md flex gap-2 justify-center items-center">
+            <TriangleAlert className="text-orange-200" />
+            <span>You are not an admin.</span>
+          </div>
+        );
+      } else {
+        toast.success("Login successful!");
+        navigate(path);
+      }
     } catch (error) {
       // Display an error message from the server or a default message
       const errorMessage =

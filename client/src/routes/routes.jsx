@@ -16,6 +16,8 @@ import ProtectedRoute from "../components/common/ProtectedRoute";
 import Error404 from "../components/Error404";
 import Meals from "../components/Meals";
 import ResetPassword from "../components/ResetPassword";
+import AdminDashBoard from "../admin/layouts/DashboardLayout";
+import Orders from "../admin/pages/Orders";
 
 const routes = createBrowserRouter(
   [
@@ -90,6 +92,21 @@ const routes = createBrowserRouter(
         {
           path: "*",
           element: <Error404 />,
+        },
+      ],
+    },
+    {
+      path: "admin",
+      element: (
+        <ProtectedRoute>
+          <AdminDashBoard />
+        </ProtectedRoute>
+      ),
+
+      children: [
+        {
+          index: true,
+          element: <Orders />,
         },
       ],
     },

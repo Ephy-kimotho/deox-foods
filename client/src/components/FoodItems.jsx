@@ -2,28 +2,25 @@ import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { ArrowLeftCircle } from "lucide-react";
-import { postItemToCart, getCartItems } from "../utils/utils";
+import { postItemToCart, getCartItems, BASE_URL } from "../utils/utils";
 import { useCart } from "./CartProvider";
-import { BASE_URL } from "../utils/utils";
 import { useToken } from "./AuthProvider";
 import { SyncLoader } from "react-spinners";
 import axios from "axios";
 
 function FoodItemsPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [hotels, setHotels] = useState([]);
+  const [allMeals, setAllMeals] = useState([]);
+
   const { hotelId } = useParams();
   const { setCart, cart } = useCart();
   const { token } = useToken();
   const { pathname } = useLocation();
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [hotels, setHotels] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [selectedHotel, setSelectedHotel] = useState("");
-  const [allMeals, setAllMeals] = useState([]);
   const navigate = useNavigate();
 
-  // Get all restaurants to be used in the select element
+  // Once the component mounts get all restaurant names to be shown in drop down.
   useEffect(() => {
     async function getRestaurants() {
       try {
@@ -40,12 +37,7 @@ function FoodItemsPage() {
     getRestaurants();
   }, []);
 
-  // Sync selectedHotel with URL
-  useEffect(() => {
-    setSelectedHotel(hotelId);
-  }, [hotelId]);
-
-  // Get all products associated to particular hotel
+  // Get all meals associated to particular hotel on mount and when hotelId changes
   useEffect(() => {
     async function getHotelMeals() {
       try {
@@ -66,9 +58,9 @@ function FoodItemsPage() {
       }
     }
     getHotelMeals();
-  }, [hotelId, searchTerm]);
+  }, [hotelId]);
 
-  // Handle search
+  // Update search term  onchange
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.trim());
   };
@@ -94,9 +86,12 @@ function FoodItemsPage() {
   // Add item to cart function
   const addItem = async (id) => {
     try {
-      await postItemToCart(Number(id), token);
+      const res = await postItemToCart(Number(id), token);
 
-      toast.success("Item added to cart.");
+      if (res.statusText === "Created") {
+        toast.success("Item added to cart.");
+      }
+
       const items = await getCartItems(token);
       setCart(items);
     } catch (error) {
@@ -106,9 +101,10 @@ function FoodItemsPage() {
 
   // Fucntion to generate the FoodItems
   const generateFoodItems = (meals, term = "") => {
+    const lowerCaseTerm = term.toLocaleLowerCase();
     const filteredMeals = term
       ? meals.filter((meal) =>
-          meal.product_name.toLowerCase().includes(term.toLocaleLowerCase())
+          meal.product_name.toLowerCase().includes(lowerCaseTerm)
         )
       : meals;
 
@@ -161,10 +157,12 @@ function FoodItemsPage() {
 
   // Handle hotel filter and update URL
   const handleHotelFilter = (e) => {
-    const hotelId = e.target.value.trim();
-    setSelectedHotel(hotelId);
+    const hotelId = e.target.value;
     navigate(`/restaurants/${hotelId}`);
   };
+
+  // Get the current hotels's name
+  const currentHotel = hotels.find((hotel) => hotel.id === Number(hotelId));
 
   // show Loader when fetching foods
   if (isLoading) {
@@ -177,9 +175,6 @@ function FoodItemsPage() {
       </div>
     );
   }
-
-  // Get the current hotels's name
-  const currentHotel = hotels.find((hotel) => hotel.id === Number(hotelId));
 
   return (
     <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 p-5 mt-20 pb-6">
@@ -211,7 +206,6 @@ function FoodItemsPage() {
           </div>
           <div className="w-full sm:w-1/2 flex justify-end">
             <select
-              value={selectedHotel}
               onChange={handleHotelFilter}
               className="p-3 rounded-md bg-gray-100 dark:bg-night-300 text-night-200 focus:outline-none w-full sm:w-1/2"
             >

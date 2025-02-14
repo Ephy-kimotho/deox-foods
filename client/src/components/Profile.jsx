@@ -49,7 +49,7 @@ function Profile() {
   return (
     <section className="flex-grow min-h-screen bg-zinc-200 dark:bg-night-200 px-4 font-sans relative">
       <div className="mt-28 flex flex-col gap-2 items-center ">
-        <FaUserCircle className="text-2xl sm:text-4xl md:text-8xl dark:text-gray-200" />
+        <FaUserCircle className="text-5xl md:text-8xl dark:text-gray-200" />
         <p className="text-lg text-night-200 dark:text-gray-200 font-bold">
           Hello {user?.username}
         </p>

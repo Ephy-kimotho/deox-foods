@@ -35,9 +35,12 @@ const Meals = () => {
   // Add item to cart function
   const addItem = async (id) => {
     try {
-      await postItemToCart(Number(id), token);
+      const res = await postItemToCart(Number(id), token);
 
-      toast.success("Item added to cart.");
+      if (res.statusText === "Created") {
+        toast.success("Item added to cart.");
+      }
+
       const items = await getCartItems(token);
       setCart(items);
     } catch (error) {
